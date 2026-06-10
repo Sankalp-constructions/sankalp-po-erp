@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Purchase Order ERP</title>
+<!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root {
+    --primary: #1a3c5e;
+    --primary-light: #2563a8;
+    --accent: #f59e0b;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #d97706;
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #1e293b;
+    --muted: #64748b;
+    --sidebar-w: 240px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  #sidebar {
+    width: var(--sidebar-w); background: var(--primary); color: #fff;
+    display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100;
+  }
+  #sidebar .logo { padding: 20px 16px 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  #sidebar .logo h1 { font-size: 14px; font-weight: 700; letter-spacing: 0.5px; line-height: 1.4; }
+  #sidebar .logo p { font-size: 10px; opacity: 0.6; margin-top: 2px; }
+  #sidebar nav { flex: 1; overflow-y: auto; padding: 8px 0; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 11px 16px; cursor: pointer;
+    font-size: 13px; border-left: 3px solid transparent; transition: all 0.15s;
+    opacity: 0.75;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.08); opacity: 1; }
+  .nav-item.active { background: rgba(255,255,255,0.12); border-left-color: var(--accent); opacity: 1; font-weight: 600; }
+  .nav-item .badge {
+    margin-left: auto; background: var(--accent); color: #000;
+    border-radius: 10px; padding: 1px 6px; font-size: 10px; font-weight: 700;
+  }
+  .nav-step { font-size: 10px; opacity: 0.4; padding: 8px 16px 2px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* TOPBAR */
+  #topbar {
+    position: fixed; top: 0; left: var(--sidebar-w); right: 0; height: 56px;
+    background: var(--card); border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; padding: 0 24px; gap: 16px; z-index: 90;
+  }
+  #topbar h2 { font-size: 16px; font-weight: 600; flex: 1; }
+  .role-wrap { display: flex; align-items: center; gap: 8px; }
+  .role-wrap label { font-size: 12px; color: var(--muted); }
+  #roleSelect {
+    padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px;
+    font-size: 13px; background: var(--bg); cursor: pointer;
+  }
+  .role-badge {
+    background: var(--primary); color: #fff; border-radius: 20px;
+    padding: 4px 12px; font-size: 12px; font-weight: 600;
+  }
+
+  /* MAIN */
+  #main { margin-left: var(--sidebar-w); margin-top: 56px; padding: 24px; flex: 1; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* CARDS */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+  .card-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .card-title .icon { font-size: 18px; }
+
+  /* STATS ROW */
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; }
+  .stat-card .val { font-size: 28px; font-weight: 700; color: var(--primary); }
+  .stat-card .lbl { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* FORMS */
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  .form-group label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
+  .form-group input, .form-group select, .form-group textarea {
+    padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px;
+    font-size: 13px; background: var(--bg); color: var(--text); outline: none;
+    transition: border 0.15s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary-light); background: #fff; }
+  .form-group textarea { resize: vertical; min-height: 70px; }
+  .form-full { grid-column: 1/-1; }
+
+  /* BUTTONS */
+  .btn { padding: 8px 16px; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-light); }
+  .btn-success { background: var(--success); color: #fff; }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-warning { background: var(--warning); color: #fff; }
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .btn-outline:hover { background: var(--bg); }
+  .btn-sm { padding: 5px 10px; font-size: 11px; }
+  .btn-accent { background: var(--accent); color: #000; }
+
+  /* TABLES */
+  .tbl-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--bg); padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8fafc; }
+
+  /* STATUS BADGES */
+  .status { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .status-draft { background: #e2e8f0; color: #475569; }
+  .status-pending { background: #fef3c7; color: #92400e; }
+  .status-approved { background: #dcfce7; color: #166534; }
+  .status-rejected { background: #fee2e2; color: #991b1b; }
+  .status-partial { background: #dbeafe; color: #1e40af; }
+  .status-complete { background: #d1fae5; color: #065f46; }
+  .status-invoiced { background: #ede9fe; color: #5b21b6; }
+
+  /* APPROVAL FLOW */
+  .approval-flow { display: flex; gap: 0; margin: 12px 0; flex-wrap: wrap; }
+  .approval-step {
+    display: flex; align-items: center; font-size: 11px;
+  }
+  .approval-step .step-dot {
+    width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; border: 2px solid var(--border); background: #fff;
+    flex-shrink: 0;
+  }
+  .approval-step .step-label { margin: 0 4px; color: var(--muted); font-size: 10px; white-space: nowrap; }
+  .approval-step .step-line { width: 24px; height: 2px; background: var(--border); flex-shrink: 0; }
+  .approval-step.done .step-dot { background: var(--success); border-color: var(--success); color: #fff; }
+  .approval-step.done .step-line { background: var(--success); }
+  .approval-step.active .step-dot { background: var(--accent); border-color: var(--accent); color: #000; }
+  .approval-step.rejected .step-dot { background: var(--danger); border-color: var(--danger); color: #fff; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+  .tab { padding: 10px 16px; font-size: 13px; cursor: pointer; border-bottom: 2px solid transparent; color: var(--muted); transition: all 0.15s; }
+  .tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* PIPELINE */
+  .pipeline { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; }
+  .pipeline-col { min-width: 220px; background: var(--bg); border-radius: 8px; padding: 12px; }
+  .pipeline-col h4 { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; }
+  .pipeline-card { background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-bottom: 8px; font-size: 12px; cursor: pointer; }
+  .pipeline-card:hover { border-color: var(--primary-light); }
+  .pipeline-card .pc-id { font-weight: 700; color: var(--primary); font-size: 11px; }
+  .pipeline-card .pc-desc { margin: 4px 0; }
+  .pipeline-card .pc-meta { color: var(--muted); font-size: 10px; }
+
+  /* LINE ITEMS */
+  .line-items-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .line-items-table th { background: #f8fafc; padding: 8px; font-size: 10px; text-align: left; border: 1px solid var(--border); }
+  .line-items-table td { padding: 6px 8px; border: 1px solid var(--border); }
+  .line-items-table input, .line-items-table select { width: 100%; padding: 4px; border: none; background: transparent; font-size: 12px; }
+  .line-items-table input:focus, .line-items-table select:focus { outline: 1px solid var(--primary-light); }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: #fff; border-radius: 12px; padding: 24px; max-width: 700px; width: 95%; max-height: 85vh; overflow-y: auto; }
+  .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+  .modal-close { cursor: pointer; font-size: 18px; color: var(--muted); }
+
+  /* MISC */
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .section-header h3 { font-size: 14px; font-weight: 600; }
+  .alert { padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-bottom: 12px; }
+  .alert-info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+  .alert-success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+  .alert-warning { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+  .empty-state { text-align: center; padding: 40px; color: var(--muted); }
+  .empty-state .icon { font-size: 40px; margin-bottom: 10px; }
+  .flex-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .mt-12 { margin-top: 12px; }
+  .mt-16 { margin-top: 16px; }
+  .text-muted { color: var(--muted); font-size: 12px; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+  .progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--primary); border-radius: 3px; transition: width 0.3s; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+  .tag-contractor { background: #dbeafe; color: #1e40af; }
+  .tag-noncontract { background: #fce7f3; color: #9d174d; }
+
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; background: #1e293b; color: #fff;
+    padding: 12px 18px; border-radius: 8px; font-size: 13px; z-index: 999;
+    transform: translateY(60px); opacity: 0; transition: all 0.3s; pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="logo">
+    <h1>PO Management<br>ERP System</h1>
+    <p>Sankalp Construction</p>
+  </div>
+  <nav>
+    <div class="nav-step">Master</div>
+    <div class="nav-item active" data-page="dashboard" onclick="nav(this)">
+      <span>📊</span> Dashboard
+    </div>
+    <div class="nav-item" data-page="master" onclick="nav(this)">
+      <span>📋</span> Material Master
+    </div>
+    <div class="nav-step">Procurement Flow</div>
+    <div class="nav-item" data-page="indent" onclick="nav(this)">
+      <span>📝</span> Indent
+      <span class="badge" id="badge-indent">0</span>
+    </div>
+    <div class="nav-item" data-page="vendor" onclick="nav(this)">
+      <span>🏢</span> Vendor & CS
+      <span class="badge" id="badge-vendor">0</span>
+    </div>
+    <div class="nav-item" data-page="po" onclick="nav(this)">
+      <span>📄</span> Purchase Order
+      <span class="badge" id="badge-po">0</span>
+    </div>
+    <div class="nav-item" data-page="grn" onclick="nav(this)">
+      <span>📦</span> GRN
+      <span class="badge" id="badge-grn">0</span>
+    </div>
+    <div class="nav-item" data-page="invoice" onclick="nav(this)">
+      <span>🧾</span> Invoice
+      <span class="badge" id="badge-invoice">0</span>
+    </div>
+  </nav>
+</div>
+
+<!-- TOPBAR -->
+<div id="topbar">
+  <h2 id="pageTitle">Dashboard</h2>
+  <div class="role-wrap">
+    <label>Logged in as:</label>
+    <select id="roleSelect" onchange="changeRole()">
+      <option value="site_engineer">Site Engineer</option>
+      <option value="qs_engineer">QS Engineer</option>
+      <option value="technical_director">Technical Director</option>
+      <option value="management">Management</option>
+      <option value="purchase_manager">Purchase Manager</option>
+      <option value="qs_manager">QS Manager</option>
+    </select>
+    <span class="role-badge" id="roleBadge">Site Engineer</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- ===== DASHBOARD ===== -->
+  <div class="page active" id="page-dashboard">
+    <div class="stats-row" id="dashStats"></div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+      <div class="card">
+        <div class="card-title"><span class="icon">🔄</span> Procurement Pipeline</div>
+        <div class="pipeline" id="dashPipeline"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="icon">⏳</span> Pending My Approvals</div>
+        <div id="myApprovals"></div>
+      </div>
+    </div>
+    <div class="card mt-16">
+      <div class="card-title"><span class="icon">📈</span> Recent Activity</div>
+      <div id="recentActivity"></div>
+    </div>
+  </div>
+
+  <!-- ===== MATERIAL MASTER ===== -->
+  <div class="page" id="page-master">
+    <div class="card">
+      <div class="card-title"><span class="icon">📋</span> Material Master — Estimated Requirements</div>
+      <div class="alert alert-info">This master stores estimated material requirements per project, categorized by scope (Contractor / Non-Contractual). Indents are raised against these entries.</div>
+      <div class="form-grid" id="masterForm">
+        <div class="form-group">
+          <label>Project Name</label>
+          <input id="m_project" list="projectList" placeholder="e.g. Block A Construction">
+          <datalist id="projectList"></datalist>
+        </div>
+        <div class="form-group">
+          <label>Material Code</label>
+          <input id="m_code" placeholder="e.g. MAT-001">
+        </div>
+        <div class="form-group">
+          <label>Material Description</label>
+          <input id="m_desc" placeholder="e.g. TMT Steel 16mm">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="m_category">
+            <option>Civil</option><option>Electrical</option><option>Plumbing</option>
+            <option>Finishing</option><option>Structure</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>UOM</label>
+          <select id="m_uom">
+            <option>MT</option><option>KG</option><option>Nos</option><option>RFT</option>
+            <option>SFT</option><option>CUM</option><option>LTR</option><option>BAG</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Estimated Qty</label>
+          <input id="m_qty" type="number" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>Estimated Rate (₹)</label>
+          <input id="m_rate" type="number" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>Scope</label>
+          <select id="m_scope">
+            <option value="contractor">Contractor</option>
+            <option value="noncontract">Non-Contractual</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Remarks</label>
+          <input id="m_remarks" placeholder="Optional remarks">
+        </div>
+        <div class="form-group" style="align-self:end;">
+          <button class="btn btn-primary" onclick="addMaster()">+ Add to Master</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-header">
+        <h3>Master Records</h3>
+        <div class="flex-row">
+          <input style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;" placeholder="Search..." id="masterSearch" oninput="renderMaster()">
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>Project</th><th>Code</th><th>Description</th><th>Category</th>
+            <th>UOM</th><th>Est. Qty</th><th>Est. Rate</th><th>Est. Value</th><th>Scope</th><th>Indented</th><th>Balance</th><th>Action</th>
+          </tr></thead>
+          <tbody id="masterBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== INDENT ===== -->
+  <div class="page" id="page-indent">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('indent','create')">Create Indent</div>
+      <div class="tab" onclick="switchTab('indent','list')">All Indents</div>
+      <div class="tab" onclick="switchTab('indent','approve')">Pending Approvals</div>
+    </div>
+
+    <!-- CREATE -->
+    <div class="tab-content active" id="indent-create">
+      <div class="card">
+        <div class="card-title"><span class="icon">📝</span> New Indent Request</div>
+        <div class="alert alert-info">Raised by Site Engineer. Approval flow: Site Engineer → QS Engineer → Technical Director → Management</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Indent No</label>
+            <input id="i_no" placeholder="Auto-generated" readonly style="background:#f1f5f9;">
+          </div>
+          <div class="form-group">
+            <label>Date</label>
+            <input id="i_date" type="date">
+          </div>
+          <div class="form-group">
+            <label>Project</label>
+            <select id="i_project" onchange="populateMasterItems()">
+              <option value="">-- Select Project --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Required By Date</label>
+            <input id="i_reqdate" type="date">
+          </div>
+          <div class="form-group">
+            <label>Site Location</label>
+            <input id="i_location" placeholder="e.g. Floor 3, Block A">
+          </div>
+          <div class="form-group">
+            <label>Priority</label>
+            <select id="i_priority">
+              <option>Normal</option><option>Urgent</option><option>Critical</option>
+            </select>
+          </div>
+          <div class="form-group form-full">
+            <label>Purpose / Justification</label>
+            <textarea id="i_purpose" placeholder="Reason for this material request..."></textarea>
+          </div>
+        </div>
+        <hr class="divider">
+        <div class="section-header">
+          <h3>Line Items</h3>
+          <button class="btn btn-outline btn-sm" onclick="addIndentLine()">+ Add Line</button>
+        </div>
+        <div class="tbl-wrap">
+          <table class="line-items-table">
+            <thead><tr>
+              <th>#</th><th>Material (from Master)</th><th>Description</th><th>Scope</th>
+              <th>UOM</th><th>Est. Qty</th><th>Req. Qty</th><th>Remarks</th><th></th>
+            </tr></thead>
+            <tbody id="indentLines"></tbody>
+          </table>
+        </div>
+        <div class="flex-row mt-16">
+          <button class="btn btn-primary" onclick="submitIndent()">Submit Indent</button>
+          <button class="btn btn-outline" onclick="clearIndentForm()">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIST -->
+    <div class="tab-content" id="indent-list">
+      <div class="card">
+        <div class="section-header">
+          <h3>All Indents</h3>
+          <div class="flex-row">
+            <select id="indentFilterStatus" onchange="renderIndentList()" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;">
+              <option value="">All Status</option>
+              <option value="Pending QS Engineer">Pending QS Engineer</option>
+              <option value="Pending Technical Director">Pending Technical Director</option>
+              <option value="Pending Management">Pending Management</option>
+              <option value="Approved">Approved</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>Indent No</th><th>Date</th><th>Project</th><th>Items</th>
+              <th>Priority</th><th>Approval Status</th><th>Raised By</th><th>Action</th>
+            </tr></thead>
+            <tbody id="indentListBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPROVE -->
+    <div class="tab-content" id="indent-approve">
+      <div class="card">
+        <div class="card-title"><span class="icon">⏳</span> Indents Pending Your Approval</div>
+        <div id="indentApproveList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== VENDOR & CS ===== -->
+  <div class="page" id="page-vendor">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('vendor','upload')">Upload Vendors & CS</div>
+      <div class="tab" onclick="switchTab('vendor','list')">All CS Records</div>
+      <div class="tab" onclick="switchTab('vendor','approve')">Pending Approvals</div>
+    </div>
+
+    <div class="tab-content active" id="vendor-upload">
+      <div class="card">
+        <div class="card-title"><span class="icon">🏢</span> Upload Vendor Details & Comparative Statement</div>
+        <div class="alert alert-info">Procurement team uploads vendor quotes. Approval: Purchase Manager → QS Manager → Management</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Select Approved Indent</label>
+            <select id="cs_indent" onchange="loadCSIndentItems()">
+              <option value="">-- Select Approved Indent --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>CS Reference No</label>
+            <input id="cs_ref" placeholder="CS-2025-001">
+          </div>
+          <div class="form-group">
+            <label>Date</label>
+            <input id="cs_date" type="date">
+          </div>
+          <div class="form-group">
+            <label>Prepared By</label>
+            <input id="cs_preparedby" placeholder="Procurement Officer Name">
+          </div>
+          <div class="form-group form-full">
+            <label>Remarks</label>
+            <textarea id="cs_remarks" placeholder="Notes on comparative statement..."></textarea>
+          </div>
+        </div>
+        <hr class="divider">
+        <div class="section-header">
+          <h3>Vendor Quotes per Line Item</h3>
+          <p class="text-muted">Enter up to 3 vendor quotes per line item. The recommended vendor will be highlighted.</p>
+        </div>
+        <div id="csLineItems"></div>
+        <div class="flex-row mt-16">
+          <button class="btn btn-primary" onclick="submitCS()">Submit for Approval</button>
+          <button class="btn btn-outline" onclick="clearCSForm()">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="vendor-list">
+      <div class="card">
+        <div class="section-header"><h3>Comparative Statements</h3></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>CS Ref</th><th>Indent No</th><th>Date</th><th>Prepared By</th><th>Status</th><th>Action</th>
+            </tr></thead>
+            <tbody id="csListBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="vendor-approve">
+      <div class="card">
+        <div class="card-title"><span class="icon">⏳</span> CS Pending Your Approval</div>
+        <div id="csApproveList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PURCHASE ORDER ===== -->
+  <div class="page" id="page-po">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('po','create')">Create PO</div>
+      <div class="tab" onclick="switchTab('po','list')">All POs</div>
+      <div class="tab" onclick="switchTab('po','approve')">Pending Approvals</div>
+    </div>
+
+    <div class="tab-content active" id="po-create">
+      <div class="card">
+        <div class="card-title"><span class="icon">📄</span> Generate Purchase Order</div>
+        <div class="alert alert-info">Select an approved CS to auto-generate PO. Approval: Purchase Manager → Management. PO is downloadable after final approval.</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Select Approved CS</label>
+            <select id="po_cs" onchange="loadPOFromCS()">
+              <option value="">-- Select Approved CS --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>PO Number</label>
+            <input id="po_no" placeholder="Auto-generated" readonly style="background:#f1f5f9;">
+          </div>
+          <div class="form-group">
+            <label>PO Date</label>
+            <input id="po_date" type="date">
+          </div>
+          <div class="form-group">
+            <label>Delivery Address</label>
+            <input id="po_address" placeholder="Site delivery address">
+          </div>
+          <div class="form-group">
+            <label>Payment Terms</label>
+            <select id="po_payment">
+              <option>30 days credit</option><option>60 days credit</option>
+              <option>Advance 30%, balance on delivery</option><option>100% advance</option><option>Against delivery</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Delivery Terms</label>
+            <select id="po_delivery">
+              <option>FOR Site</option><option>Ex-Works</option><option>CIF</option>
+            </select>
+          </div>
+          <div class="form-group form-full">
+            <label>Special Instructions</label>
+            <textarea id="po_instructions" placeholder="Any special delivery or quality requirements..."></textarea>
+          </div>
+        </div>
+        <hr class="divider">
+        <div class="section-header"><h3>PO Line Items (from approved CS)</h3></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>#</th><th>Description</th><th>UOM</th><th>Qty</th>
+              <th>Vendor</th><th>Unit Rate (₹)</th><th>GST%</th><th>Total (₹)</th>
+            </tr></thead>
+            <tbody id="poLineBody"></tbody>
+            <tfoot>
+              <tr>
+                <td colspan="7" style="text-align:right;font-weight:700;padding:10px 12px;">Grand Total (₹)</td>
+                <td style="font-weight:700;padding:10px 12px;" id="poGrandTotal">0.00</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="flex-row mt-16">
+          <button class="btn btn-primary" onclick="submitPO()">Create & Submit PO</button>
+          <button class="btn btn-outline" onclick="clearPOForm()">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="po-list">
+      <div class="card">
+        <div class="section-header"><h3>All Purchase Orders</h3></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>PO No</th><th>Date</th><th>Vendor</th><th>Indent Ref</th>
+              <th>Amount (₹)</th><th>Status</th><th>Action</th>
+            </tr></thead>
+            <tbody id="poListBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="po-approve">
+      <div class="card">
+        <div class="card-title"><span class="icon">⏳</span> POs Pending Your Approval</div>
+        <div id="poApproveList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== GRN ===== -->
+  <div class="page" id="page-grn">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('grn','create')">Enter GRN</div>
+      <div class="tab" onclick="switchTab('grn','list')">All GRNs</div>
+    </div>
+
+    <div class="tab-content active" id="grn-create">
+      <div class="card">
+        <div class="card-title"><span class="icon">📦</span> Goods Receipt Note</div>
+        <div class="alert alert-info">Enter GRN against each line item of an approved PO when material is received at site.</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Select Approved PO</label>
+            <select id="grn_po" onchange="loadGRNfromPO()">
+              <option value="">-- Select PO --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>GRN Number</label>
+            <input id="grn_no" placeholder="Auto-generated" readonly style="background:#f1f5f9;">
+          </div>
+          <div class="form-group">
+            <label>Receipt Date</label>
+            <input id="grn_date" type="date">
+          </div>
+          <div class="form-group">
+            <label>Vehicle / Challan No</label>
+            <input id="grn_challan" placeholder="Challan / DC number">
+          </div>
+          <div class="form-group">
+            <label>Received By</label>
+            <input id="grn_receivedby" placeholder="Store / Site In-charge name">
+          </div>
+          <div class="form-group">
+            <label>Supplier Challan Date</label>
+            <input id="grn_challandate" type="date">
+          </div>
+          <div class="form-group form-full">
+            <label>Remarks</label>
+            <textarea id="grn_remarks" placeholder="Quality observations, shortages, damages..."></textarea>
+          </div>
+        </div>
+        <hr class="divider">
+        <div class="section-header"><h3>PO Line Items — Enter Received Quantities</h3></div>
+        <div class="tbl-wrap">
+          <table class="line-items-table">
+            <thead><tr>
+              <th>#</th><th>Description</th><th>UOM</th><th>PO Qty</th>
+              <th>Already Received</th><th>Balance</th><th>Received Now</th><th>Condition</th><th>Remarks</th>
+            </tr></thead>
+            <tbody id="grnLineBody"></tbody>
+          </table>
+        </div>
+        <div class="flex-row mt-16">
+          <button class="btn btn-primary" onclick="submitGRN()">Save GRN</button>
+          <button class="btn btn-outline" onclick="clearGRNForm()">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="grn-list">
+      <div class="card">
+        <div class="section-header"><h3>All GRNs</h3></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>GRN No</th><th>Date</th><th>PO No</th><th>Vendor</th>
+              <th>Challan No</th><th>Received By</th><th>Status</th><th>Action</th>
+            </tr></thead>
+            <tbody id="grnListBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== INVOICE ===== -->
+  <div class="page" id="page-invoice">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('invoice','upload')">Upload Invoice</div>
+      <div class="tab" onclick="switchTab('invoice','list')">All Invoices</div>
+    </div>
+
+    <div class="tab-content active" id="invoice-upload">
+      <div class="card">
+        <div class="card-title"><span class="icon">🧾</span> Upload Vendor Invoice</div>
+        <div class="alert alert-info">Upload invoice against PO number. System auto-validates against GRN quantities.</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Select PO</label>
+            <select id="inv_po" onchange="loadInvoicePO()">
+              <option value="">-- Select PO (with GRN) --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Invoice Number</label>
+            <input id="inv_no" placeholder="Vendor invoice number">
+          </div>
+          <div class="form-group">
+            <label>Invoice Date</label>
+            <input id="inv_date" type="date">
+          </div>
+          <div class="form-group">
+            <label>Vendor Name</label>
+            <input id="inv_vendor" placeholder="Vendor name" readonly style="background:#f1f5f9;">
+          </div>
+          <div class="form-group">
+            <label>Invoice Amount (₹)</label>
+            <input id="inv_amount" type="number" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label>GST Amount (₹)</label>
+            <input id="inv_gst" type="number" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label>Total with GST (₹)</label>
+            <input id="inv_total" type="number" placeholder="0" readonly style="background:#f1f5f9;">
+          </div>
+          <div class="form-group">
+            <label>Payment Due Date</label>
+            <input id="inv_duedate" type="date">
+          </div>
+          <div class="form-group form-full">
+            <label>Invoice File (Reference / Filename)</label>
+            <input id="inv_file" placeholder="e.g. Invoice_Vendor_Nov2025.pdf">
+          </div>
+          <div class="form-group form-full">
+            <label>Remarks</label>
+            <textarea id="inv_remarks" placeholder="Any discrepancies or notes..."></textarea>
+          </div>
+        </div>
+        <hr class="divider">
+        <div class="section-header"><h3>GRN Summary for this PO</h3></div>
+        <div id="invGRNSummary"></div>
+        <div class="flex-row mt-16">
+          <button class="btn btn-primary" onclick="submitInvoice()">Submit Invoice</button>
+          <button class="btn btn-outline" onclick="clearInvoiceForm()">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="invoice-list">
+      <div class="card">
+        <div class="section-header"><h3>All Invoices</h3></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>Invoice No</th><th>Invoice Date</th><th>PO No</th><th>Vendor</th>
+              <th>Amount (₹)</th><th>GST (₹)</th><th>Total (₹)</th><th>Due Date</th><th>Status</th><th>Action</th>
+            </tr></thead>
+            <tbody id="invoiceListBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ======================================================
+// STATE & STORAGE
+// ======================================================
+let state = {
+  role: 'site_engineer',
+  master: [],
+  indents: [],
+  cs: [],
+  pos: [],
+  grns: [],
+  invoices: [],
+  activity: []
+};
+
+const ROLES = {
+  site_engineer: 'Site Engineer',
+  qs_engineer: 'QS Engineer',
+  technical_director: 'Technical Director',
+  management: 'Management',
+  purchase_manager: 'Purchase Manager',
+  qs_manager: 'QS Manager'
+};
+
+// ======================================================
+// SUPABASE CONFIGURATION
+// ======================================================
+const SUPABASE_URL = 'https://poshibdnmmkndgjhlxpe.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBvc2hpYmRubW1rbmRnamhseHBlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwODA2ODMsImV4cCI6MjA5NjY1NjY4M30.lfn90fbo7WcSBmVsoWt5j6L619rOqQBn_Ph2M00Z-cY';
+const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function save() {
+  try {
+    await _sb.from('app_state').upsert({ id: 'main', data: state, updated_at: new Date().toISOString() });
+  } catch(e) {
+    // Fallback to localStorage if Supabase fails
+    localStorage.setItem('poerp', JSON.stringify(state));
+    console.warn('Supabase save failed, using localStorage:', e.message);
+  }
+}
+
+async function load() {
+  try {
+    const { data, error } = await _sb.from('app_state').select('data').eq('id', 'main').single();
+    if (!error && data?.data) {
+      state = data.data;
+    } else {
+      // Fallback: try localStorage
+      const d = localStorage.getItem('poerp');
+      if (d) state = JSON.parse(d);
+    }
+  } catch(e) {
+    const d = localStorage.getItem('poerp');
+    if (d) state = JSON.parse(d);
+    console.warn('Supabase load failed, using localStorage:', e.message);
+  }
+}
+
+function genId(prefix) {
+  return prefix + '-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-5);
+}
+
+function today() { return new Date().toISOString().slice(0,10); }
+
+function addActivity(msg) {
+  state.activity.unshift({ time: new Date().toLocaleString('en-IN'), msg, role: ROLES[state.role] });
+  if (state.activity.length > 50) state.activity.pop();
+}
+
+function toast(msg, color) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = color || '#1e293b';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ======================================================
+// NAV & TABS
+// ======================================================
+function nav(el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  const page = el.dataset.page;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  const titles = {
+    dashboard: 'Dashboard', master: 'Material Master', indent: 'Indent',
+    vendor: 'Vendor & Comparative Statement', po: 'Purchase Order', grn: 'Goods Receipt Note', invoice: 'Invoice'
+  };
+  document.getElementById('pageTitle').textContent = titles[page] || page;
+  if (page === 'dashboard') renderDashboard();
+  if (page === 'master') { renderMaster(); populateProjectDropdowns(); }
+  if (page === 'indent') { populateProjectDropdowns(); renderIndentList(); renderIndentApprove(); initIndentForm(); }
+  if (page === 'vendor') { populateCSIndentDropdown(); renderCSList(); renderCSApprove(); }
+  if (page === 'po') { populatePOCSDropdown(); renderPOList(); renderPOApprove(); }
+  if (page === 'grn') { populateGRNPODropdown(); renderGRNList(); }
+  if (page === 'invoice') { populateInvoicePODropdown(); renderInvoiceList(); }
+}
+
+function switchTab(section, tab) {
+  const tabs = document.querySelectorAll(`#page-${section} .tab`);
+  const contents = document.querySelectorAll(`#page-${section} .tab-content`);
+  tabs.forEach((t,i) => {
+    t.classList.toggle('active', t.textContent.toLowerCase().includes(tab) ||
+      (tab === 'create' && i === 0 && !t.textContent.toLowerCase().includes('list') && !t.textContent.toLowerCase().includes('approv')) ||
+      (tab === 'upload' && i === 0));
+  });
+  contents.forEach(c => {
+    c.classList.toggle('active', c.id === `${section}-${tab}`);
+  });
+  // re-render lists when switching to them
+  if (tab === 'list') {
+    if (section === 'indent') renderIndentList();
+    if (section === 'vendor') renderCSList();
+    if (section === 'po') renderPOList();
+    if (section === 'grn') renderGRNList();
+    if (section === 'invoice') renderInvoiceList();
+  }
+  if (tab === 'approve') {
+    if (section === 'indent') renderIndentApprove();
+    if (section === 'vendor') renderCSApprove();
+    if (section === 'po') renderPOApprove();
+  }
+}
+
+function changeRole() {
+  state.role = document.getElementById('roleSelect').value;
+  document.getElementById('roleBadge').textContent = ROLES[state.role];
+  updateBadges();
+}
+
+// ======================================================
+// BADGES
+// ======================================================
+function updateBadges() {
+  const role = state.role;
+  const indentPending = state.indents.filter(i => pendingForRole(i, role, 'indent')).length;
+  const vPending = state.cs.filter(c => pendingForRole(c, role, 'cs')).length;
+  const poPending = state.pos.filter(p => pendingForRole(p, role, 'po')).length;
+  const grnPending = state.pos.filter(p => p.status === 'Approved' && totalGRNBalance(p.id) > 0).length;
+  const invPending = state.invoices.filter(i => i.status === 'Pending').length;
+  document.getElementById('badge-indent').textContent = indentPending;
+  document.getElementById('badge-vendor').textContent = vPending;
+  document.getElementById('badge-po').textContent = poPending;
+  document.getElementById('badge-grn').textContent = grnPending;
+  document.getElementById('badge-invoice').textContent = invPending;
+}
+
+function pendingForRole(doc, role, type) {
+  if (type === 'indent') {
+    const map = {
+      qs_engineer: 'Pending QS Engineer',
+      technical_director: 'Pending Technical Director',
+      management: 'Pending Management'
+    };
+    return doc.status === (map[role] || '');
+  }
+  if (type === 'cs') {
+    const map = {
+      qs_manager: 'Pending QS Manager',
+      management: 'Pending Management'
+    };
+    if (role === 'purchase_manager') return doc.status === 'Pending Purchase Manager';
+    return doc.status === (map[role] || '');
+  }
+  if (type === 'po') {
+    if (role === 'purchase_manager') return doc.status === 'Pending Purchase Manager';
+    if (role === 'management') return doc.status === 'Pending Management';
+    return false;
+  }
+  return false;
+}
+
+function totalGRNBalance(poId) {
+  const po = state.pos.find(p => p.id === poId);
+  if (!po) return 0;
+  return po.lines.reduce((s, l) => {
+    const recv = state.grns.filter(g => g.poId === poId)
+      .reduce((t, g) => t + (g.lines.find(gl => gl.lineId === l.id)?.received || 0), 0);
+    return s + Math.max(0, l.qty - recv);
+  }, 0);
+}
+
+// ======================================================
+// DASHBOARD
+// ======================================================
+function renderDashboard() {
+  updateBadges();
+  // Stats
+  const stats = [
+    { val: state.master.length, lbl: 'Master Items' },
+    { val: state.indents.length, lbl: 'Total Indents' },
+    { val: state.indents.filter(i => i.status === 'Approved').length, lbl: 'Approved Indents' },
+    { val: state.pos.length, lbl: 'Purchase Orders' },
+    { val: state.pos.filter(p => p.status === 'Approved').length, lbl: 'Approved POs' },
+    { val: state.grns.length, lbl: 'GRNs' },
+    { val: state.invoices.length, lbl: 'Invoices' },
+    { val: '₹' + (state.pos.filter(p => p.status === 'Approved').reduce((s,p) => s + (p.total||0), 0)).toLocaleString('en-IN'), lbl: 'PO Value' }
+  ];
+  document.getElementById('dashStats').innerHTML = stats.map(s =>
+    `<div class="stat-card"><div class="val">${s.val}</div><div class="lbl">${s.lbl}</div></div>`
+  ).join('');
+
+  // Pipeline
+  const stages = [
+    { label: 'Indent', items: state.indents.slice(-4), color: '#3b82f6' },
+    { label: 'CS / Vendor', items: state.cs.slice(-4), color: '#f59e0b' },
+    { label: 'PO', items: state.pos.slice(-4), color: '#8b5cf6' },
+    { label: 'GRN', items: state.grns.slice(-4), color: '#10b981' },
+    { label: 'Invoice', items: state.invoices.slice(-4), color: '#ef4444' }
+  ];
+  document.getElementById('dashPipeline').innerHTML = stages.map(s =>
+    `<div class="pipeline-col">
+      <h4>${s.label}</h4>
+      ${s.items.length ? s.items.map(i => `
+        <div class="pipeline-card">
+          <div class="pc-id">${i.id || i.no || ''}</div>
+          <div class="pc-desc">${i.project || i.indentId || ''}</div>
+          <div class="pc-meta">${i.status || ''}</div>
+        </div>`).join('') : '<div class="text-muted" style="font-size:11px;">No items</div>'}
+    </div>`
+  ).join('');
+
+  // My approvals
+  const role = state.role;
+  const myIndents = state.indents.filter(i => pendingForRole(i, role, 'indent'));
+  const myCS = state.cs.filter(c => pendingForRole(c, role, 'cs'));
+  const myPO = state.pos.filter(p => pendingForRole(p, role, 'po'));
+  const all = [...myIndents.map(i => ({type:'Indent', id:i.id, status:i.status})),
+                ...myCS.map(c => ({type:'CS', id:c.id, status:c.status})),
+                ...myPO.map(p => ({type:'PO', id:p.id, status:p.status}))];
+  const approvalEl = document.getElementById('myApprovals');
+  if (!all.length) {
+    approvalEl.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>No pending approvals for your role</p></div>';
+  } else {
+    approvalEl.innerHTML = `<table><thead><tr><th>Type</th><th>ID</th><th>Status</th></tr></thead><tbody>
+      ${all.map(a => `<tr><td>${a.type}</td><td><b>${a.id}</b></td><td><span class="status status-pending">${a.status}</span></td></tr>`).join('')}
+      </tbody></table>`;
+  }
+
+  // Activity
+  const actEl = document.getElementById('recentActivity');
+  if (!state.activity.length) {
+    actEl.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>No activity yet</p></div>';
+  } else {
+    actEl.innerHTML = `<table><thead><tr><th>Time</th><th>Activity</th><th>By</th></tr></thead><tbody>
+      ${state.activity.slice(0,10).map(a => `<tr><td class="text-muted">${a.time}</td><td>${a.msg}</td><td>${a.role}</td></tr>`).join('')}
+      </tbody></table>`;
+  }
+}
+
+// ======================================================
+// MATERIAL MASTER
+// ======================================================
+function addMaster() {
+  const fields = ['m_project','m_code','m_desc','m_category','m_uom','m_qty','m_rate','m_scope','m_remarks'];
+  const v = {};
+  let ok = true;
+  fields.forEach(f => {
+    const el = document.getElementById(f);
+    v[f] = el ? el.value : '';
+    if (!v[f] && ['m_project','m_code','m_desc','m_qty','m_rate'].includes(f)) { ok = false; el.style.border = '1.5px solid var(--danger)'; }
+    else if (el) el.style.border = '';
+  });
+  if (!ok) { toast('Fill all required fields', '#dc2626'); return; }
+
+  state.master.push({
+    id: genId('MAT'), project: v.m_project, code: v.m_code, desc: v.m_desc,
+    category: v.m_category, uom: v.m_uom, qty: parseFloat(v.m_qty),
+    rate: parseFloat(v.m_rate), scope: v.m_scope, remarks: v.m_remarks,
+    indented: 0
+  });
+  addActivity(`Material master entry added: ${v.m_desc} for ${v.m_project}`);
+  save(); renderMaster(); populateProjectDropdowns();
+  fields.forEach(f => { const el = document.getElementById(f); if (el) { el.value = ''; if (el.tagName === 'SELECT') el.selectedIndex = 0; }});
+  toast('Material added to master ✓', '#16a34a');
+}
+
+function renderMaster() {
+  const q = (document.getElementById('masterSearch')?.value || '').toLowerCase();
+  const rows = state.master.filter(m =>
+    !q || m.desc.toLowerCase().includes(q) || m.project.toLowerCase().includes(q) || m.code.toLowerCase().includes(q)
+  );
+  const body = document.getElementById('masterBody');
+  if (!rows.length) { body.innerHTML = '<tr><td colspan="12"><div class="empty-state"><div class="icon">📋</div><p>No master entries yet</p></div></td></tr>'; return; }
+  body.innerHTML = rows.map(m => {
+    const val = (m.qty * m.rate).toFixed(0);
+    const balance = Math.max(0, m.qty - m.indented);
+    const pct = m.qty ? Math.min(100, (m.indented / m.qty) * 100) : 0;
+    return `<tr>
+      <td><b>${m.project}</b></td>
+      <td class="text-muted">${m.code}</td>
+      <td>${m.desc}</td>
+      <td>${m.category}</td>
+      <td>${m.uom}</td>
+      <td>${m.qty.toLocaleString('en-IN')}</td>
+      <td>₹${m.rate.toLocaleString('en-IN')}</td>
+      <td>₹${parseInt(val).toLocaleString('en-IN')}</td>
+      <td><span class="tag tag-${m.scope}">${m.scope === 'contractor' ? 'Contractor' : 'Non-Contractual'}</span></td>
+      <td>
+        ${m.indented.toLocaleString('en-IN')}
+        <div class="progress-bar mt-12" style="width:80px;"><div class="progress-fill" style="width:${pct}%"></div></div>
+      </td>
+      <td>${balance.toLocaleString('en-IN')}</td>
+      <td><button class="btn btn-sm btn-danger" onclick="deleteMaster('${m.id}')">Delete</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function deleteMaster(id) {
+  if (!confirm('Delete this master entry?')) return;
+  state.master = state.master.filter(m => m.id !== id);
+  save(); renderMaster();
+  toast('Entry deleted');
+}
+
+function populateProjectDropdowns() {
+  const projects = [...new Set(state.master.map(m => m.project))];
+  const dl = document.getElementById('projectList');
+  if (dl) dl.innerHTML = projects.map(p => `<option value="${p}">`).join('');
+  const iSel = document.getElementById('i_project');
+  if (iSel) {
+    const cur = iSel.value;
+    iSel.innerHTML = '<option value="">-- Select Project --</option>' +
+      projects.map(p => `<option value="${p}" ${p===cur?'selected':''}>${p}</option>`).join('');
+  }
+}
+
+// ======================================================
+// INDENT
+// ======================================================
+let indentLineCount = 0;
+
+function initIndentForm() {
+  document.getElementById('i_no').value = genId('IND');
+  document.getElementById('i_date').value = today();
+  const body = document.getElementById('indentLines');
+  body.innerHTML = '';
+  indentLineCount = 0;
+  addIndentLine();
+}
+
+function addIndentLine() {
+  indentLineCount++;
+  const idx = indentLineCount;
+  const project = document.getElementById('i_project')?.value || '';
+  const items = state.master.filter(m => !project || m.project === project);
+  const opts = `<option value="">-- Select --</option>` + items.map(m =>
+    `<option value="${m.id}" data-uom="${m.uom}" data-qty="${m.qty}" data-scope="${m.scope}" data-desc="${m.desc}">${m.code} - ${m.desc}</option>`
+  ).join('');
+  const tr = document.createElement('tr');
+  tr.id = `iline-${idx}`;
+  tr.innerHTML = `
+    <td>${idx}</td>
+    <td><select onchange="fillIndentLine(${idx})" id="imat-${idx}" style="min-width:180px;">${opts}</select></td>
+    <td><input id="idesc-${idx}" placeholder="Description"></td>
+    <td><input id="iscope-${idx}" readonly style="width:110px;background:#f1f5f9;"></td>
+    <td><input id="iuom-${idx}" readonly style="width:60px;background:#f1f5f9;"></td>
+    <td><input id="iqtyest-${idx}" readonly style="width:70px;background:#f1f5f9;"></td>
+    <td><input id="iqtyreq-${idx}" type="number" placeholder="0" style="width:80px;"></td>
+    <td><input id="irem-${idx}" placeholder="Remarks"></td>
+    <td><button class="btn btn-sm btn-danger" onclick="removeIndentLine(${idx})">✕</button></td>
+  `;
+  document.getElementById('indentLines').appendChild(tr);
+}
+
+function fillIndentLine(idx) {
+  const sel = document.getElementById(`imat-${idx}`);
+  const opt = sel.options[sel.selectedIndex];
+  document.getElementById(`idesc-${idx}`).value = opt.dataset.desc || '';
+  document.getElementById(`iuom-${idx}`).value = opt.dataset.uom || '';
+  document.getElementById(`iqtyest-${idx}`).value = opt.dataset.qty || '';
+  document.getElementById(`iscope-${idx}`).value = opt.dataset.scope === 'contractor' ? 'Contractor' : 'Non-Contractual';
+}
+
+function removeIndentLine(idx) {
+  document.getElementById(`iline-${idx}`)?.remove();
+}
+
+function populateMasterItems() {
+  // Refresh lines when project changes
+  const body = document.getElementById('indentLines');
+  body.innerHTML = '';
+  indentLineCount = 0;
+  addIndentLine();
+}
+
+function submitIndent() {
+  const no = document.getElementById('i_no').value;
+  const project = document.getElementById('i_project').value;
+  const date = document.getElementById('i_date').value;
+  const reqdate = document.getElementById('i_reqdate').value;
+  const location = document.getElementById('i_location').value;
+  const priority = document.getElementById('i_priority').value;
+  const purpose = document.getElementById('i_purpose').value;
+
+  if (!project) { toast('Select a project', '#dc2626'); return; }
+
+  const lines = [];
+  for (let i = 1; i <= indentLineCount; i++) {
+    const matEl = document.getElementById(`imat-${i}`);
+    if (!matEl) continue;
+    const matId = matEl.value;
+    const reqQty = parseFloat(document.getElementById(`iqtyreq-${i}`)?.value || 0);
+    if (!matId || !reqQty) continue;
+    const mat = state.master.find(m => m.id === matId);
+    lines.push({
+      id: 'L' + i, matId, desc: document.getElementById(`idesc-${i}`).value,
+      scope: document.getElementById(`iscope-${i}`).value,
+      uom: document.getElementById(`iuom-${i}`).value,
+      estQty: parseFloat(document.getElementById(`iqtyest-${i}`).value || 0),
+      reqQty, remarks: document.getElementById(`irem-${i}`)?.value || '',
+      matCode: mat?.code || ''
+    });
+    if (mat) { mat.indented = (mat.indented || 0) + reqQty; }
+  }
+  if (!lines.length) { toast('Add at least one line item', '#dc2626'); return; }
+
+  const indent = {
+    id: no, project, date, reqdate, location, priority, purpose, lines,
+    status: 'Pending QS Engineer',
+    raisedBy: ROLES[state.role],
+    approvals: [{ role: 'Site Engineer', status: 'Approved', by: ROLES[state.role], time: new Date().toLocaleString('en-IN') }]
+  };
+  state.indents.push(indent);
+  addActivity(`Indent ${no} submitted for ${project} (${lines.length} items)`);
+  save(); updateBadges();
+  initIndentForm();
+  toast('Indent submitted ✓', '#16a34a');
+  switchTab('indent', 'list');
+  renderIndentList();
+}
+
+function clearIndentForm() { initIndentForm(); }
+
+function renderIndentList() {
+  const filter = document.getElementById('indentFilterStatus')?.value || '';
+  const rows = state.indents.filter(i => !filter || i.status === filter);
+  const body = document.getElementById('indentListBody');
+  if (!rows.length) { body.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">📝</div><p>No indents yet</p></div></td></tr>'; return; }
+  body.innerHTML = rows.slice().reverse().map(i => {
+    const sc = statusClass(i.status);
+    return `<tr>
+      <td><b>${i.id}</b></td>
+      <td>${i.date}</td>
+      <td>${i.project}</td>
+      <td>${i.lines.length} items</td>
+      <td><span class="status status-${i.priority === 'Critical' ? 'pending' : 'draft'}">${i.priority}</span></td>
+      <td><span class="status ${sc}">${i.status}</span></td>
+      <td>${i.raisedBy}</td>
+      <td><button class="btn btn-sm btn-outline" onclick="viewIndent('${i.id}')">View</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderIndentApprove() {
+  const role = state.role;
+  const pending = state.indents.filter(i => pendingForRole(i, role, 'indent'));
+  const el = document.getElementById('indentApproveList');
+  if (!pending.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>No indents pending your approval</p></div>';
+    return;
+  }
+  el.innerHTML = pending.map(i => `
+    <div style="border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;">
+      <div class="flex-row" style="justify-content:space-between;">
+        <div>
+          <b>${i.id}</b> — ${i.project} &nbsp;
+          <span class="status status-pending">${i.status}</span>
+        </div>
+        <div class="flex-row">
+          <button class="btn btn-success btn-sm" onclick="approveIndent('${i.id}')">✓ Approve</button>
+          <button class="btn btn-danger btn-sm" onclick="rejectIndent('${i.id}')">✕ Reject</button>
+          <button class="btn btn-outline btn-sm" onclick="viewIndent('${i.id}')">View</button>
+        </div>
+      </div>
+      <div class="text-muted mt-12">Date: ${i.date} | Priority: ${i.priority} | ${i.lines.length} line items</div>
+      ${renderApprovalFlow(i.approvals, indentApprovalSteps())}
+    </div>
+  `).join('');
+}
+
+function indentApprovalSteps() {
+  return ['Site Engineer', 'QS Engineer', 'Technical Director', 'Management'];
+}
+
+function csApprovalSteps() {
+  return ['Purchase Manager', 'QS Manager', 'Management'];
+}
+
+function poApprovalSteps() {
+  return ['Purchase Manager', 'Management'];
+}
+
+function renderApprovalFlow(approvals, steps) {
+  return `<div class="approval-flow" style="margin-top:10px;">` +
+    steps.map((step, idx) => {
+      const appr = approvals?.find(a => a.role === step);
+      const isDone = appr && appr.status === 'Approved';
+      const isRejected = appr && appr.status === 'Rejected';
+      const isActive = !isDone && !isRejected && (idx === 0 || (approvals?.find(a => a.role === steps[idx-1])?.status === 'Approved'));
+      const cls = isDone ? 'done' : isRejected ? 'rejected' : isActive ? 'active' : '';
+      return `<div class="approval-step ${cls}">
+        <div>
+          <div class="step-dot">${isDone ? '✓' : isRejected ? '✕' : idx+1}</div>
+          <div class="step-label">${step}</div>
+        </div>
+        ${idx < steps.length - 1 ? '<div class="step-line"></div>' : ''}
+      </div>`;
+    }).join('') +
+  `</div>`;
+}
+
+function approveIndent(id) {
+  const indent = state.indents.find(i => i.id === id);
+  if (!indent) return;
+  const stepMap = {
+    qs_engineer: { next: 'Pending Technical Director', role: 'QS Engineer' },
+    technical_director: { next: 'Pending Management', role: 'Technical Director' },
+    management: { next: 'Approved', role: 'Management' }
+  };
+  const step = stepMap[state.role];
+  if (!step) return;
+  if (!indent.approvals) indent.approvals = [];
+  indent.approvals.push({ role: step.role, status: 'Approved', by: ROLES[state.role], time: new Date().toLocaleString('en-IN') });
+  indent.status = step.next;
+  addActivity(`Indent ${id} approved by ${ROLES[state.role]}`);
+  save(); updateBadges(); renderIndentApprove(); renderIndentList();
+  toast(`Indent approved ✓ — moved to: ${step.next}`, '#16a34a');
+}
+
+function rejectIndent(id) {
+  const reason = prompt('Reason for rejection:');
+  if (reason === null) return;
+  const indent = state.indents.find(i => i.id === id);
+  if (!indent) return;
+  if (!indent.approvals) indent.approvals = [];
+  indent.approvals.push({ role: ROLES[state.role], status: 'Rejected', by: ROLES[state.role], time: new Date().toLocaleString('en-IN'), reason });
+  indent.status = 'Rejected';
+  addActivity(`Indent ${id} rejected by ${ROLES[state.role]}: ${reason}`);
+  save(); updateBadges(); renderIndentApprove(); renderIndentList();
+  toast('Indent rejected', '#dc2626');
+}
+
+function viewIndent(id) {
+  const i = state.indents.find(x => x.id === id);
+  if (!i) return;
+  openModal(`
+    <div class="modal-title">Indent: ${i.id} <span class="modal-close" onclick="closeModal()">✕</span></div>
+    <div class="flex-row" style="margin-bottom:12px;">
+      <div><b>Project:</b> ${i.project}</div>
+      <div><b>Date:</b> ${i.date}</div>
+      <div><b>Priority:</b> ${i.priority}</div>
+      <div><span class="status ${statusClass(i.status)}">${i.status}</span></div>
+    </div>
+    <div style="margin-bottom:12px;"><b>Purpose:</b> ${i.purpose || '-'}</div>
+    ${renderApprovalFlow(i.approvals, indentApprovalSteps())}
+    <hr class="divider">
+    <table><thead><tr><th>#</th><th>Code</th><th>Description</th><th>Scope</th><th>UOM</th><th>Est Qty</th><th>Req Qty</th><th>Remarks</th></tr></thead>
+    <tbody>${i.lines.map((l,idx) => `<tr>
+      <td>${idx+1}</td><td>${l.matCode}</td><td>${l.desc}</td><td>${l.scope}</td>
+      <td>${l.uom}</td><td>${l.estQty}</td><td><b>${l.reqQty}</b></td><td>${l.remarks||'-'}</td>
+    </tr>`).join('')}</tbody></table>
+  `);
+}
+
+// ======================================================
+// VENDOR & CS
+// ======================================================
+function populateCSIndentDropdown() {
+  const sel = document.getElementById('cs_indent');
+  if (!sel) return;
+  const approved = state.indents.filter(i => i.status === 'Approved' && !state.cs.find(c => c.indentId === i.id && c.status !== 'Rejected'));
+  sel.innerHTML = '<option value="">-- Select Approved Indent --</option>' +
+    approved.map(i => `<option value="${i.id}">${i.id} — ${i.project}</option>`).join('');
+}
+
+function loadCSIndentItems() {
+  const indentId = document.getElementById('cs_indent').value;
+  const container = document.getElementById('csLineItems');
+  if (!indentId) { container.innerHTML = ''; return; }
+  const indent = state.indents.find(i => i.id === indentId);
+  if (!indent) return;
+  document.getElementById('cs_ref').value = genId('CS');
+  document.getElementById('cs_date').value = today();
+  container.innerHTML = indent.lines.map((line, idx) => `
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px;">
+      <div style="font-weight:600;margin-bottom:10px;">${idx+1}. ${line.desc} — ${line.reqQty} ${line.uom}</div>
+      <table class="line-items-table" style="margin-bottom:0;">
+        <thead><tr><th>Vendor Name</th><th>Contact</th><th>Unit Rate (₹)</th><th>Lead Days</th><th>GST%</th><th>Total (₹)</th><th>Recommend</th></tr></thead>
+        <tbody>
+          ${[1,2,3].map(v => `<tr>
+            <td><input id="cv_name_${idx}_${v}" placeholder="Vendor ${v}"></td>
+            <td><input id="cv_contact_${idx}_${v}" placeholder="Phone / Email"></td>
+            <td><input id="cv_rate_${idx}_${v}" type="number" placeholder="0" oninput="calcCSTotal(${idx},${v},${line.reqQty})"></td>
+            <td><input id="cv_lead_${idx}_${v}" type="number" placeholder="0"></td>
+            <td><input id="cv_gst_${idx}_${v}" type="number" placeholder="18" value="18" oninput="calcCSTotal(${idx},${v},${line.reqQty})"></td>
+            <td><input id="cv_total_${idx}_${v}" readonly style="background:#f1f5f9;"></td>
+            <td style="text-align:center;"><input type="radio" name="rec_${idx}" value="${v}" id="rec_${idx}_${v}"></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+      <input type="hidden" id="csline_id_${idx}" value="${line.id}">
+      <input type="hidden" id="csline_desc_${idx}" value="${line.desc}">
+      <input type="hidden" id="csline_uom_${idx}" value="${line.uom}">
+      <input type="hidden" id="csline_qty_${idx}" value="${line.reqQty}">
+    </div>
+  `).join('');
+  document.getElementById('_csLineCount').value = indent.lines.length;
+}
+
+function calcCSTotal(lineIdx, v, qty) {
+  const rate = parseFloat(document.getElementById(`cv_rate_${lineIdx}_${v}`)?.value || 0);
+  const gst = parseFloat(document.getElementById(`cv_gst_${lineIdx}_${v}`)?.value || 18);
+  const total = rate * qty * (1 + gst/100);
+  const el = document.getElementById(`cv_total_${lineIdx}_${v}`);
+  if (el) el.value = total.toFixed(2);
+}
+
+function submitCS() {
+  const indentId = document.getElementById('cs_indent').value;
+  const ref = document.getElementById('cs_ref').value;
+  const date = document.getElementById('cs_date').value;
+  const preparedby = document.getElementById('cs_preparedby').value;
+  if (!indentId || !ref) { toast('Select indent and fill CS reference', '#dc2626'); return; }
+  const indent = state.indents.find(i => i.id === indentId);
+  if (!indent) return;
+  const lineCount = parseInt(document.getElementById('_csLineCount').value || 0);
+  const lines = [];
+  for (let idx = 0; idx < lineCount; idx++) {
+    const vendors = [1,2,3].map(v => ({
+      name: document.getElementById(`cv_name_${idx}_${v}`)?.value || '',
+      contact: document.getElementById(`cv_contact_${idx}_${v}`)?.value || '',
+      rate: parseFloat(document.getElementById(`cv_rate_${idx}_${v}`)?.value || 0),
+      lead: document.getElementById(`cv_lead_${idx}_${v}`)?.value || '',
+      gst: parseFloat(document.getElementById(`cv_gst_${idx}_${v}`)?.value || 18),
+      total: parseFloat(document.getElementById(`cv_total_${idx}_${v}`)?.value || 0)
+    })).filter(v => v.name);
+    const recEl = document.querySelector(`input[name="rec_${idx}"]:checked`);
+    const recommended = recEl ? parseInt(recEl.value) - 1 : 0;
+    lines.push({
+      lineId: document.getElementById(`csline_id_${idx}`)?.value,
+      desc: document.getElementById(`csline_desc_${idx}`)?.value,
+      uom: document.getElementById(`csline_uom_${idx}`)?.value,
+      qty: parseFloat(document.getElementById(`csline_qty_${idx}`)?.value || 0),
+      vendors, recommended
+    });
+  }
+  const cs = {
+    id: ref, indentId, project: indent.project, date, preparedby,
+    remarks: document.getElementById('cs_remarks').value,
+    lines, status: 'Pending Purchase Manager',
+    approvals: []
+  };
+  state.cs.push(cs);
+  addActivity(`CS ${ref} submitted for indent ${indentId}`);
+  save(); updateBadges();
+  clearCSForm();
+  toast('Comparative Statement submitted ✓', '#16a34a');
+  switchTab('vendor', 'list');
+  renderCSList();
+}
+
+function clearCSForm() {
+  document.getElementById('cs_indent').value = '';
+  document.getElementById('cs_ref').value = '';
+  document.getElementById('cs_date').value = today();
+  document.getElementById('cs_preparedby').value = '';
+  document.getElementById('cs_remarks').value = '';
+  document.getElementById('csLineItems').innerHTML = '';
+}
+
+function renderCSList() {
+  const body = document.getElementById('csListBody');
+  if (!state.cs.length) { body.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="icon">🏢</div><p>No comparative statements yet</p></div></td></tr>'; return; }
+  body.innerHTML = state.cs.slice().reverse().map(c => `<tr>
+    <td><b>${c.id}</b></td><td>${c.indentId}</td><td>${c.date}</td>
+    <td>${c.preparedby}</td>
+    <td><span class="status ${statusClass(c.status)}">${c.status}</span></td>
+    <td><button class="btn btn-sm btn-outline" onclick="viewCS('${c.id}')">View</button></td>
+  </tr>`).join('');
+}
+
+function renderCSApprove() {
+  const role = state.role;
+  const pending = state.cs.filter(c => pendingForRole(c, role, 'cs'));
+  const el = document.getElementById('csApproveList');
+  if (!pending.length) { el.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>No CS pending your approval</p></div>'; return; }
+  el.innerHTML = pending.map(c => `
+    <div style="border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;">
+      <div class="flex-row" style="justify-content:space-between;">
+        <div><b>${c.id}</b> — Indent: ${c.indentId} &nbsp;<span class="status status-pending">${c.status}</span></div>
+        <div class="flex-row">
+          <button class="btn btn-success btn-sm" onclick="approveCS('${c.id}')">✓ Approve</button>
+          <button class="btn btn-danger btn-sm" onclick="rejectCS('${c.id}')">✕ Reject</button>
+          <button class="btn btn-outline btn-sm" onclick="viewCS('${c.id}')">View</button>
+        </div>
+      </div>
+      <div class="text-muted mt-12">Date: ${c.date} | ${c.lines?.length || 0} line items</div>
+      ${renderApprovalFlow(c.approvals, csApprovalSteps())}
+    </div>
+  `).join('');
+}
+
+function approveCS(id) {
+  const cs = state.cs.find(c => c.id === id);
+  if (!cs) return;
+  const stepMap = {
+    purchase_manager: { next: 'Pending QS Manager', role: 'Purchase Manager' },
+    qs_manager: { next: 'Pending Management', role: 'QS Manager' },
+    management: { next: 'Approved', role: 'Management' }
+  };
+  const step = stepMap[state.role];
+  if (!step) return;
+  if (!cs.approvals) cs.approvals = [];
+  cs.approvals.push({ role: step.role, status: 'Approved', by: ROLES[state.role], time: new Date().toLocaleString('en-IN') });
+  cs.status = step.next;
+  addActivity(`CS ${id} approved by ${ROLES[state.role]}`);
+  save(); updateBadges(); renderCSApprove(); renderCSList();
+  toast(`CS approved ✓`, '#16a34a');
+}
+
+function rejectCS(id) {
+  const reason = prompt('Reason for rejection:');
+  if (reason === null) return;
+  const cs = state.cs.find(c => c.id === id);
+  if (!cs) return;
+  if (!cs.approvals) cs.approvals = [];
+  cs.approvals.push({ role: ROLES[state.role], status: 'Rejected', by: ROLES[state.role], time: new Date().toLocaleString('en-IN'), reason });
+  cs.status = 'Rejected';
+  addActivity(`CS ${id} rejected by ${ROLES[state.role]}`);
+  save(); updateBadges(); renderCSApprove(); renderCSList();
+  toast('CS rejected', '#dc2626');
+}
+
+function viewCS(id) {
+  const c = state.cs.find(x => x.id === id);
+  if (!c) return;
+  openModal(`
+    <div class="modal-title">CS: ${c.id} <span class="modal-close" onclick="closeModal()">✕</span></div>
+    <div class="flex-row" style="margin-bottom:10px;">
+      <b>Indent:</b> ${c.indentId} &nbsp; <b>Project:</b> ${c.project} &nbsp;
+      <span class="status ${statusClass(c.status)}">${c.status}</span>
+    </div>
+    ${renderApprovalFlow(c.approvals, csApprovalSteps())}
+    <hr class="divider">
+    ${(c.lines || []).map((l, idx) => `
+      <div style="margin-bottom:14px;">
+        <b>${idx+1}. ${l.desc}</b> — ${l.qty} ${l.uom}
+        <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:6px;">
+          <thead><tr><th style="text-align:left;padding:4px;">Vendor</th><th>Rate</th><th>GST%</th><th>Total</th><th>Lead</th><th>Recommended</th></tr></thead>
+          <tbody>
+            ${(l.vendors || []).map((v, vi) => `<tr style="${vi === l.recommended ? 'background:#f0fdf4;' : ''}">
+              <td style="padding:4px;">${v.name}</td><td>₹${v.rate}</td><td>${v.gst}%</td>
+              <td>₹${v.total.toFixed(2)}</td><td>${v.lead} days</td>
+              <td>${vi === l.recommended ? '⭐ Yes' : '-'}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    `).join('')}
+  `);
+}
+
+// ======================================================
+// PURCHASE ORDER
+// ======================================================
+let poLines = [];
+
+function populatePOCSDropdown() {
+  const sel = document.getElementById('po_cs');
+  if (!sel) return;
+  const approved = state.cs.filter(c => c.status === 'Approved' && !state.pos.find(p => p.csId === c.id && p.status !== 'Rejected'));
+  sel.innerHTML = '<option value="">-- Select Approved CS --</option>' +
+    approved.map(c => `<option value="${c.id}">${c.id} — Indent: ${c.indentId} — ${c.project}</option>`).join('');
+}
+
+function loadPOFromCS() {
+  const csId = document.getElementById('po_cs').value;
+  if (!csId) { document.getElementById('poLineBody').innerHTML = ''; document.getElementById('poGrandTotal').textContent = '0.00'; return; }
+  const cs = state.cs.find(c => c.id === csId);
+  if (!cs) return;
+  const indent = state.indents.find(i => i.id === cs.indentId);
+  document.getElementById('po_no').value = genId('PO');
+  document.getElementById('po_date').value = today();
+  document.getElementById('po_address').value = indent?.location || '';
+  poLines = (cs.lines || []).map((l, idx) => {
+    const vendor = l.vendors?.[l.recommended] || {};
+    return {
+      id: 'P' + (idx+1), desc: l.desc, uom: l.uom, qty: l.qty,
+      vendor: vendor.name || '', rate: vendor.rate || 0, gst: vendor.gst || 18,
+      total: vendor.total || 0
+    };
+  });
+  renderPOLines();
+}
+
+function renderPOLines() {
+  const body = document.getElementById('poLineBody');
+  if (!poLines.length) { body.innerHTML = '<tr><td colspan="8"><div class="empty-state">No PO lines</div></td></tr>'; return; }
+  let grand = 0;
+  body.innerHTML = poLines.map((l, idx) => {
+    grand += l.total;
+    return `<tr>
+      <td>${idx+1}</td><td>${l.desc}</td><td>${l.uom}</td><td>${l.qty}</td>
+      <td>${l.vendor}</td><td>₹${l.rate.toLocaleString('en-IN')}</td><td>${l.gst}%</td>
+      <td>₹${l.total.toFixed(2)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('poGrandTotal').textContent = '₹' + grand.toFixed(2);
+}
+
+function submitPO() {
+  const csId = document.getElementById('po_cs').value;
+  const no = document.getElementById('po_no').value;
+  const date = document.getElementById('po_date').value;
+  if (!csId || !poLines.length) { toast('Select a CS and load PO lines', '#dc2626'); return; }
+  const cs = state.cs.find(c => c.id === csId);
+  const indent = state.indents.find(i => i.id === cs.indentId);
+  const grand = poLines.reduce((s, l) => s + l.total, 0);
+  const vendors = [...new Set(poLines.map(l => l.vendor))].join(', ');
+  const po = {
+    id: no, csId, indentId: cs.indentId, project: cs.project,
+    date, address: document.getElementById('po_address').value,
+    payment: document.getElementById('po_payment').value,
+    delivery: document.getElementById('po_delivery').value,
+    instructions: document.getElementById('po_instructions').value,
+    lines: poLines.map(l => ({...l})),
+    total: grand, vendor: vendors,
+    status: 'Pending Purchase Manager', approvals: []
+  };
+  state.pos.push(po);
+  addActivity(`PO ${no} created for ${cs.project} — ₹${grand.toFixed(2)}`);
+  save(); updateBadges();
+  clearPOForm();
+  toast('PO created and submitted ✓', '#16a34a');
+  switchTab('po', 'list');
+  renderPOList();
+}
+
+function clearPOForm() {
+  document.getElementById('po_cs').value = '';
+  document.getElementById('po_no').value = '';
+  document.getElementById('po_date').value = today();
+  document.getElementById('po_address').value = '';
+  document.getElementById('po_instructions').value = '';
+  document.getElementById('poLineBody').innerHTML = '';
+  document.getElementById('poGrandTotal').textContent = '0.00';
+  poLines = [];
+}
+
+function renderPOList() {
+  const body = document.getElementById('poListBody');
+  if (!state.pos.length) { body.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">📄</div><p>No POs yet</p></div></td></tr>'; return; }
+  body.innerHTML = state.pos.slice().reverse().map(p => `<tr>
+    <td><b>${p.id}</b></td><td>${p.date}</td><td>${p.vendor}</td>
+    <td>${p.indentId}</td><td>₹${p.total.toLocaleString('en-IN', {maximumFractionDigits:2})}</td>
+    <td><span class="status ${statusClass(p.status)}">${p.status}</span></td>
+    <td>
+      <button class="btn btn-sm btn-outline" onclick="viewPO('${p.id}')">View</button>
+      ${p.status === 'Approved' ? `<button class="btn btn-sm btn-accent" onclick="downloadPO('${p.id}')">⬇ Download</button>` : ''}
+    </td>
+  </tr>`).join('');
+}
+
+function renderPOApprove() {
+  const role = state.role;
+  const pending = state.pos.filter(p => pendingForRole(p, role, 'po'));
+  const el = document.getElementById('poApproveList');
+  if (!pending.length) { el.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>No POs pending your approval</p></div>'; return; }
+  el.innerHTML = pending.map(p => `
+    <div style="border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;">
+      <div class="flex-row" style="justify-content:space-between;">
+        <div><b>${p.id}</b> — ${p.project} &nbsp;<span class="status status-pending">${p.status}</span></div>
+        <div class="flex-row">
+          <button class="btn btn-success btn-sm" onclick="approvePO('${p.id}')">✓ Approve</button>
+          <button class="btn btn-danger btn-sm" onclick="rejectPO('${p.id}')">✕ Reject</button>
+          <button class="btn btn-outline btn-sm" onclick="viewPO('${p.id}')">View</button>
+        </div>
+      </div>
+      <div class="text-muted mt-12">Vendor: ${p.vendor} | Amount: ₹${p.total.toFixed(2)}</div>
+      ${renderApprovalFlow(p.approvals, poApprovalSteps())}
+    </div>
+  `).join('');
+}
+
+function approvePO(id) {
+  const po = state.pos.find(p => p.id === id);
+  if (!po) return;
+  const stepMap = {
+    purchase_manager: { next: 'Pending Management', role: 'Purchase Manager' },
+    management: { next: 'Approved', role: 'Management' }
+  };
+  const step = stepMap[state.role];
+  if (!step) return;
+  if (!po.approvals) po.approvals = [];
+  po.approvals.push({ role: step.role, status: 'Approved', by: ROLES[state.role], time: new Date().toLocaleString('en-IN') });
+  po.status = step.next;
+  addActivity(`PO ${id} approved by ${ROLES[state.role]}`);
+  save(); updateBadges(); renderPOApprove(); renderPOList();
+  toast('PO approved ✓', '#16a34a');
+}
+
+function rejectPO(id) {
+  const reason = prompt('Reason for rejection:');
+  if (reason === null) return;
+  const po = state.pos.find(p => p.id === id);
+  if (!po) return;
+  if (!po.approvals) po.approvals = [];
+  po.approvals.push({ role: ROLES[state.role], status: 'Rejected', by: ROLES[state.role], time: new Date().toLocaleString('en-IN'), reason });
+  po.status = 'Rejected';
+  addActivity(`PO ${id} rejected by ${ROLES[state.role]}`);
+  save(); updateBadges(); renderPOApprove(); renderPOList();
+  toast('PO rejected', '#dc2626');
+}
+
+function viewPO(id) {
+  const p = state.pos.find(x => x.id === id);
+  if (!p) return;
+  openModal(`
+    <div class="modal-title">PO: ${p.id} <span class="modal-close" onclick="closeModal()">✕</span></div>
+    <div class="flex-row" style="margin-bottom:10px;flex-wrap:wrap;gap:12px;">
+      <div><b>Project:</b> ${p.project}</div><div><b>Date:</b> ${p.date}</div>
+      <div><b>Vendor:</b> ${p.vendor}</div>
+      <span class="status ${statusClass(p.status)}">${p.status}</span>
+    </div>
+    <div class="flex-row" style="margin-bottom:12px;gap:20px;">
+      <div><b>Payment:</b> ${p.payment}</div><div><b>Delivery:</b> ${p.delivery}</div>
+    </div>
+    ${renderApprovalFlow(p.approvals, poApprovalSteps())}
+    <hr class="divider">
+    <table><thead><tr><th>#</th><th>Description</th><th>UOM</th><th>Qty</th><th>Vendor</th><th>Rate (₹)</th><th>GST%</th><th>Total (₹)</th></tr></thead>
+    <tbody>${p.lines.map((l,i) => `<tr>
+      <td>${i+1}</td><td>${l.desc}</td><td>${l.uom}</td><td>${l.qty}</td>
+      <td>${l.vendor}</td><td>${l.rate.toLocaleString('en-IN')}</td><td>${l.gst}%</td>
+      <td><b>${l.total.toFixed(2)}</b></td>
+    </tr>`).join('')}</tbody>
+    <tfoot><tr><td colspan="7" style="text-align:right;font-weight:700;padding:10px 8px;">Grand Total</td><td><b>₹${p.total.toFixed(2)}</b></td></tr></tfoot>
+    </table>
+    ${p.status === 'Approved' ? `<div class="flex-row mt-16"><button class="btn btn-accent" onclick="downloadPO('${p.id}');closeModal()">⬇ Download PO</button></div>` : ''}
+  `);
+}
+
+function downloadPO(id) {
+  const p = state.pos.find(x => x.id === id);
+  if (!p) return;
+  const html = `<!DOCTYPE html><html><head><title>PO ${p.id}</title>
+  <style>
+    body{font-family:Arial,sans-serif;margin:40px;color:#1a1a2e;}
+    h1{color:#1a3c5e;border-bottom:2px solid #1a3c5e;padding-bottom:8px;}
+    .header{display:flex;justify-content:space-between;margin-bottom:20px;}
+    .info-box{background:#f8fafc;border:1px solid #e2e8f0;padding:12px;border-radius:6px;margin-bottom:16px;}
+    table{width:100%;border-collapse:collapse;margin-top:16px;}
+    th{background:#1a3c5e;color:#fff;padding:10px;text-align:left;}
+    td{padding:8px 10px;border-bottom:1px solid #e2e8f0;}
+    .total{font-weight:bold;font-size:16px;text-align:right;margin-top:10px;}
+    .footer{margin-top:40px;display:flex;justify-content:space-around;border-top:1px solid #e2e8f0;padding-top:20px;}
+    .sign{text-align:center;min-width:150px;}
+    .sign-line{border-top:1px solid #333;margin-top:40px;padding-top:6px;}
+    @media print{button{display:none}}
+  </style></head><body>
+  <div style="text-align:center;margin-bottom:20px;">
+    <h1>PURCHASE ORDER</h1>
+    <h3 style="color:#64748b;margin:0;">Sankalp Construction</h3>
+  </div>
+  <div class="header">
+    <div><b>PO No:</b> ${p.id}<br><b>PO Date:</b> ${p.date}<br><b>Indent Ref:</b> ${p.indentId}</div>
+    <div><b>Project:</b> ${p.project}<br><b>Payment Terms:</b> ${p.payment}<br><b>Delivery:</b> ${p.delivery}</div>
+  </div>
+  <div class="info-box"><b>Vendor:</b> ${p.vendor}<br><b>Delivery Address:</b> ${p.address}</div>
+  ${p.instructions ? `<div class="info-box"><b>Special Instructions:</b> ${p.instructions}</div>` : ''}
+  <table>
+    <thead><tr><th>#</th><th>Description</th><th>UOM</th><th>Qty</th><th>Unit Rate (₹)</th><th>GST%</th><th>Total (₹)</th></tr></thead>
+    <tbody>
+      ${p.lines.map((l,i) => `<tr><td>${i+1}</td><td>${l.desc}</td><td>${l.uom}</td><td>${l.qty}</td><td>${l.rate.toLocaleString('en-IN')}</td><td>${l.gst}%</td><td><b>${l.total.toFixed(2)}</b></td></tr>`).join('')}
+    </tbody>
+  </table>
+  <div class="total">Grand Total: ₹${p.total.toFixed(2)}</div>
+  <div class="footer">
+    <div class="sign"><div class="sign-line">Purchase Manager</div></div>
+    <div class="sign"><div class="sign-line">Management Approval</div></div>
+    <div class="sign"><div class="sign-line">Vendor Acceptance</div></div>
+  </div>
+  <div style="text-align:center;margin-top:20px;"><button onclick="window.print()" style="padding:10px 20px;background:#1a3c5e;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px;">🖨 Print / Save as PDF</button></div>
+  </body></html>`;
+  const w = window.open('', '_blank');
+  w.document.write(html);
+  w.document.close();
+}
+
+// ======================================================
+// GRN
+// ======================================================
+function populateGRNPODropdown() {
+  const sel = document.getElementById('grn_po');
+  if (!sel) return;
+  const approved = state.pos.filter(p => p.status === 'Approved');
+  sel.innerHTML = '<option value="">-- Select PO --</option>' +
+    approved.map(p => `<option value="${p.id}">${p.id} — ${p.project} — ${p.vendor}</option>`).join('');
+}
+
+function loadGRNfromPO() {
+  const poId = document.getElementById('grn_po').value;
+  const body = document.getElementById('grnLineBody');
+  if (!poId) { body.innerHTML = ''; return; }
+  const po = state.pos.find(p => p.id === poId);
+  if (!po) return;
+  document.getElementById('grn_no').value = genId('GRN');
+  document.getElementById('grn_date').value = today();
+  body.innerHTML = po.lines.map((l, idx) => {
+    const alreadyRecv = state.grns.filter(g => g.poId === poId)
+      .reduce((t, g) => t + (g.lines.find(gl => gl.lineId === l.id)?.received || 0), 0);
+    const balance = Math.max(0, l.qty - alreadyRecv);
+    return `<tr>
+      <td>${idx+1}</td><td>${l.desc}</td><td>${l.uom}</td>
+      <td>${l.qty}</td><td>${alreadyRecv}</td><td><b>${balance}</b></td>
+      <td><input id="grn_recv_${idx}" type="number" max="${balance}" min="0" placeholder="0" style="width:80px;"></td>
+      <td>
+        <select id="grn_cond_${idx}" style="width:100px;">
+          <option>Good</option><option>Damaged</option><option>Short</option><option>Excess</option>
+        </select>
+      </td>
+      <td><input id="grn_lrem_${idx}" placeholder="Remarks"></td>
+      <input type="hidden" id="grn_lid_${idx}" value="${l.id}">
+    </tr>`;
+  }).join('');
+  document.getElementById('_grnLineCount').value = po.lines.length;
+}
+
+function submitGRN() {
+  const poId = document.getElementById('grn_po').value;
+  const no = document.getElementById('grn_no').value;
+  const date = document.getElementById('grn_date').value;
+  if (!poId) { toast('Select a PO', '#dc2626'); return; }
+  const po = state.pos.find(p => p.id === poId);
+  const lineCount = parseInt(document.getElementById('_grnLineCount').value || 0);
+  const lines = [];
+  for (let idx = 0; idx < lineCount; idx++) {
+    const recv = parseFloat(document.getElementById(`grn_recv_${idx}`)?.value || 0);
+    if (recv > 0) {
+      lines.push({
+        lineId: document.getElementById(`grn_lid_${idx}`)?.value,
+        received: recv,
+        condition: document.getElementById(`grn_cond_${idx}`)?.value,
+        remarks: document.getElementById(`grn_lrem_${idx}`)?.value || ''
+      });
+    }
+  }
+  if (!lines.length) { toast('Enter received quantities for at least one line', '#dc2626'); return; }
+  const grn = {
+    id: no, poId, vendor: po.vendor, project: po.project,
+    date, challan: document.getElementById('grn_challan').value,
+    receivedBy: document.getElementById('grn_receivedby').value,
+    challanDate: document.getElementById('grn_challandate').value,
+    remarks: document.getElementById('grn_remarks').value,
+    lines, status: 'Complete'
+  };
+  state.grns.push(grn);
+  addActivity(`GRN ${no} entered for PO ${poId} — ${lines.length} lines`);
+  save(); updateBadges();
+  clearGRNForm();
+  toast('GRN saved ✓', '#16a34a');
+  switchTab('grn', 'list');
+  renderGRNList();
+}
+
+function clearGRNForm() {
+  document.getElementById('grn_po').value = '';
+  document.getElementById('grn_no').value = '';
+  document.getElementById('grn_date').value = today();
+  document.getElementById('grn_challan').value = '';
+  document.getElementById('grn_receivedby').value = '';
+  document.getElementById('grn_remarks').value = '';
+  document.getElementById('grnLineBody').innerHTML = '';
+}
+
+function renderGRNList() {
+  const body = document.getElementById('grnListBody');
+  if (!state.grns.length) { body.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">📦</div><p>No GRNs yet</p></div></td></tr>'; return; }
+  body.innerHTML = state.grns.slice().reverse().map(g => `<tr>
+    <td><b>${g.id}</b></td><td>${g.date}</td><td>${g.poId}</td>
+    <td>${g.vendor}</td><td>${g.challan}</td><td>${g.receivedBy}</td>
+    <td><span class="status status-complete">Complete</span></td>
+    <td><button class="btn btn-sm btn-outline" onclick="viewGRN('${g.id}')">View</button></td>
+  </tr>`).join('');
+}
+
+function viewGRN(id) {
+  const g = state.grns.find(x => x.id === id);
+  if (!g) return;
+  const po = state.pos.find(p => p.id === g.poId);
+  openModal(`
+    <div class="modal-title">GRN: ${g.id} <span class="modal-close" onclick="closeModal()">✕</span></div>
+    <div class="flex-row" style="margin-bottom:10px;gap:16px;">
+      <div><b>PO:</b> ${g.poId}</div><div><b>Date:</b> ${g.date}</div>
+      <div><b>Vendor:</b> ${g.vendor}</div><div><b>Challan:</b> ${g.challan}</div>
+    </div>
+    <div><b>Received By:</b> ${g.receivedBy} | <b>Remarks:</b> ${g.remarks || '-'}</div>
+    <hr class="divider">
+    <table><thead><tr><th>Line</th><th>Description</th><th>PO Qty</th><th>Received</th><th>Condition</th><th>Remarks</th></tr></thead>
+    <tbody>${g.lines.map(l => {
+      const poLine = po?.lines.find(pl => pl.id === l.lineId);
+      return `<tr>
+        <td>${l.lineId}</td><td>${poLine?.desc || '-'}</td>
+        <td>${poLine?.qty || '-'}</td><td><b>${l.received}</b></td>
+        <td>${l.condition}</td><td>${l.remarks || '-'}</td>
+      </tr>`;
+    }).join('')}</tbody></table>
+  `);
+}
+
+// ======================================================
+// INVOICE
+// ======================================================
+function populateInvoicePODropdown() {
+  const sel = document.getElementById('inv_po');
+  if (!sel) return;
+  const withGRN = state.pos.filter(p => p.status === 'Approved' && state.grns.some(g => g.poId === p.id));
+  sel.innerHTML = '<option value="">-- Select PO (with GRN) --</option>' +
+    withGRN.map(p => `<option value="${p.id}">${p.id} — ${p.project} — ${p.vendor}</option>`).join('');
+}
+
+function loadInvoicePO() {
+  const poId = document.getElementById('inv_po').value;
+  const el = document.getElementById('invGRNSummary');
+  if (!poId) { el.innerHTML = ''; document.getElementById('inv_vendor').value = ''; return; }
+  const po = state.pos.find(p => p.id === poId);
+  if (!po) return;
+  document.getElementById('inv_vendor').value = po.vendor;
+  document.getElementById('inv_date').value = today();
+  const poGRNs = state.grns.filter(g => g.poId === poId);
+  el.innerHTML = `<table><thead><tr><th>GRN No</th><th>Date</th><th>Lines Received</th><th>Challan</th></tr></thead>
+    <tbody>${poGRNs.map(g => `<tr>
+      <td>${g.id}</td><td>${g.date}</td><td>${g.lines.length}</td><td>${g.challan}</td>
+    </tr>`).join('')}</tbody></table>
+    <div class="text-muted mt-12">PO Total: ₹${po.total.toFixed(2)}</div>`;
+}
+
+document.addEventListener('input', function(e) {
+  if (e.target.id === 'inv_amount' || e.target.id === 'inv_gst') {
+    const amt = parseFloat(document.getElementById('inv_amount').value || 0);
+    const gst = parseFloat(document.getElementById('inv_gst').value || 0);
+    document.getElementById('inv_total').value = (amt + gst).toFixed(2);
+  }
+});
+
+function submitInvoice() {
+  const poId = document.getElementById('inv_po').value;
+  const no = document.getElementById('inv_no').value;
+  const date = document.getElementById('inv_date').value;
+  const amount = parseFloat(document.getElementById('inv_amount').value || 0);
+  const gst = parseFloat(document.getElementById('inv_gst').value || 0);
+  if (!poId || !no) { toast('Select PO and enter invoice number', '#dc2626'); return; }
+  const po = state.pos.find(p => p.id === poId);
+  const invoice = {
+    id: genId('INV'), invoiceNo: no, poId, vendor: po?.vendor || '',
+    date, amount, gst, total: amount + gst,
+    file: document.getElementById('inv_file').value,
+    dueDate: document.getElementById('inv_duedate').value,
+    remarks: document.getElementById('inv_remarks').value,
+    status: 'Pending'
+  };
+  state.invoices.push(invoice);
+  addActivity(`Invoice ${no} uploaded for PO ${poId} — ₹${(amount+gst).toFixed(2)}`);
+  save(); updateBadges();
+  clearInvoiceForm();
+  toast('Invoice uploaded ✓', '#16a34a');
+  switchTab('invoice', 'list');
+  renderInvoiceList();
+}
+
+function clearInvoiceForm() {
+  ['inv_po','inv_no','inv_date','inv_amount','inv_gst','inv_total','inv_file','inv_duedate','inv_remarks'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('inv_vendor').value = '';
+  document.getElementById('invGRNSummary').innerHTML = '';
+}
+
+function renderInvoiceList() {
+  const body = document.getElementById('invoiceListBody');
+  if (!state.invoices.length) { body.innerHTML = '<tr><td colspan="10"><div class="empty-state"><div class="icon">🧾</div><p>No invoices yet</p></div></td></tr>'; return; }
+  body.innerHTML = state.invoices.slice().reverse().map(i => `<tr>
+    <td><b>${i.invoiceNo}</b></td><td>${i.date}</td><td>${i.poId}</td>
+    <td>${i.vendor}</td><td>₹${i.amount.toLocaleString('en-IN')}</td>
+    <td>₹${i.gst.toLocaleString('en-IN')}</td><td>₹${i.total.toLocaleString('en-IN')}</td>
+    <td>${i.dueDate || '-'}</td>
+    <td><span class="status ${i.status === 'Paid' ? 'status-complete' : 'status-pending'}">${i.status}</span></td>
+    <td>
+      <button class="btn btn-sm btn-outline" onclick="viewInvoice('${i.id}')">View</button>
+      ${i.status === 'Pending' ? `<button class="btn btn-sm btn-success" onclick="markPaid('${i.id}')">Mark Paid</button>` : ''}
+    </td>
+  </tr>`).join('');
+}
+
+function markPaid(id) {
+  const inv = state.invoices.find(i => i.id === id);
+  if (!inv) return;
+  inv.status = 'Paid';
+  addActivity(`Invoice ${inv.invoiceNo} marked as Paid`);
+  save(); updateBadges(); renderInvoiceList();
+  toast('Invoice marked as Paid ✓', '#16a34a');
+}
+
+function viewInvoice(id) {
+  const i = state.invoices.find(x => x.id === id);
+  if (!i) return;
+  openModal(`
+    <div class="modal-title">Invoice: ${i.invoiceNo} <span class="modal-close" onclick="closeModal()">✕</span></div>
+    <div class="flex-row" style="gap:20px;flex-wrap:wrap;margin-bottom:12px;">
+      <div><b>PO:</b> ${i.poId}</div><div><b>Vendor:</b> ${i.vendor}</div>
+      <div><b>Date:</b> ${i.date}</div><div><b>Due:</b> ${i.dueDate || '-'}</div>
+      <span class="status ${i.status === 'Paid' ? 'status-complete' : 'status-pending'}">${i.status}</span>
+    </div>
+    <table><thead><tr><th>Description</th><th>Amount (₹)</th></tr></thead>
+    <tbody>
+      <tr><td>Invoice Amount (excl. GST)</td><td>₹${i.amount.toFixed(2)}</td></tr>
+      <tr><td>GST Amount</td><td>₹${i.gst.toFixed(2)}</td></tr>
+      <tr><td><b>Total Invoice Amount</b></td><td><b>₹${i.total.toFixed(2)}</b></td></tr>
+    </tbody></table>
+    ${i.file ? `<div class="mt-12"><b>File:</b> ${i.file}</div>` : ''}
+    ${i.remarks ? `<div class="mt-12"><b>Remarks:</b> ${i.remarks}</div>` : ''}
+  `);
+}
+
+// ======================================================
+// HELPERS
+// ======================================================
+function statusClass(s) {
+  if (!s) return 'status-draft';
+  if (s === 'Approved') return 'status-approved';
+  if (s === 'Rejected') return 'status-rejected';
+  if (s.includes('Pending')) return 'status-pending';
+  if (s === 'Complete') return 'status-complete';
+  if (s === 'Paid') return 'status-complete';
+  return 'status-draft';
+}
+
+function openModal(html) {
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ======================================================
+// INIT
+// ======================================================
+
+// Add hidden helpers
+document.body.insertAdjacentHTML('beforeend', `
+  <input type="hidden" id="_csLineCount" value="0">
+  <input type="hidden" id="_grnLineCount" value="0">
+`);
+
+// Show loading indicator while connecting to Supabase
+document.body.insertAdjacentHTML('afterbegin', `
+  <div id="sb-loader" style="position:fixed;inset:0;background:rgba(26,60,94,0.92);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;">
+    <div style="font-size:32px;margin-bottom:12px;">🔄</div>
+    <div style="font-size:16px;font-weight:600;">Connecting to Supabase...</div>
+    <div style="font-size:12px;opacity:0.7;margin-top:6px;">Loading your PO data</div>
+  </div>
+`);
+
+(async () => {
+  await load();
+  document.getElementById('sb-loader')?.remove();
+  renderDashboard();
+  updateBadges();
+  if (!state.master.length && !state.indents.length) {
+    setTimeout(() => {
+      const add = confirm('Load sample data to explore the ERP?');
+      if (add) loadSampleData();
+    }, 500);
+  }
+})();
+
+function loadSampleData() {
+  state.master = [
+    { id:'MAT-00001', project:'Block A Construction', code:'MAT-001', desc:'TMT Steel 16mm', category:'Structure', uom:'MT', qty:50, rate:62000, scope:'noncontract', remarks:'IS 1786 Grade Fe500', indented:15 },
+    { id:'MAT-00002', project:'Block A Construction', code:'MAT-002', desc:'OPC Cement 53 Grade', category:'Civil', uom:'BAG', qty:2000, rate:380, scope:'noncontract', remarks:'53 Grade PPC', indented:500 },
+    { id:'MAT-00003', project:'Block A Construction', code:'MAT-003', desc:'M-Sand', category:'Civil', uom:'CUM', qty:300, rate:1800, scope:'contractor', remarks:'Zone II sand', indented:80 },
+    { id:'MAT-00004', project:'Block B Finishing', code:'MAT-004', desc:'Ceramic Floor Tiles 600x600', category:'Finishing', uom:'SFT', qty:5000, rate:45, scope:'noncontract', remarks:'Vitrified, anti-skid', indented:0 },
+    { id:'MAT-00005', project:'Block B Finishing', code:'MAT-005', desc:'CPVC Pipes 25mm', category:'Plumbing', uom:'RFT', qty:800, rate:120, scope:'noncontract', remarks:'ISI Marked', indented:200 }
+  ];
+  addActivity('Sample data loaded');
+  save();
+  populateProjectDropdowns();
+  renderMaster();
+  updateBadges();
+  toast('Sample data loaded ✓', '#16a34a');
+}
+</script>
+</body>
+</html>
