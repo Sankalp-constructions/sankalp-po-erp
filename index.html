@@ -239,8 +239,8 @@
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">
-      <div style="font-size:36px;">ðï¸</div>
-      <h1>Sankalp Construction</h1>
+      <div style="font-size:36px;">Ã°ÂÂÂÃ¯Â¸Â</div>
+      <h1 style="font-size:20px;font-weight:800;color:#8B1A2E;">Sankalp Construction</h1>
       <p>Purchase Order Management System</p>
       <span class="badge-erp">ERP v2.0</span>
     </div>
@@ -257,53 +257,59 @@
     <div class="form-group"><label>Passcode</label>
       <input type="password" id="loginPasscode" placeholder="Enter your passcode" onkeydown="if(event.key===\'Enter\')doLogin()">
     </div>
-    <button class="login-btn" onclick="doLogin()">Sign In â</button>
-    <div class="login-error" id="loginError">â Incorrect passcode. Please try again.</div>
+    <button class="login-btn" onclick="doLogin()">Sign In Ã¢ÂÂ</button>
+    <div class="login-error" id="loginError">Ã¢ÂÂ Incorrect passcode. Please try again.</div>
     <div class="login-hint">Contact your admin for your role passcode.<br>Each role has a unique access code.</div>
   </div>
 </div>
 <!-- SIDEBAR -->
 <div id="sidebar">
-  <div class="logo">
-    <h1>PO Management<br>ERP System</h1>
-    <p>Sankalp Construction</p>
-  </div>
+  <div class="logo" style="display:flex;align-items:center;gap:10px;padding:16px 12px 12px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="40" height="40" style="flex-shrink:0;">
+  <g transform="translate(50,50) rotate(45) translate(-35,-35)">
+    <rect x="0" y="0" width="70" height="70" fill="#8B1A2E" rx="2"/>
+    <rect x="6" y="6" width="58" height="58" fill="none" stroke="#1a0408" stroke-width="4"/>
+    <rect x="12" y="12" width="46" height="46" fill="none" stroke="#1a0408" stroke-width="4"/>
+    <rect x="18" y="18" width="34" height="34" fill="none" stroke="#1a0408" stroke-width="4"/>
+    <rect x="24" y="24" width="22" height="22" fill="none" stroke="#1a0408" stroke-width="4"/>
+    <rect x="30" y="30" width="10" height="10" fill="#1a0408"/>
+  </g>
+</svg><div><h1 style="font-size:12px;font-weight:700;line-height:1.3;">PO Management<br>ERP System</h1><p>Sankalp Construction</p></div></div>
   <nav>
     <div class="nav-step">Master</div>
     <div class="nav-item active" data-page="dashboard" onclick="nav(this)">
-      <span>ð</span> Dashboard
+      <span>Ã°ÂÂÂ</span> Dashboard
     </div>
     <div class="nav-item" data-page="master" onclick="nav(this)">
-      <span>ð</span> Material Master
+      <span>Ã°ÂÂÂ</span> Material Master
     </div>
     <div class="nav-step">Procurement Flow</div>
     <div class="nav-item" data-page="indent" onclick="nav(this)">
-      <span>ð</span> Indent
+      <span>Ã°ÂÂÂ</span> Indent
       <span class="badge" id="badge-indent">0</span>
     </div>
     <div class="nav-item" data-page="vendor" onclick="nav(this)">
-      <span>ð¢</span> Vendor & CS
+      <span>Ã°ÂÂÂ¢</span> Vendor & CS
       <span class="badge" id="badge-vendor">0</span>
     </div>
     <div class="nav-item" data-page="po" onclick="nav(this)">
-      <span>ð</span> Purchase Order
+      <span>Ã°ÂÂÂ</span> Purchase Order
       <span class="badge" id="badge-po">0</span>
     </div>
     <div class="nav-item" data-page="grn" onclick="nav(this)">
-      <span>ð¦</span> GRN
+      <span>Ã°ÂÂÂ¦</span> GRN
       <span class="badge" id="badge-grn">0</span>
     </div>
     <div class="nav-item" data-page="invoice" onclick="nav(this)">
-      <span>ð§¾</span> Invoice
+      <span>Ã°ÂÂ§Â¾</span> Invoice
       <span class="badge" id="badge-invoice">0</span>
     </div>
     <div class="nav-step">Analytics</div>
     <div class="nav-item" data-page="reports" onclick="nav(this)">
-      <span>ð</span> Reports
+      <span>Ã°ÂÂÂ</span> Reports
     </div>
   </nav>
   <div style="padding:12px 16px;border-top:1px solid rgba(255,255,255,0.1);">
-    <button onclick="doLogout()" style="width:100%;padding:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:6px;font-size:12px;cursor:pointer;">â¬ Sign Out</button>
+    <button onclick="doLogout()" style="width:100%;padding:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:6px;font-size:12px;cursor:pointer;">Ã¢Â¬Â Sign Out</button>
   </div>
 </div>
 
@@ -332,16 +338,16 @@
     <div class="stats-row" id="dashStats"></div>
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
       <div class="card">
-        <div class="card-title"><span class="icon">ð</span> Procurement Pipeline</div>
+        <div class="card-title"><span class="icon">Ã°ÂÂÂ</span> Procurement Pipeline</div>
         <div class="pipeline" id="dashPipeline"></div>
       </div>
       <div class="card">
-        <div class="card-title"><span class="icon">â³</span> Pending My Approvals</div>
+        <div class="card-title"><span class="icon">Ã¢ÂÂ³</span> Pending My Approvals</div>
         <div id="myApprovals"></div>
       </div>
     </div>
     <div class="card mt-16">
-      <div class="card-title"><span class="icon">ð</span> Recent Activity</div>
+      <div class="card-title"><span class="icon">Ã°ÂÂÂ</span> Recent Activity</div>
       <div id="recentActivity"></div>
     </div>
   </div>
@@ -349,7 +355,7 @@
   <!-- ===== MATERIAL MASTER ===== -->
   <div class="page" id="page-master">
     <div class="card">
-      <div class="card-title"><span class="icon">ð</span> Material Master â Estimated Requirements</div>
+      <div class="card-title"><span class="icon">Ã°ÂÂÂ</span> Material Master Ã¢ÂÂ Estimated Requirements</div>
       <div class="alert alert-info">This master stores estimated material requirements per project, categorized by scope (Contractor / Non-Contractual). Indents are raised against these entries.</div>
       <div class="form-grid" id="masterForm">
         <div class="form-group">
@@ -384,7 +390,7 @@
           <input id="m_qty" type="number" placeholder="0">
         </div>
         <div class="form-group">
-          <label>Estimated Rate (â¹)</label>
+          <label>Estimated Rate (Ã¢ÂÂ¹)</label>
           <input id="m_rate" type="number" placeholder="0">
         </div>
         <div class="form-group">
@@ -433,8 +439,8 @@
     <!-- CREATE -->
     <div class="tab-content active" id="indent-create">
       <div class="card">
-        <div class="card-title"><span class="icon">ð</span> New Indent Request</div>
-        <div class="alert alert-info">Raised by Site Engineer. Approval flow: Site Engineer â QS Engineer â Technical Director â Management</div>
+        <div class="card-title"><span class="icon">Ã°ÂÂÂ</span> New Indent Request</div>
+        <div class="alert alert-info">Raised by Site Engineer. Approval flow: Site Engineer Ã¢ÂÂ QS Engineer Ã¢ÂÂ Technical Director Ã¢ÂÂ Management</div>
         <div class="form-grid">
           <div class="form-group">
             <label>Indent No</label>
@@ -521,7 +527,7 @@
     <!-- APPROVE -->
     <div class="tab-content" id="indent-approve">
       <div class="card">
-        <div class="card-title"><span class="icon">â³</span> Indents Pending Your Approval</div>
+        <div class="card-title"><span class="icon">Ã¢ÂÂ³</span> Indents Pending Your Approval</div>
         <div id="indentApproveList"></div>
       </div>
     </div>
@@ -537,8 +543,8 @@
 
     <div class="tab-content active" id="vendor-upload">
       <div class="card">
-        <div class="card-title"><span class="icon">ð¢</span> Upload Vendor Details & Comparative Statement</div>
-        <div class="alert alert-info">Procurement team uploads vendor quotes. Approval: Purchase Manager â QS Manager â Management</div>
+        <div class="card-title"><span class="icon">Ã°ÂÂÂ¢</span> Upload Vendor Details & Comparative Statement</div>
+        <div class="alert alert-info">Procurement team uploads vendor quotes. Approval: Purchase Manager Ã¢ÂÂ QS Manager Ã¢ÂÂ Management</div>
         <div class="form-grid">
           <div class="form-group">
             <label>Select Approved Indent</label>
@@ -592,7 +598,7 @@
 
     <div class="tab-content" id="vendor-approve">
       <div class="card">
-        <div class="card-title"><span class="icon">â³</span> CS Pending Your Approval</div>
+        <div class="card-title"><span class="icon">Ã¢ÂÂ³</span> CS Pending Your Approval</div>
         <div id="csApproveList"></div>
       </div>
     </div>
@@ -608,8 +614,8 @@
 
     <div class="tab-content active" id="po-create">
       <div class="card">
-        <div class="card-title"><span class="icon">ð</span> Generate Purchase Order</div>
-        <div class="alert alert-info">Select an approved CS to auto-generate PO. Approval: Purchase Manager â Management. PO is downloadable after final approval.</div>
+        <div class="card-title"><span class="icon">Ã°ÂÂÂ</span> Generate Purchase Order</div>
+        <div class="alert alert-info">Select an approved CS to auto-generate PO. Approval: Purchase Manager Ã¢ÂÂ Management. PO is downloadable after final approval.</div>
         <div class="form-grid">
           <div class="form-group">
             <label>Select Approved CS</label>
@@ -653,12 +659,12 @@
           <table>
             <thead><tr>
               <th>#</th><th>Description</th><th>UOM</th><th>Qty</th>
-              <th>Vendor</th><th>Unit Rate (â¹)</th><th>GST%</th><th>Total (â¹)</th>
+              <th>Vendor</th><th>Unit Rate (Ã¢ÂÂ¹)</th><th>GST%</th><th>Total (Ã¢ÂÂ¹)</th>
             </tr></thead>
             <tbody id="poLineBody"></tbody>
             <tfoot>
               <tr>
-                <td colspan="7" style="text-align:right;font-weight:700;padding:10px 12px;">Grand Total (â¹)</td>
+                <td colspan="7" style="text-align:right;font-weight:700;padding:10px 12px;">Grand Total (Ã¢ÂÂ¹)</td>
                 <td style="font-weight:700;padding:10px 12px;" id="poGrandTotal">0.00</td>
               </tr>
             </tfoot>
@@ -678,7 +684,7 @@
           <table>
             <thead><tr>
               <th>PO No</th><th>Date</th><th>Vendor</th><th>Indent Ref</th>
-              <th>Amount (â¹)</th><th>Status</th><th>Action</th>
+              <th>Amount (Ã¢ÂÂ¹)</th><th>Status</th><th>Action</th>
             </tr></thead>
             <tbody id="poListBody"></tbody>
           </table>
@@ -688,7 +694,7 @@
 
     <div class="tab-content" id="po-approve">
       <div class="card">
-        <div class="card-title"><span class="icon">â³</span> POs Pending Your Approval</div>
+        <div class="card-title"><span class="icon">Ã¢ÂÂ³</span> POs Pending Your Approval</div>
         <div id="poApproveList"></div>
       </div>
     </div>
@@ -703,7 +709,7 @@
 
     <div class="tab-content active" id="grn-create">
       <div class="card">
-        <div class="card-title"><span class="icon">ð¦</span> Goods Receipt Note</div>
+        <div class="card-title"><span class="icon">Ã°ÂÂÂ¦</span> Goods Receipt Note</div>
         <div class="alert alert-info">Enter GRN against each line item of an approved PO when material is received at site.</div>
         <div class="form-grid">
           <div class="form-group">
@@ -738,7 +744,7 @@
           </div>
         </div>
         <hr class="divider">
-        <div class="section-header"><h3>PO Line Items â Enter Received Quantities</h3></div>
+        <div class="section-header"><h3>PO Line Items Ã¢ÂÂ Enter Received Quantities</h3></div>
         <div class="tbl-wrap">
           <table class="line-items-table">
             <thead><tr>
@@ -781,7 +787,7 @@
 
     <div class="tab-content active" id="invoice-upload">
       <div class="card">
-        <div class="card-title"><span class="icon">ð§¾</span> Upload Vendor Invoice</div>
+        <div class="card-title"><span class="icon">Ã°ÂÂ§Â¾</span> Upload Vendor Invoice</div>
         <div class="alert alert-info">Upload invoice against PO number. System auto-validates against GRN quantities.</div>
         <div class="form-grid">
           <div class="form-group">
@@ -803,15 +809,15 @@
             <input id="inv_vendor" placeholder="Vendor name" readonly style="background:#f1f5f9;">
           </div>
           <div class="form-group">
-            <label>Invoice Amount (â¹)</label>
+            <label>Invoice Amount (Ã¢ÂÂ¹)</label>
             <input id="inv_amount" type="number" placeholder="0">
           </div>
           <div class="form-group">
-            <label>GST Amount (â¹)</label>
+            <label>GST Amount (Ã¢ÂÂ¹)</label>
             <input id="inv_gst" type="number" placeholder="0">
           </div>
           <div class="form-group">
-            <label>Total with GST (â¹)</label>
+            <label>Total with GST (Ã¢ÂÂ¹)</label>
             <input id="inv_total" type="number" placeholder="0" readonly style="background:#f1f5f9;">
           </div>
           <div class="form-group">
@@ -844,7 +850,7 @@
           <table>
             <thead><tr>
               <th>Invoice No</th><th>Invoice Date</th><th>PO No</th><th>Vendor</th>
-              <th>Amount (â¹)</th><th>GST (â¹)</th><th>Total (â¹)</th><th>Due Date</th><th>Status</th><th>Action</th>
+              <th>Amount (Ã¢ÂÂ¹)</th><th>GST (Ã¢ÂÂ¹)</th><th>Total (Ã¢ÂÂ¹)</th><th>Due Date</th><th>Status</th><th>Action</th>
             </tr></thead>
             <tbody id="invoiceListBody"></tbody>
           </table>
@@ -854,13 +860,13 @@
   
     <div class="tab-content" id="invoice-payment">
       <div class="card">
-        <div class="card-title"><span class="icon">ð³</span> Record Payment</div>
+        <div class="card-title"><span class="icon">Ã°ÂÂÂ³</span> Record Payment</div>
         <div class="form-grid">
           <div class="form-group"><label>Select Invoice</label><select id="pay_invoice" onchange="loadPaymentInvoice()"><option value="">-- Select Invoice --</option></select></div>
-          <div class="form-group"><label>Invoice Total (â¹)</label><input id="pay_total" readonly style="background:#f1f5f9;"></div>
-          <div class="form-group"><label>Already Paid (â¹)</label><input id="pay_paid_so_far" readonly style="background:#f1f5f9;"></div>
-          <div class="form-group"><label>Balance Due (â¹)</label><input id="pay_balance" readonly style="background:#f1f5f9;"></div>
-          <div class="form-group"><label>Payment Amount (â¹)</label><input id="pay_amount" type="number" placeholder="0"></div>
+          <div class="form-group"><label>Invoice Total (Ã¢ÂÂ¹)</label><input id="pay_total" readonly style="background:#f1f5f9;"></div>
+          <div class="form-group"><label>Already Paid (Ã¢ÂÂ¹)</label><input id="pay_paid_so_far" readonly style="background:#f1f5f9;"></div>
+          <div class="form-group"><label>Balance Due (Ã¢ÂÂ¹)</label><input id="pay_balance" readonly style="background:#f1f5f9;"></div>
+          <div class="form-group"><label>Payment Amount (Ã¢ÂÂ¹)</label><input id="pay_amount" type="number" placeholder="0"></div>
           <div class="form-group"><label>Payment Date</label><input id="pay_date" type="date"></div>
           <div class="form-group"><label>Payment Mode</label><select id="pay_mode"><option>NEFT</option><option>RTGS</option><option>Cheque</option><option>Cash</option><option>UPI</option></select></div>
           <div class="form-group"><label>Reference / UTR No</label><input id="pay_ref" placeholder="Transaction reference"></div>
@@ -873,7 +879,7 @@
       </div>
       <div class="card">
         <div class="section-header"><h3>Payment History</h3></div>
-        <div class="tbl-wrap"><table><thead><tr><th>Invoice No</th><th>Vendor</th><th>Date</th><th>Amount (â¹)</th><th>Mode</th><th>Reference</th><th>By</th></tr></thead><tbody id="paymentHistoryBody"></tbody></table></div>
+        <div class="tbl-wrap"><table><thead><tr><th>Invoice No</th><th>Vendor</th><th>Date</th><th>Amount (Ã¢ÂÂ¹)</th><th>Mode</th><th>Reference</th><th>By</th></tr></thead><tbody id="paymentHistoryBody"></tbody></table></div>
       </div>
     </div>
   </div>
@@ -882,17 +888,17 @@
   <div class="page" id="page-reports">
     <div class="kpi-grid" id="reportKPIs"></div>
     <div class="report-grid">
-      <div class="chart-card"><h4>ð Project-wise PO Value</h4><canvas id="chartProjectPO" height="220"></canvas></div>
-      <div class="chart-card"><h4>ð¢ Top Vendors by Spend</h4><canvas id="chartVendorSpend" height="220"></canvas></div>
-      <div class="chart-card"><h4>ð Monthly PO Trend</h4><canvas id="chartMonthlyPO" height="220"></canvas></div>
-      <div class="chart-card"><h4>ð° Invoice Payment Status</h4><canvas id="chartPaymentStatus" height="220"></canvas></div>
+      <div class="chart-card"><h4>Ã°ÂÂÂ Project-wise PO Value</h4><canvas id="chartProjectPO" height="220"></canvas></div>
+      <div class="chart-card"><h4>Ã°ÂÂÂ¢ Top Vendors by Spend</h4><canvas id="chartVendorSpend" height="220"></canvas></div>
+      <div class="chart-card"><h4>Ã°ÂÂÂ Monthly PO Trend</h4><canvas id="chartMonthlyPO" height="220"></canvas></div>
+      <div class="chart-card"><h4>Ã°ÂÂÂ° Invoice Payment Status</h4><canvas id="chartPaymentStatus" height="220"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title"><span class="icon">â ï¸</span> Overdue Invoices</div>
-      <div class="tbl-wrap"><table><thead><tr><th>Invoice No</th><th>Vendor</th><th>PO No</th><th>Due Date</th><th>Balance (â¹)</th><th>Days Overdue</th></tr></thead><tbody id="overdueBody"></tbody></table></div>
+      <div class="card-title"><span class="icon">Ã¢ÂÂ Ã¯Â¸Â</span> Overdue Invoices</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Invoice No</th><th>Vendor</th><th>PO No</th><th>Due Date</th><th>Balance (Ã¢ÂÂ¹)</th><th>Days Overdue</th></tr></thead><tbody id="overdueBody"></tbody></table></div>
     </div>
     <div class="card">
-      <div class="card-title"><span class="icon">ð</span> Pending Approvals Summary</div>
+      <div class="card-title"><span class="icon">Ã°ÂÂÂ</span> Pending Approvals Summary</div>
       <div class="tbl-wrap"><table><thead><tr><th>Module</th><th>Pending</th><th>Awaiting Role</th></tr></thead><tbody id="approvalSummaryBody"></tbody></table></div>
     </div>
   </div>
@@ -1119,7 +1125,7 @@ function renderDashboard() {
     { val: state.pos.filter(p => p.status === 'Approved').length, lbl: 'Approved POs' },
     { val: state.grns.length, lbl: 'GRNs' },
     { val: state.invoices.length, lbl: 'Invoices' },
-    { val: 'â¹' + (state.pos.filter(p => p.status === 'Approved').reduce((s,p) => s + (p.total||0), 0)).toLocaleString('en-IN'), lbl: 'PO Value' }
+    { val: 'Ã¢ÂÂ¹' + (state.pos.filter(p => p.status === 'Approved').reduce((s,p) => s + (p.total||0), 0)).toLocaleString('en-IN'), lbl: 'PO Value' }
   ];
   document.getElementById('dashStats').innerHTML = stats.map(s =>
     `<div class="stat-card"><div class="val">${s.val}</div><div class="lbl">${s.lbl}</div></div>`
@@ -1155,7 +1161,7 @@ function renderDashboard() {
                 ...myPO.map(p => ({type:'PO', id:p.id, status:p.status}))];
   const approvalEl = document.getElementById('myApprovals');
   if (!all.length) {
-    approvalEl.innerHTML = '<div class="empty-state"><div class="icon">â</div><p>No pending approvals for your role</p></div>';
+    approvalEl.innerHTML = '<div class="empty-state"><div class="icon">Ã¢ÂÂ</div><p>No pending approvals for your role</p></div>';
   } else {
     approvalEl.innerHTML = `<table><thead><tr><th>Type</th><th>ID</th><th>Status</th></tr></thead><tbody>
       ${all.map(a => `<tr><td>${a.type}</td><td><b>${a.id}</b></td><td><span class="status status-pending">${a.status}</span></td></tr>`).join('')}
@@ -1165,7 +1171,7 @@ function renderDashboard() {
   // Activity
   const actEl = document.getElementById('recentActivity');
   if (!state.activity.length) {
-    actEl.innerHTML = '<div class="empty-state"><div class="icon">ð</div><p>No activity yet</p></div>';
+    actEl.innerHTML = '<div class="empty-state"><div class="icon">Ã°ÂÂÂ</div><p>No activity yet</p></div>';
   } else {
     actEl.innerHTML = `<table><thead><tr><th>Time</th><th>Activity</th><th>By</th></tr></thead><tbody>
       ${state.activity.slice(0,10).map(a => `<tr><td class="text-muted">${a.time}</td><td>${a.msg}</td><td>${a.role}</td></tr>`).join('')}
@@ -1197,7 +1203,7 @@ function addMaster() {
   addActivity(`Material master entry added: ${v.m_desc} for ${v.m_project}`);
   save(); renderMaster(); populateProjectDropdowns();
   fields.forEach(f => { const el = document.getElementById(f); if (el) { el.value = ''; if (el.tagName === 'SELECT') el.selectedIndex = 0; }});
-  toast('Material added to master â', '#16a34a');
+  toast('Material added to master Ã¢ÂÂ', '#16a34a');
 }
 
 function renderMaster() {
@@ -1206,7 +1212,7 @@ function renderMaster() {
     !q || m.desc.toLowerCase().includes(q) || m.project.toLowerCase().includes(q) || m.code.toLowerCase().includes(q)
   );
   const body = document.getElementById('masterBody');
-  if (!rows.length) { body.innerHTML = '<tr><td colspan="12"><div class="empty-state"><div class="icon">ð</div><p>No master entries yet</p></div></td></tr>'; return; }
+  if (!rows.length) { body.innerHTML = '<tr><td colspan="12"><div class="empty-state"><div class="icon">Ã°ÂÂÂ</div><p>No master entries yet</p></div></td></tr>'; return; }
   body.innerHTML = rows.map(m => {
     const val = (m.qty * m.rate).toFixed(0);
     const balance = Math.max(0, m.qty - m.indented);
@@ -1218,8 +1224,8 @@ function renderMaster() {
       <td>${m.category}</td>
       <td>${m.uom}</td>
       <td>${m.qty.toLocaleString('en-IN')}</td>
-      <td>â¹${m.rate.toLocaleString('en-IN')}</td>
-      <td>â¹${parseInt(val).toLocaleString('en-IN')}</td>
+      <td>Ã¢ÂÂ¹${m.rate.toLocaleString('en-IN')}</td>
+      <td>Ã¢ÂÂ¹${parseInt(val).toLocaleString('en-IN')}</td>
       <td><span class="tag tag-${m.scope}">${m.scope === 'contractor' ? 'Contractor' : 'Non-Contractual'}</span></td>
       <td>
         ${m.indented.toLocaleString('en-IN')}
@@ -1283,7 +1289,7 @@ function addIndentLine() {
     <td><input id="iqtyest-${idx}" readonly style="width:70px;background:#f1f5f9;"></td>
     <td><input id="iqtyreq-${idx}" type="number" placeholder="0" style="width:80px;"></td>
     <td><input id="irem-${idx}" placeholder="Remarks"></td>
-    <td><button class="btn btn-sm btn-danger" onclick="removeIndentLine(${idx})">â</button></td>
+    <td><button class="btn btn-sm btn-danger" onclick="removeIndentLine(${idx})">Ã¢ÂÂ</button></td>
   `;
   document.getElementById('indentLines').appendChild(tr);
 }
@@ -1350,7 +1356,7 @@ function submitIndent() {
   addActivity(`Indent ${no} submitted for ${project} (${lines.length} items)`);
   save(); updateBadges();
   initIndentForm();
-  toast('Indent submitted â', '#16a34a');
+  toast('Indent submitted Ã¢ÂÂ', '#16a34a');
   switchTab('indent', 'list');
   renderIndentList();
 }
@@ -1361,7 +1367,7 @@ function renderIndentList() {
   const filter = document.getElementById('indentFilterStatus')?.value || '';
   const rows = state.indents.filter(i => !filter || i.status === filter);
   const body = document.getElementById('indentListBody');
-  if (!rows.length) { body.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">ð</div><p>No indents yet</p></div></td></tr>'; return; }
+  if (!rows.length) { body.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">Ã°ÂÂÂ</div><p>No indents yet</p></div></td></tr>'; return; }
   body.innerHTML = rows.slice().reverse().map(i => {
     const sc = statusClass(i.status);
     return `<tr>
@@ -1382,19 +1388,19 @@ function renderIndentApprove() {
   const pending = state.indents.filter(i => pendingForRole(i, role, 'indent'));
   const el = document.getElementById('indentApproveList');
   if (!pending.length) {
-    el.innerHTML = '<div class="empty-state"><div class="icon">â</div><p>No indents pending your approval</p></div>';
+    el.innerHTML = '<div class="empty-state"><div class="icon">Ã¢ÂÂ</div><p>No indents pending your approval</p></div>';
     return;
   }
   el.innerHTML = pending.map(i => `
     <div style="border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;">
       <div class="flex-row" style="justify-content:space-between;">
         <div>
-          <b>${i.id}</b> â ${i.project} &nbsp;
+          <b>${i.id}</b> Ã¢ÂÂ ${i.project} &nbsp;
           <span class="status status-pending">${i.status}</span>
         </div>
         <div class="flex-row">
-          <button class="btn btn-success btn-sm" onclick="approveIndent('${i.id}')">â Approve</button>
-          <button class="btn btn-danger btn-sm" onclick="rejectIndent('${i.id}')">â Reject</button>
+          <button class="btn btn-success btn-sm" onclick="approveIndent('${i.id}')">Ã¢ÂÂ Approve</button>
+          <button class="btn btn-danger btn-sm" onclick="rejectIndent('${i.id}')">Ã¢ÂÂ Reject</button>
           <button class="btn btn-outline btn-sm" onclick="viewIndent('${i.id}')">View</button>
         </div>
       </div>
@@ -1426,7 +1432,7 @@ function renderApprovalFlow(approvals, steps) {
       const cls = isDone ? 'done' : isRejected ? 'rejected' : isActive ? 'active' : '';
       return `<div class="approval-step ${cls}">
         <div>
-          <div class="step-dot">${isDone ? 'â' : isRejected ? 'â' : idx+1}</div>
+          <div class="step-dot">${isDone ? 'Ã¢ÂÂ' : isRejected ? 'Ã¢ÂÂ' : idx+1}</div>
           <div class="step-label">${step}</div>
         </div>
         ${idx < steps.length - 1 ? '<div class="step-line"></div>' : ''}
@@ -1450,7 +1456,7 @@ function approveIndent(id) {
   indent.status = step.next;
   addActivity(`Indent ${id} approved by ${ROLES[state.role]}`);
   save(); updateBadges(); renderIndentApprove(); renderIndentList();
-  toast(`Indent approved â â moved to: ${step.next}`, '#16a34a');
+  toast(`Indent approved Ã¢ÂÂ Ã¢ÂÂ moved to: ${step.next}`, '#16a34a');
 }
 
 function rejectIndent(id) {
@@ -1470,7 +1476,7 @@ function viewIndent(id) {
   const i = state.indents.find(x => x.id === id);
   if (!i) return;
   openModal(`
-    <div class="modal-title">Indent: ${i.id} <span class="modal-close" onclick="closeModal()">â</span></div>
+    <div class="modal-title">Indent: ${i.id} <span class="modal-close" onclick="closeModal()">Ã¢ÂÂ</span></div>
     <div class="flex-row" style="margin-bottom:12px;">
       <div><b>Project:</b> ${i.project}</div>
       <div><b>Date:</b> ${i.date}</div>
@@ -1496,7 +1502,7 @@ function populateCSIndentDropdown() {
   if (!sel) return;
   const approved = state.indents.filter(i => i.status === 'Approved' && !state.cs.find(c => c.indentId === i.id && c.status !== 'Rejected'));
   sel.innerHTML = '<option value="">-- Select Approved Indent --</option>' +
-    approved.map(i => `<option value="${i.id}">${i.id} â ${i.project}</option>`).join('');
+    approved.map(i => `<option value="${i.id}">${i.id} Ã¢ÂÂ ${i.project}</option>`).join('');
 }
 
 function loadCSIndentItems() {
@@ -1509,9 +1515,9 @@ function loadCSIndentItems() {
   document.getElementById('cs_date').value = today();
   container.innerHTML = indent.lines.map((line, idx) => `
     <div style="border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px;">
-      <div style="font-weight:600;margin-bottom:10px;">${idx+1}. ${line.desc} â ${line.reqQty} ${line.uom}</div>
+      <div style="font-weight:600;margin-bottom:10px;">${idx+1}. ${line.desc} Ã¢ÂÂ ${line.reqQty} ${line.uom}</div>
       <table class="line-items-table" style="margin-bottom:0;">
-        <thead><tr><th>Vendor Name</th><th>Contact</th><th>Unit Rate (â¹)</th><th>Lead Days</th><th>GST%</th><th>Total (â¹)</th><th>Recommend</th></tr></thead>
+        <thead><tr><th>Vendor Name</th><th>Contact</th><th>Unit Rate (Ã¢ÂÂ¹)</th><th>Lead Days</th><th>GST%</th><th>Total (Ã¢ÂÂ¹)</th><th>Recommend</th></tr></thead>
         <tbody>
           ${[1,2,3].map(v => `<tr>
             <td><input id="cv_name_${idx}_${v}" placeholder="Vendor ${v}"></td>
@@ -1580,7 +1586,7 @@ function submitCS() {
   addActivity(`CS ${ref} submitted for indent ${indentId}`);
   save(); updateBadges();
   clearCSForm();
-  toast('Comparative Statement submitted â', '#16a34a');
+  toast('Comparative Statement submitted Ã¢ÂÂ', '#16a34a');
   switchTab('vendor', 'list');
   renderCSList();
 }
@@ -1596,7 +1602,7 @@ function clearCSForm() {
 
 function renderCSList() {
   const body = document.getElementById('csListBody');
-  if (!state.cs.length) { body.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="icon">ð¢</div><p>No comparative statements yet</p></div></td></tr>'; return; }
+  if (!state.cs.length) { body.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="icon">Ã°ÂÂÂ¢</div><p>No comparative statements yet</p></div></td></tr>'; return; }
   body.innerHTML = state.cs.slice().reverse().map(c => `<tr>
     <td><b>${c.id}</b></td><td>${c.indentId}</td><td>${c.date}</td>
     <td>${c.preparedby}</td>
@@ -1609,14 +1615,14 @@ function renderCSApprove() {
   const role = state.role;
   const pending = state.cs.filter(c => pendingForRole(c, role, 'cs'));
   const el = document.getElementById('csApproveList');
-  if (!pending.length) { el.innerHTML = '<div class="empty-state"><div class="icon">â</div><p>No CS pending your approval</p></div>'; return; }
+  if (!pending.length) { el.innerHTML = '<div class="empty-state"><div class="icon">Ã¢ÂÂ</div><p>No CS pending your approval</p></div>'; return; }
   el.innerHTML = pending.map(c => `
     <div style="border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;">
       <div class="flex-row" style="justify-content:space-between;">
-        <div><b>${c.id}</b> â Indent: ${c.indentId} &nbsp;<span class="status status-pending">${c.status}</span></div>
+        <div><b>${c.id}</b> Ã¢ÂÂ Indent: ${c.indentId} &nbsp;<span class="status status-pending">${c.status}</span></div>
         <div class="flex-row">
-          <button class="btn btn-success btn-sm" onclick="approveCS('${c.id}')">â Approve</button>
-          <button class="btn btn-danger btn-sm" onclick="rejectCS('${c.id}')">â Reject</button>
+          <button class="btn btn-success btn-sm" onclick="approveCS('${c.id}')">Ã¢ÂÂ Approve</button>
+          <button class="btn btn-danger btn-sm" onclick="rejectCS('${c.id}')">Ã¢ÂÂ Reject</button>
           <button class="btn btn-outline btn-sm" onclick="viewCS('${c.id}')">View</button>
         </div>
       </div>
@@ -1641,7 +1647,7 @@ function approveCS(id) {
   cs.status = step.next;
   addActivity(`CS ${id} approved by ${ROLES[state.role]}`);
   save(); updateBadges(); renderCSApprove(); renderCSList();
-  toast(`CS approved â`, '#16a34a');
+  toast(`CS approved Ã¢ÂÂ`, '#16a34a');
 }
 
 function rejectCS(id) {
@@ -1661,7 +1667,7 @@ function viewCS(id) {
   const c = state.cs.find(x => x.id === id);
   if (!c) return;
   openModal(`
-    <div class="modal-title">CS: ${c.id} <span class="modal-close" onclick="closeModal()">â</span></div>
+    <div class="modal-title">CS: ${c.id} <span class="modal-close" onclick="closeModal()">Ã¢ÂÂ</span></div>
     <div class="flex-row" style="margin-bottom:10px;">
       <b>Indent:</b> ${c.indentId} &nbsp; <b>Project:</b> ${c.project} &nbsp;
       <span class="status ${statusClass(c.status)}">${c.status}</span>
@@ -1670,14 +1676,14 @@ function viewCS(id) {
     <hr class="divider">
     ${(c.lines || []).map((l, idx) => `
       <div style="margin-bottom:14px;">
-        <b>${idx+1}. ${l.desc}</b> â ${l.qty} ${l.uom}
+        <b>${idx+1}. ${l.desc}</b> Ã¢ÂÂ ${l.qty} ${l.uom}
         <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:6px;">
           <thead><tr><th style="text-align:left;padding:4px;">Vendor</th><th>Rate</th><th>GST%</th><th>Total</th><th>Lead</th><th>Recommended</th></tr></thead>
           <tbody>
             ${(l.vendors || []).map((v, vi) => `<tr style="${vi === l.recommended ? 'background:#f0fdf4;' : ''}">
-              <td style="padding:4px;">${v.name}</td><td>â¹${v.rate}</td><td>${v.gst}%</td>
-              <td>â¹${v.total.toFixed(2)}</td><td>${v.lead} days</td>
-              <td>${vi === l.recommended ? 'â­ Yes' : '-'}</td>
+              <td style="padding:4px;">${v.name}</td><td>Ã¢ÂÂ¹${v.rate}</td><td>${v.gst}%</td>
+              <td>Ã¢ÂÂ¹${v.total.toFixed(2)}</td><td>${v.lead} days</td>
+              <td>${vi === l.recommended ? 'Ã¢Â­Â Yes' : '-'}</td>
             </tr>`).join('')}
           </tbody>
         </table>
@@ -1696,7 +1702,7 @@ function populatePOCSDropdown() {
   if (!sel) return;
   const approved = state.cs.filter(c => c.status === 'Approved' && !state.pos.find(p => p.csId === c.id && p.status !== 'Rejected'));
   sel.innerHTML = '<option value="">-- Select Approved CS --</option>' +
-    approved.map(c => `<option value="${c.id}">${c.id} â Indent: ${c.indentId} â ${c.project}</option>`).join('');
+    approved.map(c => `<option value="${c.id}">${c.id} Ã¢ÂÂ Indent: ${c.indentId} Ã¢ÂÂ ${c.project}</option>`).join('');
 }
 
 function loadPOFromCS() {
@@ -1727,11 +1733,11 @@ function renderPOLines() {
     grand += l.total;
     return `<tr>
       <td>${idx+1}</td><td>${l.desc}</td><td>${l.uom}</td><td>${l.qty}</td>
-      <td>${l.vendor}</td><td>â¹${l.rate.toLocaleString('en-IN')}</td><td>${l.gst}%</td>
-      <td>â¹${l.total.toFixed(2)}</td>
+      <td>${l.vendor}</td><td>Ã¢ÂÂ¹${l.rate.toLocaleString('en-IN')}</td><td>${l.gst}%</td>
+      <td>Ã¢ÂÂ¹${l.total.toFixed(2)}</td>
     </tr>`;
   }).join('');
-  document.getElementById('poGrandTotal').textContent = 'â¹' + grand.toFixed(2);
+  document.getElementById('poGrandTotal').textContent = 'Ã¢ÂÂ¹' + grand.toFixed(2);
 }
 
 function submitPO() {
@@ -1754,10 +1760,10 @@ function submitPO() {
     status: 'Pending Purchase Manager', approvals: []
   };
   state.pos.push(po);
-  addActivity(`PO ${no} created for ${cs.project} â â¹${grand.toFixed(2)}`);
+  addActivity(`PO ${no} created for ${cs.project} Ã¢ÂÂ Ã¢ÂÂ¹${grand.toFixed(2)}`);
   save(); updateBadges();
   clearPOForm();
-  toast('PO created and submitted â', '#16a34a');
+  toast('PO created and submitted Ã¢ÂÂ', '#16a34a');
   switchTab('po', 'list');
   renderPOList();
 }
@@ -1775,14 +1781,14 @@ function clearPOForm() {
 
 function renderPOList() {
   const body = document.getElementById('poListBody');
-  if (!state.pos.length) { body.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">ð</div><p>No POs yet</p></div></td></tr>'; return; }
+  if (!state.pos.length) { body.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">Ã°ÂÂÂ</div><p>No POs yet</p></div></td></tr>'; return; }
   body.innerHTML = state.pos.slice().reverse().map(p => `<tr>
     <td><b>${p.id}</b></td><td>${p.date}</td><td>${p.vendor}</td>
-    <td>${p.indentId}</td><td>â¹${p.total.toLocaleString('en-IN', {maximumFractionDigits:2})}</td>
+    <td>${p.indentId}</td><td>Ã¢ÂÂ¹${p.total.toLocaleString('en-IN', {maximumFractionDigits:2})}</td>
     <td><span class="status ${statusClass(p.status)}">${p.status}</span></td>
     <td>
       <button class="btn btn-sm btn-outline" onclick="viewPO('${p.id}')">View</button>
-      ${p.status === 'Approved' ? `<button class="btn btn-sm btn-accent" onclick="downloadPO('${p.id}')">â¬ Download</button>` : ''}
+      ${p.status === 'Approved' ? `<button class="btn btn-sm btn-accent" onclick="downloadPO('${p.id}')">Ã¢Â¬Â Download</button>` : ''}
     </td>
   </tr>`).join('');
 }
@@ -1791,18 +1797,18 @@ function renderPOApprove() {
   const role = state.role;
   const pending = state.pos.filter(p => pendingForRole(p, role, 'po'));
   const el = document.getElementById('poApproveList');
-  if (!pending.length) { el.innerHTML = '<div class="empty-state"><div class="icon">â</div><p>No POs pending your approval</p></div>'; return; }
+  if (!pending.length) { el.innerHTML = '<div class="empty-state"><div class="icon">Ã¢ÂÂ</div><p>No POs pending your approval</p></div>'; return; }
   el.innerHTML = pending.map(p => `
     <div style="border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;">
       <div class="flex-row" style="justify-content:space-between;">
-        <div><b>${p.id}</b> â ${p.project} &nbsp;<span class="status status-pending">${p.status}</span></div>
+        <div><b>${p.id}</b> Ã¢ÂÂ ${p.project} &nbsp;<span class="status status-pending">${p.status}</span></div>
         <div class="flex-row">
-          <button class="btn btn-success btn-sm" onclick="approvePO('${p.id}')">â Approve</button>
-          <button class="btn btn-danger btn-sm" onclick="rejectPO('${p.id}')">â Reject</button>
+          <button class="btn btn-success btn-sm" onclick="approvePO('${p.id}')">Ã¢ÂÂ Approve</button>
+          <button class="btn btn-danger btn-sm" onclick="rejectPO('${p.id}')">Ã¢ÂÂ Reject</button>
           <button class="btn btn-outline btn-sm" onclick="viewPO('${p.id}')">View</button>
         </div>
       </div>
-      <div class="text-muted mt-12">Vendor: ${p.vendor} | Amount: â¹${p.total.toFixed(2)}</div>
+      <div class="text-muted mt-12">Vendor: ${p.vendor} | Amount: Ã¢ÂÂ¹${p.total.toFixed(2)}</div>
       ${renderApprovalFlow(p.approvals, poApprovalSteps())}
     </div>
   `).join('');
@@ -1822,7 +1828,7 @@ function approvePO(id) {
   po.status = step.next;
   addActivity(`PO ${id} approved by ${ROLES[state.role]}`);
   save(); updateBadges(); renderPOApprove(); renderPOList();
-  toast('PO approved â', '#16a34a');
+  toast('PO approved Ã¢ÂÂ', '#16a34a');
 }
 
 function rejectPO(id) {
@@ -1842,7 +1848,7 @@ function viewPO(id) {
   const p = state.pos.find(x => x.id === id);
   if (!p) return;
   openModal(`
-    <div class="modal-title">PO: ${p.id} <span class="modal-close" onclick="closeModal()">â</span></div>
+    <div class="modal-title">PO: ${p.id} <span class="modal-close" onclick="closeModal()">Ã¢ÂÂ</span></div>
     <div class="flex-row" style="margin-bottom:10px;flex-wrap:wrap;gap:12px;">
       <div><b>Project:</b> ${p.project}</div><div><b>Date:</b> ${p.date}</div>
       <div><b>Vendor:</b> ${p.vendor}</div>
@@ -1853,15 +1859,15 @@ function viewPO(id) {
     </div>
     ${renderApprovalFlow(p.approvals, poApprovalSteps())}
     <hr class="divider">
-    <table><thead><tr><th>#</th><th>Description</th><th>UOM</th><th>Qty</th><th>Vendor</th><th>Rate (â¹)</th><th>GST%</th><th>Total (â¹)</th></tr></thead>
+    <table><thead><tr><th>#</th><th>Description</th><th>UOM</th><th>Qty</th><th>Vendor</th><th>Rate (Ã¢ÂÂ¹)</th><th>GST%</th><th>Total (Ã¢ÂÂ¹)</th></tr></thead>
     <tbody>${p.lines.map((l,i) => `<tr>
       <td>${i+1}</td><td>${l.desc}</td><td>${l.uom}</td><td>${l.qty}</td>
       <td>${l.vendor}</td><td>${l.rate.toLocaleString('en-IN')}</td><td>${l.gst}%</td>
       <td><b>${l.total.toFixed(2)}</b></td>
     </tr>`).join('')}</tbody>
-    <tfoot><tr><td colspan="7" style="text-align:right;font-weight:700;padding:10px 8px;">Grand Total</td><td><b>â¹${p.total.toFixed(2)}</b></td></tr></tfoot>
+    <tfoot><tr><td colspan="7" style="text-align:right;font-weight:700;padding:10px 8px;">Grand Total</td><td><b>Ã¢ÂÂ¹${p.total.toFixed(2)}</b></td></tr></tfoot>
     </table>
-    ${p.status === 'Approved' ? `<div class="flex-row mt-16"><button class="btn btn-accent" onclick="downloadPO('${p.id}');closeModal()">â¬ Download PO</button></div>` : ''}
+    ${p.status === 'Approved' ? `<div class="flex-row mt-16"><button class="btn btn-accent" onclick="downloadPO('${p.id}');closeModal()">Ã¢Â¬Â Download PO</button></div>` : ''}
   `);
 }
 
@@ -1894,18 +1900,18 @@ function downloadPO(id) {
   <div class="info-box"><b>Vendor:</b> ${p.vendor}<br><b>Delivery Address:</b> ${p.address}</div>
   ${p.instructions ? `<div class="info-box"><b>Special Instructions:</b> ${p.instructions}</div>` : ''}
   <table>
-    <thead><tr><th>#</th><th>Description</th><th>UOM</th><th>Qty</th><th>Unit Rate (â¹)</th><th>GST%</th><th>Total (â¹)</th></tr></thead>
+    <thead><tr><th>#</th><th>Description</th><th>UOM</th><th>Qty</th><th>Unit Rate (Ã¢ÂÂ¹)</th><th>GST%</th><th>Total (Ã¢ÂÂ¹)</th></tr></thead>
     <tbody>
       ${p.lines.map((l,i) => `<tr><td>${i+1}</td><td>${l.desc}</td><td>${l.uom}</td><td>${l.qty}</td><td>${l.rate.toLocaleString('en-IN')}</td><td>${l.gst}%</td><td><b>${l.total.toFixed(2)}</b></td></tr>`).join('')}
     </tbody>
   </table>
-  <div class="total">Grand Total: â¹${p.total.toFixed(2)}</div>
+  <div class="total">Grand Total: Ã¢ÂÂ¹${p.total.toFixed(2)}</div>
   <div class="footer">
     <div class="sign"><div class="sign-line">Purchase Manager</div></div>
     <div class="sign"><div class="sign-line">Management Approval</div></div>
     <div class="sign"><div class="sign-line">Vendor Acceptance</div></div>
   </div>
-  <div style="text-align:center;margin-top:20px;"><button onclick="window.print()" style="padding:10px 20px;background:#1a3c5e;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px;">ð¨ Print / Save as PDF</button></div>
+  <div style="text-align:center;margin-top:20px;"><button onclick="window.print()" style="padding:10px 20px;background:#1a3c5e;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px;">Ã°ÂÂÂ¨ Print / Save as PDF</button></div>
   </body></html>`;
   const w = window.open('', '_blank');
   w.document.write(html);
@@ -1920,7 +1926,7 @@ function populateGRNPODropdown() {
   if (!sel) return;
   const approved = state.pos.filter(p => p.status === 'Approved');
   sel.innerHTML = '<option value="">-- Select PO --</option>' +
-    approved.map(p => `<option value="${p.id}">${p.id} â ${p.project} â ${p.vendor}</option>`).join('');
+    approved.map(p => `<option value="${p.id}">${p.id} Ã¢ÂÂ ${p.project} Ã¢ÂÂ ${p.vendor}</option>`).join('');
 }
 
 function loadGRNfromPO() {
@@ -1980,10 +1986,10 @@ function submitGRN() {
     lines, status: 'Complete'
   };
   state.grns.push(grn);
-  addActivity(`GRN ${no} entered for PO ${poId} â ${lines.length} lines`);
+  addActivity(`GRN ${no} entered for PO ${poId} Ã¢ÂÂ ${lines.length} lines`);
   save(); updateBadges();
   clearGRNForm();
-  toast('GRN saved â', '#16a34a');
+  toast('GRN saved Ã¢ÂÂ', '#16a34a');
   switchTab('grn', 'list');
   renderGRNList();
 }
@@ -2000,12 +2006,12 @@ function clearGRNForm() {
 
 function renderGRNList() {
   const body = document.getElementById('grnListBody');
-  if (!state.grns.length) { body.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">ð¦</div><p>No GRNs yet</p></div></td></tr>'; return; }
+  if (!state.grns.length) { body.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">Ã°ÂÂÂ¦</div><p>No GRNs yet</p></div></td></tr>'; return; }
   body.innerHTML = state.grns.slice().reverse().map(g => `<tr>
     <td><b>${g.id}</b></td><td>${g.date}</td><td>${g.poId}</td>
     <td>${g.vendor}</td><td>${g.challan}</td><td>${g.receivedBy}</td>
     <td><span class="status status-complete">Complete</span></td>
-    <td><button class="btn btn-sm btn-outline" onclick="viewGRN('${g.id}')">View</button> <button class="btn btn-sm btn-accent" onclick="downloadGRN('${g.id}')">â¬ PDF</button></td>
+    <td><button class="btn btn-sm btn-outline" onclick="viewGRN('${g.id}')">View</button> <button class="btn btn-sm btn-accent" onclick="downloadGRN('${g.id}')">Ã¢Â¬Â PDF</button></td>
   </tr>`).join('');
 }
 
@@ -2014,7 +2020,7 @@ function viewGRN(id) {
   if (!g) return;
   const po = state.pos.find(p => p.id === g.poId);
   openModal(`
-    <div class="modal-title">GRN: ${g.id} <span class="modal-close" onclick="closeModal()">â</span></div>
+    <div class="modal-title">GRN: ${g.id} <span class="modal-close" onclick="closeModal()">Ã¢ÂÂ</span></div>
     <div class="flex-row" style="margin-bottom:10px;gap:16px;">
       <div><b>PO:</b> ${g.poId}</div><div><b>Date:</b> ${g.date}</div>
       <div><b>Vendor:</b> ${g.vendor}</div><div><b>Challan:</b> ${g.challan}</div>
@@ -2041,7 +2047,7 @@ function populateInvoicePODropdown() {
   if (!sel) return;
   const withGRN = state.pos.filter(p => p.status === 'Approved' && state.grns.some(g => g.poId === p.id));
   sel.innerHTML = '<option value="">-- Select PO (with GRN) --</option>' +
-    withGRN.map(p => `<option value="${p.id}">${p.id} â ${p.project} â ${p.vendor}</option>`).join('');
+    withGRN.map(p => `<option value="${p.id}">${p.id} Ã¢ÂÂ ${p.project} Ã¢ÂÂ ${p.vendor}</option>`).join('');
 }
 
 function loadInvoicePO() {
@@ -2057,7 +2063,7 @@ function loadInvoicePO() {
     <tbody>${poGRNs.map(g => `<tr>
       <td>${g.id}</td><td>${g.date}</td><td>${g.lines.length}</td><td>${g.challan}</td>
     </tr>`).join('')}</tbody></table>
-    <div class="text-muted mt-12">PO Total: â¹${po.total.toFixed(2)}</div>`;
+    <div class="text-muted mt-12">PO Total: Ã¢ÂÂ¹${po.total.toFixed(2)}</div>`;
 }
 
 document.addEventListener('input', function(e) {
@@ -2085,10 +2091,10 @@ function submitInvoice() {
     status: 'Pending'
   };
   state.invoices.push(invoice);
-  addActivity(`Invoice ${no} uploaded for PO ${poId} â â¹${(amount+gst).toFixed(2)}`);
+  addActivity(`Invoice ${no} uploaded for PO ${poId} Ã¢ÂÂ Ã¢ÂÂ¹${(amount+gst).toFixed(2)}`);
   save(); updateBadges();
   clearInvoiceForm();
-  toast('Invoice uploaded â', '#16a34a');
+  toast('Invoice uploaded Ã¢ÂÂ', '#16a34a');
   switchTab('invoice', 'list');
   renderInvoiceList();
 }
@@ -2104,19 +2110,19 @@ function clearInvoiceForm() {
 
 function renderInvoiceList() {
   const body = document.getElementById('invoiceListBody');
-  if (!state.invoices.length) { body.innerHTML = '<tr><td colspan="10"><div class="empty-state"><div class="icon">ð§¾</div><p>No invoices yet</p></div></td></tr>'; return; }
+  if (!state.invoices.length) { body.innerHTML = '<tr><td colspan="10"><div class="empty-state"><div class="icon">Ã°ÂÂ§Â¾</div><p>No invoices yet</p></div></td></tr>'; return; }
   const statusColors = {Paid:'payment-paid',Partial:'payment-partial',Overdue:'payment-overdue',Pending:'payment-pending'};
   body.innerHTML = state.invoices.slice().reverse().map(i => {
     const paid=getInvoicePaid(i.id), balance=(i.total||0)-paid, status=getInvoiceStatus(i);
     return `<tr>
     <td><b>${i.invoiceNo}</b></td><td>${i.date}</td><td>${i.poId}</td>
-    <td>${i.vendor}</td><td>â¹${(i.total||0).toLocaleString('en-IN')}</td>
-    <td>â¹${paid.toLocaleString('en-IN')}</td><td><b>â¹${balance.toLocaleString('en-IN')}</b></td>
+    <td>${i.vendor}</td><td>Ã¢ÂÂ¹${(i.total||0).toLocaleString('en-IN')}</td>
+    <td>Ã¢ÂÂ¹${paid.toLocaleString('en-IN')}</td><td><b>Ã¢ÂÂ¹${balance.toLocaleString('en-IN')}</b></td>
     <td>${i.dueDate || '-'}</td>
     <td><span class="payment-badge ${statusColors[status]}">${status}</span></td>
     <td>
       <button class="btn btn-sm btn-outline" onclick="viewInvoice('${i.id}')">View</button>
-      <button class="btn btn-sm btn-accent" onclick="downloadInvoicePDF('${i.id}')">â¬ PDF</button>
+      <button class="btn btn-sm btn-accent" onclick="downloadInvoicePDF('${i.id}')">Ã¢Â¬Â PDF</button>
     </td>
   </tr>`;
   }).join('');
@@ -2128,24 +2134,24 @@ function markPaid(id) {
   inv.status = 'Paid';
   addActivity(`Invoice ${inv.invoiceNo} marked as Paid`);
   save(); updateBadges(); renderInvoiceList();
-  toast('Invoice marked as Paid â', '#16a34a');
+  toast('Invoice marked as Paid Ã¢ÂÂ', '#16a34a');
 }
 
 function viewInvoice(id) {
   const i = state.invoices.find(x => x.id === id);
   if (!i) return;
   openModal(`
-    <div class="modal-title">Invoice: ${i.invoiceNo} <span class="modal-close" onclick="closeModal()">â</span></div>
+    <div class="modal-title">Invoice: ${i.invoiceNo} <span class="modal-close" onclick="closeModal()">Ã¢ÂÂ</span></div>
     <div class="flex-row" style="gap:20px;flex-wrap:wrap;margin-bottom:12px;">
       <div><b>PO:</b> ${i.poId}</div><div><b>Vendor:</b> ${i.vendor}</div>
       <div><b>Date:</b> ${i.date}</div><div><b>Due:</b> ${i.dueDate || '-'}</div>
       <span class="status ${i.status === 'Paid' ? 'status-complete' : 'status-pending'}">${i.status}</span>
     </div>
-    <table><thead><tr><th>Description</th><th>Amount (â¹)</th></tr></thead>
+    <table><thead><tr><th>Description</th><th>Amount (Ã¢ÂÂ¹)</th></tr></thead>
     <tbody>
-      <tr><td>Invoice Amount (excl. GST)</td><td>â¹${i.amount.toFixed(2)}</td></tr>
-      <tr><td>GST Amount</td><td>â¹${i.gst.toFixed(2)}</td></tr>
-      <tr><td><b>Total Invoice Amount</b></td><td><b>â¹${i.total.toFixed(2)}</b></td></tr>
+      <tr><td>Invoice Amount (excl. GST)</td><td>Ã¢ÂÂ¹${i.amount.toFixed(2)}</td></tr>
+      <tr><td>GST Amount</td><td>Ã¢ÂÂ¹${i.gst.toFixed(2)}</td></tr>
+      <tr><td><b>Total Invoice Amount</b></td><td><b>Ã¢ÂÂ¹${i.total.toFixed(2)}</b></td></tr>
     </tbody></table>
     ${i.file ? `<div class="mt-12"><b>File:</b> ${i.file}</div>` : ''}
     ${i.remarks ? `<div class="mt-12"><b>Remarks:</b> ${i.remarks}</div>` : ''}
@@ -2167,15 +2173,15 @@ function getInvoiceStatus(inv) {
 function populatePaymentDropdown() {
   const sel=document.getElementById('pay_invoice'); if(!sel) return;
   const unpaid=state.invoices.filter(i=>getInvoiceStatus(i)!=='Paid');
-  sel.innerHTML='<option value="">-- Select Invoice --</option>'+unpaid.map(i=>`<option value="${i.id}">${i.invoiceNo} â ${i.vendor} â â¹${(i.total||0).toLocaleString('en-IN')}</option>`).join('');
+  sel.innerHTML='<option value="">-- Select Invoice --</option>'+unpaid.map(i=>`<option value="${i.id}">${i.invoiceNo} Ã¢ÂÂ ${i.vendor} Ã¢ÂÂ Ã¢ÂÂ¹${(i.total||0).toLocaleString('en-IN')}</option>`).join('');
 }
 function loadPaymentInvoice() {
   const invId=document.getElementById('pay_invoice').value; if(!invId) return;
   const inv=state.invoices.find(i=>i.id===invId); if(!inv) return;
   const paid=getInvoicePaid(invId), balance=(inv.total||0)-paid;
-  document.getElementById('pay_total').value='â¹'+(inv.total||0).toLocaleString('en-IN');
-  document.getElementById('pay_paid_so_far').value='â¹'+paid.toLocaleString('en-IN');
-  document.getElementById('pay_balance').value='â¹'+balance.toLocaleString('en-IN');
+  document.getElementById('pay_total').value='Ã¢ÂÂ¹'+(inv.total||0).toLocaleString('en-IN');
+  document.getElementById('pay_paid_so_far').value='Ã¢ÂÂ¹'+paid.toLocaleString('en-IN');
+  document.getElementById('pay_balance').value='Ã¢ÂÂ¹'+balance.toLocaleString('en-IN');
   document.getElementById('pay_date').value=today();
   document.getElementById('pay_amount').value=balance;
 }
@@ -2186,16 +2192,16 @@ function recordPayment() {
   if(amount>balance){toast('Payment exceeds balance','#dc2626');return;}
   if(!state.payments) state.payments=[];
   state.payments.push({id:genId('PAY'),invId,invoiceNo:inv.invoiceNo,vendor:inv.vendor,amount,date,mode:document.getElementById('pay_mode').value,ref:document.getElementById('pay_ref').value,remarks:document.getElementById('pay_remarks').value,recordedBy:ROLES[state.role]});
-  addActivity(`Payment â¹${amount.toLocaleString('en-IN')} recorded for ${inv.invoiceNo}`);
+  addActivity(`Payment Ã¢ÂÂ¹${amount.toLocaleString('en-IN')} recorded for ${inv.invoiceNo}`);
   save(); updateBadges(); renderInvoiceList(); renderPaymentHistory(); clearPaymentForm();
-  toast('Payment recorded â','#16a34a');
+  toast('Payment recorded Ã¢ÂÂ','#16a34a');
 }
 function clearPaymentForm() { ['pay_invoice','pay_total','pay_paid_so_far','pay_balance','pay_amount','pay_date','pay_ref','pay_remarks'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';}); }
 function renderPaymentHistory() {
   const body=document.getElementById('paymentHistoryBody'); if(!body) return;
   const payments=(state.payments||[]).slice().reverse();
-  if(!payments.length){body.innerHTML='<tr><td colspan="7"><div class="empty-state"><div class="icon">ð³</div><p>No payments recorded yet</p></div></td></tr>';return;}
-  body.innerHTML=payments.map(p=>`<tr><td><b>${p.invoiceNo}</b></td><td>${p.vendor}</td><td>${p.date}</td><td><b>â¹${p.amount.toLocaleString('en-IN')}</b></td><td>${p.mode}</td><td>${p.ref||'-'}</td><td>${p.recordedBy}</td></tr>`).join('');
+  if(!payments.length){body.innerHTML='<tr><td colspan="7"><div class="empty-state"><div class="icon">Ã°ÂÂÂ³</div><p>No payments recorded yet</p></div></td></tr>';return;}
+  body.innerHTML=payments.map(p=>`<tr><td><b>${p.invoiceNo}</b></td><td>${p.vendor}</td><td>${p.date}</td><td><b>Ã¢ÂÂ¹${p.amount.toLocaleString('en-IN')}</b></td><td>${p.mode}</td><td>${p.ref||'-'}</td><td>${p.recordedBy}</td></tr>`).join('');
 }
 // ======================================================
 // REPORTS
@@ -2208,30 +2214,30 @@ function renderReports() {
   const overdueInvs=state.invoices.filter(i=>getInvoiceStatus(i)==='Overdue');
   const pendingAll=state.indents.filter(i=>i.status.includes('Pending')).length+state.cs.filter(c=>c.status.includes('Pending')).length+state.pos.filter(p=>p.status.includes('Pending')).length;
   document.getElementById('reportKPIs').innerHTML=[
-    {val:'â¹'+totalPO.toLocaleString('en-IN'),lbl:'Approved PO Value',sub:state.pos.filter(p=>p.status==='Approved').length+' POs'},
-    {val:'â¹'+totalPaid.toLocaleString('en-IN'),lbl:'Total Payments',sub:(state.payments||[]).length+' transactions'},
-    {val:'â¹'+(totalInv-totalPaid).toLocaleString('en-IN'),lbl:'Outstanding',sub:state.invoices.filter(i=>getInvoiceStatus(i)!=='Paid').length+' invoices'},
+    {val:'Ã¢ÂÂ¹'+totalPO.toLocaleString('en-IN'),lbl:'Approved PO Value',sub:state.pos.filter(p=>p.status==='Approved').length+' POs'},
+    {val:'Ã¢ÂÂ¹'+totalPaid.toLocaleString('en-IN'),lbl:'Total Payments',sub:(state.payments||[]).length+' transactions'},
+    {val:'Ã¢ÂÂ¹'+(totalInv-totalPaid).toLocaleString('en-IN'),lbl:'Outstanding',sub:state.invoices.filter(i=>getInvoiceStatus(i)!=='Paid').length+' invoices'},
     {val:overdueInvs.length,lbl:'Overdue',sub:'Needs attention'},
     {val:pendingAll,lbl:'Pending Approvals',sub:'All modules'},
     {val:state.grns.length,lbl:'GRNs',sub:'Total receipts'}
   ].map(k=>`<div class="kpi-card"><div class="kpi-val">${k.val}</div><div class="kpi-lbl">${k.lbl}</div><div class="kpi-sub">${k.sub}</div></div>`).join('');
   const projMap={};
   state.pos.filter(p=>p.status==='Approved').forEach(p=>{projMap[p.project]=(projMap[p.project]||0)+(p.total||0);});
-  renderChart('chartProjectPO','bar',Object.keys(projMap),Object.values(projMap),'PO Value (â¹)');
+  renderChart('chartProjectPO','bar',Object.keys(projMap),Object.values(projMap),'PO Value (Ã¢ÂÂ¹)');
   const vMap={};
   state.pos.filter(p=>p.status==='Approved').forEach(p=>{(p.vendor||'').split(',').map(v=>v.trim()).filter(Boolean).forEach(v=>{vMap[v]=(vMap[v]||0)+(p.total||0);});});
   const tv=Object.entries(vMap).sort((a,b)=>b[1]-a[1]).slice(0,6);
-  renderChart('chartVendorSpend','bar',tv.map(v=>v[0]),tv.map(v=>v[1]),'Spend (â¹)',true);
+  renderChart('chartVendorSpend','bar',tv.map(v=>v[0]),tv.map(v=>v[1]),'Spend (Ã¢ÂÂ¹)',true);
   const mMap={};
   state.pos.filter(p=>p.status==='Approved').forEach(p=>{const m=(p.date||'').substring(0,7);if(m) mMap[m]=(mMap[m]||0)+(p.total||0);});
   const months=Object.keys(mMap).sort();
-  renderChart('chartMonthlyPO','line',months,months.map(m=>mMap[m]),'PO Value (â¹)');
+  renderChart('chartMonthlyPO','line',months,months.map(m=>mMap[m]),'PO Value (Ã¢ÂÂ¹)');
   const sc=[state.invoices.filter(i=>getInvoiceStatus(i)==='Paid').length,state.invoices.filter(i=>getInvoiceStatus(i)==='Partial').length,overdueInvs.length,state.invoices.filter(i=>getInvoiceStatus(i)==='Pending').length];
   renderDoughnut('chartPaymentStatus',['Paid','Partial','Overdue','Pending'],sc);
   const ob=document.getElementById('overdueBody');
-  if(!overdueInvs.length){ob.innerHTML='<tr><td colspan="6"><div class="empty-state"><div class="icon">â</div><p>No overdue invoices</p></div></td></tr>';}
-  else ob.innerHTML=overdueInvs.map(i=>{const bal=(i.total||0)-getInvoicePaid(i.id),days=Math.floor((new Date()-new Date(i.dueDate))/(86400000));return `<tr><td><b>${i.invoiceNo}</b></td><td>${i.vendor}</td><td>${i.poId}</td><td style="color:#dc2626">${i.dueDate}</td><td><b>â¹${bal.toLocaleString('en-IN')}</b></td><td><span class="status status-rejected">${days}d</span></td></tr>`;}).join('');
-  document.getElementById('approvalSummaryBody').innerHTML=[{m:'Indent',p:state.indents.filter(i=>i.status.includes('Pending'))},{m:'CS',p:state.cs.filter(c=>c.status.includes('Pending'))},{m:'PO',p:state.pos.filter(p=>p.status.includes('Pending'))}].map(r=>`<tr><td><b>${r.m}</b></td><td><span class="status ${r.p.length?'status-pending':'status-complete'}">${r.p.length}</span></td><td>${r.p.length?[...new Set(r.p.map(x=>x.status))].join(', '):'â'}</td></tr>`).join('');
+  if(!overdueInvs.length){ob.innerHTML='<tr><td colspan="6"><div class="empty-state"><div class="icon">Ã¢ÂÂ</div><p>No overdue invoices</p></div></td></tr>';}
+  else ob.innerHTML=overdueInvs.map(i=>{const bal=(i.total||0)-getInvoicePaid(i.id),days=Math.floor((new Date()-new Date(i.dueDate))/(86400000));return `<tr><td><b>${i.invoiceNo}</b></td><td>${i.vendor}</td><td>${i.poId}</td><td style="color:#dc2626">${i.dueDate}</td><td><b>Ã¢ÂÂ¹${bal.toLocaleString('en-IN')}</b></td><td><span class="status status-rejected">${days}d</span></td></tr>`;}).join('');
+  document.getElementById('approvalSummaryBody').innerHTML=[{m:'Indent',p:state.indents.filter(i=>i.status.includes('Pending'))},{m:'CS',p:state.cs.filter(c=>c.status.includes('Pending'))},{m:'PO',p:state.pos.filter(p=>p.status.includes('Pending'))}].map(r=>`<tr><td><b>${r.m}</b></td><td><span class="status ${r.p.length?'status-pending':'status-complete'}">${r.p.length}</span></td><td>${r.p.length?[...new Set(r.p.map(x=>x.status))].join(', '):'Ã¢ÂÂ'}</td></tr>`).join('');
 }
 function renderChart(id,type,labels,data,label,horizontal=false) {
   if(_charts[id]){_charts[id].destroy();}
@@ -2244,7 +2250,7 @@ function renderDoughnut(id,labels,data) {
   _charts[id]=new Chart(ctx,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:['#16a34a','#2563a8','#dc2626','#f59e0b']}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}});
 }
 // ======================================================
-// PDF EXPORTS â GRN & INVOICE
+// PDF EXPORTS Ã¢ÂÂ GRN & INVOICE
 // ======================================================
 function downloadGRN(id) {
   var g=state.grns.find(function(x){return x.id===id;}); if(!g) return;
@@ -2325,7 +2331,7 @@ document.body.insertAdjacentHTML('beforeend', `
 // Show loading indicator while connecting to Supabase
 document.body.insertAdjacentHTML('afterbegin', `
   <div id="sb-loader" style="position:fixed;inset:0;background:rgba(26,60,94,0.92);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;">
-    <div style="font-size:32px;margin-bottom:12px;">ð</div>
+    <div style="font-size:32px;margin-bottom:12px;">Ã°ÂÂÂ</div>
     <div style="font-size:16px;font-weight:600;">Connecting to Supabase...</div>
     <div style="font-size:12px;opacity:0.7;margin-top:6px;">Loading your PO data</div>
   </div>
@@ -2351,7 +2357,7 @@ function loadSampleData() {
   populateProjectDropdowns();
   renderMaster();
   updateBadges();
-  toast('Sample data loaded â', '#16a34a');
+  toast('Sample data loaded Ã¢ÂÂ', '#16a34a');
 }
 </script>
 </body>
