@@ -1,13 +1,9 @@
 <!DOCTYPE html>
-<html lang="en"><head></head><body>if (!state.settings.moduleTemplates) state.settings.moduleTemplates = JSON.parse(JSON.stringify(DEFAULT_SETTINGS.moduleTemplates));
 <!-- v1781336765899 -->
 <!-- Build: 2026-06-13T07:34:09.373Z -->
-
-
+<html lang="en">
+<head>
 <meta charset="UTF-8">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Purchase Order ERP</title>
 <!-- Supabase JS SDK -->
@@ -245,8 +241,8 @@
   .kpi-card .kpi-lbl { font-size: 11px; color: var(--muted); margin-top: 4px; }
   .kpi-card .kpi-sub { font-size: 10px; color: var(--success); margin-top: 2px; font-weight: 600; }
 </style>
-
-
+</head>
+<body>
 
 <!-- LOGIN SCREEN -->
 <div id="loginScreen">
@@ -278,7 +274,7 @@
       <label>Passcode</label>
       <input type="password" id="loginPasscode" placeholder="Enter your passcode" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-    <button class="login-btn" onclick="doLogin()">Sign In →</button>
+    <button class="login-btn" onclick="doLogin()">Sign In &rarr;</button>
     <div class="login-error" id="loginError">Invalid name, role, or passcode.</div>
     <div class="login-hint">Contact your admin to get your name, role &amp; passcode.</div>
   </div>
@@ -304,7 +300,7 @@
       <span class="badge" id="badge-indent">0</span>
     </div>
     <div class="nav-item" data-page="vendor" onclick="nav(this)">
-      <span>🏢</span> Vendor &amp; CS
+      <span>🏢</span> Vendor & CS
       <span class="badge" id="badge-vendor">0</span>
     </div>
     <div class="nav-item" data-page="po" onclick="nav(this)">
@@ -460,7 +456,7 @@
         <div class="form-grid">
           <div class="form-group">
             <label>Indent No</label>
-            <input id="i_no" placeholder="Auto-generated" readonly="" style="background:#f1f5f9;">
+            <input id="i_no" placeholder="Auto-generated" readonly style="background:#f1f5f9;">
           </div>
           <div class="form-group">
             <label>Date</label>
@@ -552,14 +548,14 @@
   <!-- ===== VENDOR & CS ===== -->
   <div class="page" id="page-vendor">
     <div class="tabs">
-      <div class="tab active" onclick="switchTab('vendor','upload')">Upload Vendors &amp; CS</div>
+      <div class="tab active" onclick="switchTab('vendor','upload')">Upload Vendors & CS</div>
       <div class="tab" onclick="switchTab('vendor','list')">All CS Records</div>
       <div class="tab" onclick="switchTab('vendor','approve')">Pending Approvals</div>
     </div>
 
     <div class="tab-content active" id="vendor-upload">
       <div class="card">
-        <div class="card-title"><span class="icon">🏢</span> Upload Vendor Details &amp; Comparative Statement</div>
+        <div class="card-title"><span class="icon">🏢</span> Upload Vendor Details & Comparative Statement</div>
         <div class="alert alert-info">Procurement team uploads vendor quotes. Approval: Purchase Department → QS Department → Management</div>
         <div class="form-grid">
           <div class="form-group">
@@ -641,7 +637,7 @@
           </div>
           <div class="form-group">
             <label>PO Number</label>
-            <input id="po_no" placeholder="Auto-generated" readonly="" style="background:#f1f5f9;">
+            <input id="po_no" placeholder="Auto-generated" readonly style="background:#f1f5f9;">
           </div>
           <div class="form-group">
             <label>PO Date</label>
@@ -687,7 +683,7 @@
           </table>
         </div>
         <div class="flex-row mt-16">
-          <button class="btn btn-primary" onclick="submitPO()">Create &amp; Submit PO</button>
+          <button class="btn btn-primary" onclick="submitPO()">Create & Submit PO</button>
           <button class="btn btn-outline" onclick="clearPOForm()">Clear</button>
         </div>
       </div>
@@ -736,7 +732,7 @@
           </div>
           <div class="form-group">
             <label>GRN Number</label>
-            <input id="grn_no" placeholder="Auto-generated" readonly="" style="background:#f1f5f9;">
+            <input id="grn_no" placeholder="Auto-generated" readonly style="background:#f1f5f9;">
           </div>
           <div class="form-group">
             <label>Receipt Date</label>
@@ -822,7 +818,7 @@
           </div>
           <div class="form-group">
             <label>Vendor Name</label>
-            <input id="inv_vendor" placeholder="Vendor name" readonly="" style="background:#f1f5f9;">
+            <input id="inv_vendor" placeholder="Vendor name" readonly style="background:#f1f5f9;">
           </div>
           <div class="form-group">
             <label>Invoice Amount (₹)</label>
@@ -834,7 +830,7 @@
           </div>
           <div class="form-group">
             <label>Total with GST (₹)</label>
-            <input id="inv_total" type="number" placeholder="0" readonly="" style="background:#f1f5f9;">
+            <input id="inv_total" type="number" placeholder="0" readonly style="background:#f1f5f9;">
           </div>
           <div class="form-group">
             <label>Payment Due Date</label>
@@ -895,15 +891,15 @@
           </div>
           <div class="form-group">
             <label>Invoice Total (₹)</label>
-            <input id="pay_total" readonly="" style="background:#f1f5f9;">
+            <input id="pay_total" readonly style="background:#f1f5f9;">
           </div>
           <div class="form-group">
             <label>Already Paid (₹)</label>
-            <input id="pay_paid_so_far" readonly="" style="background:#f1f5f9;">
+            <input id="pay_paid_so_far" readonly style="background:#f1f5f9;">
           </div>
           <div class="form-group">
             <label>Balance Due (₹)</label>
-            <input id="pay_balance" readonly="" style="background:#f1f5f9;">
+            <input id="pay_balance" readonly style="background:#f1f5f9;">
           </div>
           <div class="form-group">
             <label>Payment Amount (₹)</label>
@@ -989,12 +985,15 @@
     </div>
   </div>
 
+</div>
+
+
+<!-- TEMPLATE SETTINGS PAGE -->
 <div class="page" id="page-templates">
   <div class="tabs">
     <div class="tab active" onclick="switchTab('templates','company')">Company Details</div>
     <div class="tab" onclick="switchTab('templates','workflow')">Approval Workflow</div>
     <div class="tab" onclick="switchTab('templates','prefixes')">Document Numbering</div>
-    <div class="tab" onclick="switchTab('templates','modules')">Module Templates</div>
   </div>
 
   <div class="tab-content active" id="templates-company">
@@ -1042,20 +1041,10 @@
       </div>
     </div>
   </div>
-<div class="tab-content" id="templates-modules">
-    <div class="card">
-      <div class="card-title"><span class="icon">✏</span> Module Form Templates</div>
-      <div class="alert alert-info">Select a module below to rename labels, hide fields, or add custom fields.</div>
-      <div class="flex-row" style="margin-bottom:16px;gap:8px;flex-wrap:wrap;">
-        <button class="btn btn-outline" data-mod="indent" onclick="openModuleEditor(this.getAttribute('data-mod'))">Indent</button>
-        <button class="btn btn-outline" data-mod="cs" onclick="openModuleEditor(this.getAttribute('data-mod'))">CS / Vendor</button>
-        <button class="btn btn-outline" data-mod="po" onclick="openModuleEditor(this.getAttribute('data-mod'))">Purchase Order</button>
-        <button class="btn btn-outline" data-mod="grn" onclick="openModuleEditor(this.getAttribute('data-mod'))">GRN</button>
-        <button class="btn btn-outline" data-mod="invoice" onclick="openModuleEditor(this.getAttribute('data-mod'))">Invoice</button>
-      </div>
-      <div id="moduleEditorContent"><div class="empty-state"><p>Click a module above to edit its template.</p></div></div>
-    </div>
-  </div></div><div class="page" id="page-usermgmt">
+</div>
+
+<!-- USER MANAGEMENT PAGE -->
+<div class="page" id="page-usermgmt">
   <div class="card">
     <div class="card-title"><span class="icon">👥</span> Add New User</div>
     <div class="form-grid">
@@ -1100,17 +1089,7 @@
       <tbody id="userListBody"></tbody></table>
     </div>
   </div>
-</div></div>
-
-
-<!-- TEMPLATE SETTINGS PAGE -->
-
-
-
-  
-
-<!-- USER MANAGEMENT PAGE -->
-
+</div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay">
@@ -1130,7 +1109,6 @@
 const DEFAULT_SETTINGS = {
   company: { name: 'Sankalp Construction', address: '', phone: '', email: '', gstin: '' },
   prefixes: { indent: 'IND', cs: 'CS', po: 'PO', grn: 'GRN', invoice: 'INV', payment: 'PAY' },
-  moduleTemplates:{indent:{labels:{},hidden:[],custom:[]},cs:{labels:{},hidden:[],custom:[]},po:{labels:{},hidden:[],custom:[]},grn:{labels:{},hidden:[],custom:[]},invoice:{labels:{},hidden:[],custom:[]}},
   workflow: {
     indent: ['site_engineer','qs_engineer','technical_director','management'],
     cs:     ['purchase_manager','qs_manager','management'],
@@ -1334,8 +1312,6 @@ function nav(el) {
   if (page === 'invoice') { populateInvoicePODropdown(); renderInvoiceList(); renderPaymentHistory(); }
   if (page === 'reports') { renderReports(); }
   if (page === 'usermgmt') { renderUserManagement(); }
-  var _mods=['indent','cs','po','grn','invoice'];
-  if (_mods.indexOf(page)!==-1) { setTimeout(function(){ applyModuleTemplate(page); },100); }
   if (page === 'templates') { renderTemplateSettings(); }
 }
 
@@ -2638,105 +2614,6 @@ function loadSampleData() {
 }
 
 
-var MODULE_FIELDS = {
-  indent:[{id:"project",label:"Project",req:true},{id:"date",label:"Date",req:true},{id:"priority",label:"Priority",req:false},{id:"remarks",label:"Remarks",req:false}],
-  cs:[{id:"indent_ref",label:"Indent Reference",req:true},{id:"vendor",label:"Vendor Name",req:true},{id:"quote_ref",label:"Quote Reference",req:false},{id:"validity",label:"Validity",req:false},{id:"delivery",label:"Delivery Terms",req:false},{id:"payment_terms",label:"Payment Terms",req:false},{id:"remarks",label:"Remarks",req:false}],
-  po:[{id:"vendor",label:"Vendor",req:true},{id:"po_date",label:"PO Date",req:true},{id:"delivery_date",label:"Delivery Date",req:false},{id:"delivery_address",label:"Delivery Address",req:false},{id:"payment_terms",label:"Payment Terms",req:false},{id:"instructions",label:"Special Instructions",req:false}],
-  grn:[{id:"po_ref",label:"PO Reference",req:true},{id:"receipt_date",label:"Receipt Date",req:true},{id:"challan_no",label:"Challan No",req:false},{id:"received_by",label:"Received By",req:false},{id:"challan_date",label:"Challan Date",req:false},{id:"remarks",label:"Remarks",req:false}],
-  invoice:[{id:"po_ref",label:"PO Reference",req:true},{id:"invoice_no",label:"Invoice Number",req:true},{id:"invoice_date",label:"Invoice Date",req:true},{id:"amount",label:"Invoice Amount",req:true},{id:"gst",label:"GST Amount",req:false},{id:"due_date",label:"Due Date",req:false},{id:"file_ref",label:"File Reference",req:false},{id:"remarks",label:"Remarks",req:false}]
-};
-var MODULE_NAMES={indent:"Indent",cs:"CS / Vendor",po:"Purchase Order",grn:"GRN",invoice:"Invoice"};
-function openModuleEditor(module){
-  var s=(state.settings&&state.settings.moduleTemplates&&state.settings.moduleTemplates[module])||{labels:{},hidden:[],custom:[]};
-  var fields=MODULE_FIELDS[module]||[];
-  var el=document.getElementById("moduleEditorContent");
-  if(!el)return;
-  var rows="";
-  for(var i=0;i<fields.length;i++){
-    var f=fields[i];
-    var lbl=(s.labels&&s.labels[f.id])?s.labels[f.id]:f.label;
-    var hid=s.hidden&&s.hidden.indexOf(f.id)!==-1;
-    rows+="<tr><td><b>"+f.label+"</b>"+(f.req?" <span style='color:#dc2626;font-size:10px;'>req</span>":"")+"</td>";
-    rows+="<td><input type='text' value='"+lbl+"' id='lbl_"+module+"_"+f.id+"' placeholder='"+f.label+"' style='width:100%;padding:5px 8px;border:1px solid var(--border);border-radius:4px;font-size:13px;'></td>";
-    rows+=f.req?"<td style='text-align:center;'><span style='font-size:11px;color:var(--muted);'>Always on</span></td>":"<td style='text-align:center;'><input type='checkbox' id='vis_"+module+"_"+f.id+"' "+(hid?"":"checked")+" style='width:auto;'></td>";
-    rows+="</tr>";
-  }
-  var customs=s.custom||[];
-  var cfHTML="";
-  for(var j=0;j<customs.length;j++){
-    var cf=customs[j];
-    cfHTML+="<div style='display:flex;gap:6px;align-items:center;margin-bottom:8px;'>";
-    cfHTML+="<input type='text' id='cfl_"+module+"_"+j+"' value='"+cf.label+"' placeholder='Label' style='flex:2;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:13px;'>";
-    cfHTML+="<select id='cft_"+module+"_"+j+"' style='flex:1;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:13px;'>";
-    var types=["text","number","date","textarea"];
-    for(var t=0;t<types.length;t++) cfHTML+="<option value='"+types[t]+"'"+(cf.type===types[t]?" selected":"")+">"+types[t]+"</option>";
-    cfHTML+="</select><label style='font-size:12px;display:flex;align-items:center;gap:4px;'><input type='checkbox' id='cfr_"+module+"_"+j+"' "+(cf.required?"checked":"")+" style='width:auto;'> Req</label>";
-    cfHTML+="<button class='btn btn-sm btn-danger' data-mod='"+module+"' data-idx='"+j+"' onclick='removeModuleField(this)'>Remove</button></div>";
-  }
-  if(!cfHTML)cfHTML="<p style='color:var(--muted);font-size:13px;margin:0;'>No custom fields yet.</p>";
-  var mn=MODULE_NAMES[module]||module;
-  el.innerHTML="<h4 style='margin-bottom:12px;color:var(--primary);'>"+mn+" Template</h4>"
-   +"<div class='tbl-wrap'><table><thead><tr><th>Field</th><th>Custom Label</th><th>Visible</th></tr></thead><tbody>"+rows+"</tbody></table></div>"
-   +"<hr class='divider'><div class='section-header'><h3>Custom Fields</h3>"
-   +"<button class='btn btn-outline' data-mod='"+module+"' onclick='addModuleCustomField(this.getAttribute(\"data-mod\"))'>+ Add Field</button></div>"
-   +"<div id='cfWrap_"+module+"'>"+cfHTML+"</div>"
-   +"<div class='flex-row mt-16'>"
-   +"<button class='btn btn-primary' data-mod='"+module+"' onclick='saveModuleTemplate(this.getAttribute(\"data-mod\"))'>Save Template</button>"
-   +"<button class='btn btn-outline' data-mod='"+module+"' onclick='resetModuleTemplate(this.getAttribute(\"data-mod\"))'>Reset to Default</button></div>";
-}
-function addModuleCustomField(m){
-  if(!state.settings.moduleTemplates[m])state.settings.moduleTemplates[m]={labels:{},hidden:[],custom:[]};
-  var s=state.settings.moduleTemplates[m];
-  if(!s.custom)s.custom=[];
-  s.custom.push({label:"Custom Field",type:"text",required:false});
-  openModuleEditor(m);
-}
-function removeModuleField(btn){
-  var m=btn.getAttribute("data-mod"),idx=parseInt(btn.getAttribute("data-idx"));
-  var s=state.settings.moduleTemplates[m];
-  if(s&&s.custom){s.custom.splice(idx,1);openModuleEditor(m);}
-}
-function saveModuleTemplate(m){
-  if(!state.settings.moduleTemplates[m])state.settings.moduleTemplates[m]={labels:{},hidden:[],custom:[]};
-  var s=state.settings.moduleTemplates[m],fields=MODULE_FIELDS[m]||[];
-  s.labels={};
-  for(var i=0;i<fields.length;i++){var f=fields[i];var el=document.getElementById("lbl_"+m+"_"+f.id);if(el&&el.value.trim()&&el.value.trim()!==f.label)s.labels[f.id]=el.value.trim();}
-  s.hidden=[];
-  for(var i=0;i<fields.length;i++){var f2=fields[i];if(!f2.req){var vel=document.getElementById("vis_"+m+"_"+f2.id);if(vel&&!vel.checked)s.hidden.push(f2.id);}}
-  var customs=s.custom||[];
-  for(var j=0;j<customs.length;j++){
-    var lel=document.getElementById("cfl_"+m+"_"+j);
-    var tel=document.getElementById("cft_"+m+"_"+j);
-    var rel=document.getElementById("cfr_"+m+"_"+j);
-    if(lel)customs[j].label=lel.value.trim()||customs[j].label;
-    if(tel)customs[j].type=tel.value;
-    if(rel)customs[j].required=rel.checked;
-  }
-  save();toast("Template saved","#16a34a");openModuleEditor(m);
-}
-function resetModuleTemplate(m){
-  if(!confirm("Reset "+(MODULE_NAMES[m]||m)+" template to defaults?"))return;
-  state.settings.moduleTemplates[m]={labels:{},hidden:[],custom:[]};
-  save();toast("Reset to default","#16a34a");openModuleEditor(m);
-}
-function applyModuleTemplate(module){
-  var s=state.settings&&state.settings.moduleTemplates&&state.settings.moduleTemplates[module];
-  if(!s)return;
-  var fields=MODULE_FIELDS[module]||[];
-  for(var i=0;i<fields.length;i++){
-    var f=fields[i];
-    var nl=(s.labels&&s.labels[f.id])?s.labels[f.id]:f.label;
-    var pg=document.getElementById("page-"+module);if(!pg)continue;
-    var lbls=pg.querySelectorAll("label");
-    for(var k=0;k<lbls.length;k++){
-      if(lbls[k].textContent.trim()===f.label||lbls[k].textContent.trim()===nl){
-        lbls[k].textContent=nl;
-        var fg=lbls[k].closest(".form-group");
-        if(fg)fg.style.display=(s.hidden&&s.hidden.indexOf(f.id)!==-1)?"none":"";
-      }
-    }
-  }
-}
 // ======================================================
 // TEMPLATE SETTINGS
 // ======================================================
@@ -2944,6 +2821,5 @@ window.onload = async function() {
 
 
 </script>
-
-
-</body></html>
+</body>
+</html>
