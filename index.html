@@ -2372,7 +2372,7 @@ function recordPayment() {
   };
   state.payments = state.payments || [];
   if (!state.managedUsers || !state.managedUsers.length) { state.managedUsers = DEFAULT_USERS; save(); }
-  if (!state.managedUsers || state.managedUsers.length === 0) { state.managedUsers = DEFAULT_USERS; await save(); }
+  if (!state.managedUsers || state.managedUsers.length === 0) { state.managedUsers = DEFAULT_USERS; save(); }
   state.payments.push(payment);
   inv.paidAmount = (inv.paidAmount||0) + amount;
   inv.status = inv.paidAmount >= inv.total ? 'Paid' : 'Partial';
@@ -2608,7 +2608,7 @@ function clearUserForm() {
 // STARTUP
 // ======================================================
 window.onload = async function() {
-  await load();
+  load();
   state.payments = state.payments || [];
   renderDashboard();
 };
