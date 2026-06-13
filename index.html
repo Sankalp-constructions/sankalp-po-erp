@@ -1045,16 +1045,17 @@
   </div>
 </div>
 
+
   <div class="tab-content" id="templates-modules">
     <div class="card">
       <div class="card-title"><span class="icon">&#9999;</span> Module Form Templates</div>
-      <div class="alert alert-info">Select a module to rename field labels, hide optional fields, or add custom fields.</div>
+      <div class="alert alert-info">Select a module below to rename labels, hide fields, or add custom fields.</div>
       <div class="flex-row" style="margin-bottom:16px;gap:8px;flex-wrap:wrap;">
-        <button class="btn btn-outline" onclick="openModuleEditor('indent')">Indent</button>
-        <button class="btn btn-outline" onclick="openModuleEditor('cs')">CS / Vendor</button>
-        <button class="btn btn-outline" onclick="openModuleEditor('po')">Purchase Order</button>
-        <button class="btn btn-outline" onclick="openModuleEditor('grn')">GRN</button>
-        <button class="btn btn-outline" onclick="openModuleEditor('invoice')">Invoice</button>
+        <button class="btn btn-outline" data-mod="indent" onclick="openModuleEditor(this.getAttribute('data-mod'))">Indent</button>
+        <button class="btn btn-outline" data-mod="cs" onclick="openModuleEditor(this.getAttribute('data-mod'))">CS / Vendor</button>
+        <button class="btn btn-outline" data-mod="po" onclick="openModuleEditor(this.getAttribute('data-mod'))">Purchase Order</button>
+        <button class="btn btn-outline" data-mod="grn" onclick="openModuleEditor(this.getAttribute('data-mod'))">GRN</button>
+        <button class="btn btn-outline" data-mod="invoice" onclick="openModuleEditor(this.getAttribute('data-mod'))">Invoice</button>
       </div>
       <div id="moduleEditorContent"><div class="empty-state"><p>Click a module above to edit its template.</p></div></div>
     </div>
@@ -1330,7 +1331,8 @@ function nav(el) {
   if (page === 'invoice') { populateInvoicePODropdown(); renderInvoiceList(); renderPaymentHistory(); }
   if (page === 'reports') { renderReports(); }
   if (page === 'usermgmt') { renderUserManagement(); }
-  if (['indent','cs','po','grn','invoice'].includes(page)) { setTimeout(function(){ applyModuleTemplate(page); }, 100); }
+  var _mods=['indent','cs','po','grn','invoice'];
+  if (_mods.indexOf(page)!==-1) { setTimeout(function(){ applyModuleTemplate(page); },100); }
   if (page === 'templates') { renderTemplateSettings(); }
 }
 
@@ -2633,182 +2635,105 @@ function loadSampleData() {
 }
 
 
-
-// ======================================================
-// MODULE TEMPLATE EDITOR
-// ======================================================
 var MODULE_FIELDS = {
-  indent: [
-    {id:'project',label:'Project',req:true},
-    {id:'date',label:'Date',req:true},
-    {id:'priority',label:'Priority',req:false},
-    {id:'remarks',label:'Remarks',req:false}
-  ],
-  cs: [
-    {id:'indent_ref',label:'Indent Reference',req:true},
-    {id:'vendor',label:'Vendor Name',req:true},
-    {id:'quote_ref',label:'Quote Reference',req:false},
-    {id:'validity',label:'Validity',req:false},
-    {id:'delivery',label:'Delivery Terms',req:false},
-    {id:'payment_terms',label:'Payment Terms',req:false},
-    {id:'remarks',label:'Remarks',req:false}
-  ],
-  po: [
-    {id:'vendor',label:'Vendor',req:true},
-    {id:'po_date',label:'PO Date',req:true},
-    {id:'delivery_date',label:'Delivery Date',req:false},
-    {id:'delivery_address',label:'Delivery Address',req:false},
-    {id:'payment_terms',label:'Payment Terms',req:false},
-    {id:'instructions',label:'Special Instructions',req:false}
-  ],
-  grn: [
-    {id:'po_ref',label:'PO Reference',req:true},
-    {id:'receipt_date',label:'Receipt Date',req:true},
-    {id:'challan_no',label:'Challan No',req:false},
-    {id:'received_by',label:'Received By',req:false},
-    {id:'challan_date',label:'Challan Date',req:false},
-    {id:'remarks',label:'Remarks',req:false}
-  ],
-  invoice: [
-    {id:'po_ref',label:'PO Reference',req:true},
-    {id:'invoice_no',label:'Invoice Number',req:true},
-    {id:'invoice_date',label:'Invoice Date',req:true},
-    {id:'amount',label:'Invoice Amount',req:true},
-    {id:'gst',label:'GST Amount',req:false},
-    {id:'due_date',label:'Due Date',req:false},
-    {id:'file_ref',label:'File Reference',req:false},
-    {id:'remarks',label:'Remarks',req:false}
-  ]
+  indent:[{id:"project",label:"Project",req:true},{id:"date",label:"Date",req:true},{id:"priority",label:"Priority",req:false},{id:"remarks",label:"Remarks",req:false}],
+  cs:[{id:"indent_ref",label:"Indent Reference",req:true},{id:"vendor",label:"Vendor Name",req:true},{id:"quote_ref",label:"Quote Reference",req:false},{id:"validity",label:"Validity",req:false},{id:"delivery",label:"Delivery Terms",req:false},{id:"payment_terms",label:"Payment Terms",req:false},{id:"remarks",label:"Remarks",req:false}],
+  po:[{id:"vendor",label:"Vendor",req:true},{id:"po_date",label:"PO Date",req:true},{id:"delivery_date",label:"Delivery Date",req:false},{id:"delivery_address",label:"Delivery Address",req:false},{id:"payment_terms",label:"Payment Terms",req:false},{id:"instructions",label:"Special Instructions",req:false}],
+  grn:[{id:"po_ref",label:"PO Reference",req:true},{id:"receipt_date",label:"Receipt Date",req:true},{id:"challan_no",label:"Challan No",req:false},{id:"received_by",label:"Received By",req:false},{id:"challan_date",label:"Challan Date",req:false},{id:"remarks",label:"Remarks",req:false}],
+  invoice:[{id:"po_ref",label:"PO Reference",req:true},{id:"invoice_no",label:"Invoice Number",req:true},{id:"invoice_date",label:"Invoice Date",req:true},{id:"amount",label:"Invoice Amount",req:true},{id:"gst",label:"GST Amount",req:false},{id:"due_date",label:"Due Date",req:false},{id:"file_ref",label:"File Reference",req:false},{id:"remarks",label:"Remarks",req:false}]
 };
-var MODULE_NAMES = {indent:'Indent',cs:'CS / Vendor',po:'Purchase Order',grn:'GRN',invoice:'Invoice'};
-
-function openModuleEditor(module) {
-  var tmpl = state.settings.moduleTemplates || {};
-  var s = tmpl[module] || {labels:{},hidden:[],custom:[]};
-  var fields = MODULE_FIELDS[module] || [];
-  var el = document.getElementById('moduleEditorContent');
-  if (!el) return;
-  var rows = '';
-  for (var i = 0; i < fields.length; i++) {
-    var f = fields[i];
-    var lbl = (s.labels && s.labels[f.id]) ? s.labels[f.id] : f.label;
-    var isHidden = s.hidden && s.hidden.indexOf(f.id) !== -1;
-    rows += '<tr>';
-    rows += '<td><b>' + f.label + '</b>';
-    if (f.req) rows += ' <span style="color:#dc2626;font-size:10px;">required</span>';
-    rows += '</td>';
-    rows += '<td><input type="text" value="' + lbl + '" id="lbl_' + module + '_' + f.id + '" placeholder="' + f.label + '" style="width:100%;padding:5px 8px;border:1px solid var(--border);border-radius:4px;font-size:13px;"></td>';
-    if (f.req) {
-      rows += '<td style="text-align:center;"><span style="font-size:11px;color:var(--muted);">Always on</span></td>';
-    } else {
-      rows += '<td style="text-align:center;"><input type="checkbox" id="vis_' + module + '_' + f.id + '" ' + (isHidden ? '' : 'checked') + ' style="width:auto;"></td>';
-    }
-    rows += '</tr>';
+var MODULE_NAMES={indent:"Indent",cs:"CS / Vendor",po:"Purchase Order",grn:"GRN",invoice:"Invoice"};
+function openModuleEditor(module){
+  var s=(state.settings&&state.settings.moduleTemplates&&state.settings.moduleTemplates[module])||{labels:{},hidden:[],custom:[]};
+  var fields=MODULE_FIELDS[module]||[];
+  var el=document.getElementById("moduleEditorContent");
+  if(!el)return;
+  var rows="";
+  for(var i=0;i<fields.length;i++){
+    var f=fields[i];
+    var lbl=(s.labels&&s.labels[f.id])?s.labels[f.id]:f.label;
+    var hid=s.hidden&&s.hidden.indexOf(f.id)!==-1;
+    rows+="<tr><td><b>"+f.label+"</b>"+(f.req?" <span style='color:#dc2626;font-size:10px;'>req</span>":"")+"</td>";
+    rows+="<td><input type='text' value='"+lbl+"' id='lbl_"+module+"_"+f.id+"' placeholder='"+f.label+"' style='width:100%;padding:5px 8px;border:1px solid var(--border);border-radius:4px;font-size:13px;'></td>";
+    rows+=f.req?"<td style='text-align:center;'><span style='font-size:11px;color:var(--muted);'>Always on</span></td>":"<td style='text-align:center;'><input type='checkbox' id='vis_"+module+"_"+f.id+"' "+(hid?"":"checked")+" style='width:auto;'></td>";
+    rows+="</tr>";
   }
-  var customs = s.custom || [];
-  var cfHTML = '';
-  for (var j = 0; j < customs.length; j++) {
-    var cf = customs[j];
-    cfHTML += '<div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;">';
-    cfHTML += '<input type="text" id="cfl_' + module + '_' + j + '" value="' + cf.label + '" placeholder="Field label" style="flex:2;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:13px;">';
-    cfHTML += '<select id="cft_' + module + '_' + j + '" style="flex:1;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:13px;">';
-    var types = ['text','number','date','textarea'];
-    for (var t = 0; t < types.length; t++) {
-      cfHTML += '<option value="' + types[t] + '"' + (cf.type === types[t] ? ' selected' : '') + '>' + types[t] + '</option>';
-    }
-    cfHTML += '</select>';
-    cfHTML += '<label style="font-size:12px;display:flex;align-items:center;gap:4px;"><input type="checkbox" id="cfr_' + module + '_' + j + '" ' + (cf.required ? 'checked' : '') + ' style="width:auto;"> Required</label>';
-    cfHTML += '<button class="btn btn-sm btn-danger" onclick="removeCustomField('' + module + '',' + j + ')">Remove</button>';
-    cfHTML += '</div>';
+  var customs=s.custom||[];
+  var cfHTML="";
+  for(var j=0;j<customs.length;j++){
+    var cf=customs[j];
+    cfHTML+="<div style='display:flex;gap:6px;align-items:center;margin-bottom:8px;'>";
+    cfHTML+="<input type='text' id='cfl_"+module+"_"+j+"' value='"+cf.label+"' placeholder='Label' style='flex:2;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:13px;'>";
+    cfHTML+="<select id='cft_"+module+"_"+j+"' style='flex:1;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:13px;'>";
+    var types=["text","number","date","textarea"];
+    for(var t=0;t<types.length;t++) cfHTML+="<option value='"+types[t]+"'"+(cf.type===types[t]?" selected":"")+">"+types[t]+"</option>";
+    cfHTML+="</select><label style='font-size:12px;display:flex;align-items:center;gap:4px;'><input type='checkbox' id='cfr_"+module+"_"+j+"' "+(cf.required?"checked":"")+" style='width:auto;'> Req</label>";
+    cfHTML+="<button class='btn btn-sm btn-danger' data-mod='"+module+"' data-idx='"+j+"' onclick='removeModuleField(this)'>Remove</button></div>";
   }
-  if (!cfHTML) cfHTML = '<p style="color:var(--muted);font-size:13px;margin:0;">No custom fields added yet.</p>';
-  var modName = MODULE_NAMES[module] || module;
-  el.innerHTML = '<h4 style="margin-bottom:12px;color:var(--primary);">' + modName + ' Template</h4>'
-    + '<div class="tbl-wrap"><table><thead><tr><th>Original Field</th><th>Custom Label</th><th>Visible</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
-    + '<hr class="divider">'
-    + '<div class="section-header"><h3>Custom Fields</h3>'
-    + '<button class="btn btn-outline" onclick="addModuleCustomField('' + module + '')">+ Add Field</button></div>'
-    + '<div id="cfWrap_' + module + '">' + cfHTML + '</div>'
-    + '<div class="flex-row mt-16">'
-    + '<button class="btn btn-primary" onclick="saveModuleTemplate('' + module + '')">Save Template</button>'
-    + '<button class="btn btn-outline" onclick="resetModuleTemplate('' + module + '')">Reset to Default</button>'
-    + '</div>';
+  if(!cfHTML)cfHTML="<p style='color:var(--muted);font-size:13px;margin:0;'>No custom fields yet.</p>";
+  var mn=MODULE_NAMES[module]||module;
+  el.innerHTML="<h4 style='margin-bottom:12px;color:var(--primary);'>"+mn+" Template</h4>"
+   +"<div class='tbl-wrap'><table><thead><tr><th>Field</th><th>Custom Label</th><th>Visible</th></tr></thead><tbody>"+rows+"</tbody></table></div>"
+   +"<hr class='divider'><div class='section-header'><h3>Custom Fields</h3>"
+   +"<button class='btn btn-outline' data-mod='"+module+"' onclick='addModuleCustomField(this.getAttribute(\"data-mod\"))'>+ Add Field</button></div>"
+   +"<div id='cfWrap_"+module+"'>"+cfHTML+"</div>"
+   +"<div class='flex-row mt-16'>"
+   +"<button class='btn btn-primary' data-mod='"+module+"' onclick='saveModuleTemplate(this.getAttribute(\"data-mod\"))'>Save Template</button>"
+   +"<button class='btn btn-outline' data-mod='"+module+"' onclick='resetModuleTemplate(this.getAttribute(\"data-mod\"))'>Reset to Default</button></div>";
 }
-
-function addModuleCustomField(module) {
-  if (!state.settings.moduleTemplates[module]) state.settings.moduleTemplates[module] = {labels:{},hidden:[],custom:[]};
-  if (!state.settings.moduleTemplates[module].custom) state.settings.moduleTemplates[module].custom = [];
-  state.settings.moduleTemplates[module].custom.push({label:'Custom Field',type:'text',required:false});
-  openModuleEditor(module);
+function addModuleCustomField(m){
+  if(!state.settings.moduleTemplates[m])state.settings.moduleTemplates[m]={labels:{},hidden:[],custom:[]};
+  var s=state.settings.moduleTemplates[m];
+  if(!s.custom)s.custom=[];
+  s.custom.push({label:"Custom Field",type:"text",required:false});
+  openModuleEditor(m);
 }
-
-function removeCustomField(module, idx) {
-  if (state.settings.moduleTemplates[module] && state.settings.moduleTemplates[module].custom) {
-    state.settings.moduleTemplates[module].custom.splice(idx, 1);
-    openModuleEditor(module);
-  }
+function removeModuleField(btn){
+  var m=btn.getAttribute("data-mod"),idx=parseInt(btn.getAttribute("data-idx"));
+  var s=state.settings.moduleTemplates[m];
+  if(s&&s.custom){s.custom.splice(idx,1);openModuleEditor(m);}
 }
-
-function saveModuleTemplate(module) {
-  if (!state.settings.moduleTemplates[module]) state.settings.moduleTemplates[module] = {labels:{},hidden:[],custom:[]};
-  var s = state.settings.moduleTemplates[module];
-  var fields = MODULE_FIELDS[module] || [];
-  s.labels = {};
-  for (var i = 0; i < fields.length; i++) {
-    var f = fields[i];
-    var el = document.getElementById('lbl_' + module + '_' + f.id);
-    if (el && el.value.trim() && el.value.trim() !== f.label) s.labels[f.id] = el.value.trim();
+function saveModuleTemplate(m){
+  if(!state.settings.moduleTemplates[m])state.settings.moduleTemplates[m]={labels:{},hidden:[],custom:[]};
+  var s=state.settings.moduleTemplates[m],fields=MODULE_FIELDS[m]||[];
+  s.labels={};
+  for(var i=0;i<fields.length;i++){var f=fields[i];var el=document.getElementById("lbl_"+m+"_"+f.id);if(el&&el.value.trim()&&el.value.trim()!==f.label)s.labels[f.id]=el.value.trim();}
+  s.hidden=[];
+  for(var i=0;i<fields.length;i++){var f2=fields[i];if(!f2.req){var vel=document.getElementById("vis_"+m+"_"+f2.id);if(vel&&!vel.checked)s.hidden.push(f2.id);}}
+  var customs=s.custom||[];
+  for(var j=0;j<customs.length;j++){
+    var lel=document.getElementById("cfl_"+m+"_"+j);
+    var tel=document.getElementById("cft_"+m+"_"+j);
+    var rel=document.getElementById("cfr_"+m+"_"+j);
+    if(lel)customs[j].label=lel.value.trim()||customs[j].label;
+    if(tel)customs[j].type=tel.value;
+    if(rel)customs[j].required=rel.checked;
   }
-  s.hidden = [];
-  for (var i = 0; i < fields.length; i++) {
-    var f = fields[i];
-    if (!f.req) {
-      var vel = document.getElementById('vis_' + module + '_' + f.id);
-      if (vel && !vel.checked) s.hidden.push(f.id);
-    }
-  }
-  var customs = s.custom || [];
-  for (var j = 0; j < customs.length; j++) {
-    var lel = document.getElementById('cfl_' + module + '_' + j);
-    var tel = document.getElementById('cft_' + module + '_' + j);
-    var rel = document.getElementById('cfr_' + module + '_' + j);
-    if (lel) customs[j].label = lel.value.trim() || customs[j].label;
-    if (tel) customs[j].type = tel.value;
-    if (rel) customs[j].required = rel.checked;
-  }
-  save();
-  toast('Template saved successfully', '#16a34a');
-  openModuleEditor(module);
+  save();toast("Template saved","#16a34a");openModuleEditor(m);
 }
-
-function resetModuleTemplate(module) {
-  if (!confirm('Reset ' + (MODULE_NAMES[module]||module) + ' template to defaults?')) return;
-  state.settings.moduleTemplates[module] = {labels:{},hidden:[],custom:[]};
-  save();
-  toast('Template reset to default', '#16a34a');
-  openModuleEditor(module);
+function resetModuleTemplate(m){
+  if(!confirm("Reset "+(MODULE_NAMES[m]||m)+" template to defaults?"))return;
+  state.settings.moduleTemplates[m]={labels:{},hidden:[],custom:[]};
+  save();toast("Reset to default","#16a34a");openModuleEditor(m);
 }
-
-function applyModuleTemplate(module) {
-  var s = state.settings && state.settings.moduleTemplates && state.settings.moduleTemplates[module];
-  if (!s) return;
-  var fields = MODULE_FIELDS[module] || [];
-  for (var i = 0; i < fields.length; i++) {
-    var f = fields[i];
-    var newLabel = (s.labels && s.labels[f.id]) ? s.labels[f.id] : f.label;
-    var pageEl = document.getElementById('page-' + module);
-    if (!pageEl) continue;
-    var labels = pageEl.querySelectorAll('label');
-    for (var k = 0; k < labels.length; k++) {
-      if (labels[k].textContent.trim() === f.label || labels[k].textContent.trim() === newLabel) {
-        labels[k].textContent = newLabel;
-        var fg = labels[k].closest('.form-group');
-        if (fg) fg.style.display = (s.hidden && s.hidden.indexOf(f.id) !== -1) ? 'none' : '';
+function applyModuleTemplate(module){
+  var s=state.settings&&state.settings.moduleTemplates&&state.settings.moduleTemplates[module];
+  if(!s)return;
+  var fields=MODULE_FIELDS[module]||[];
+  for(var i=0;i<fields.length;i++){
+    var f=fields[i];
+    var nl=(s.labels&&s.labels[f.id])?s.labels[f.id]:f.label;
+    var pg=document.getElementById("page-"+module);if(!pg)continue;
+    var lbls=pg.querySelectorAll("label");
+    for(var k=0;k<lbls.length;k++){
+      if(lbls[k].textContent.trim()===f.label||lbls[k].textContent.trim()===nl){
+        lbls[k].textContent=nl;
+        var fg=lbls[k].closest(".form-group");
+        if(fg)fg.style.display=(s.hidden&&s.hidden.indexOf(f.id)!==-1)?"none":"";
       }
     }
   }
 }
-
 // ======================================================
 // TEMPLATE SETTINGS
 // ======================================================
