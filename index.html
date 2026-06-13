@@ -1163,18 +1163,30 @@ async function save() {
 }
 
 async function load() {
+  function merge(loaded) {
+    state.master        = loaded.master        || [];
+    state.indents       = loaded.indents       || [];
+    state.cs            = loaded.cs            || [];
+    state.pos           = loaded.pos           || [];
+    state.grns          = loaded.grns          || [];
+    state.invoices      = loaded.invoices      || [];
+    state.payments      = loaded.payments      || [];
+    state.activity      = loaded.activity      || [];
+    state.managedUsers  = (loaded.managedUsers && loaded.managedUsers.length) ? loaded.managedUsers : DEFAULT_USERS.slice();
+  }
   try {
     const { data, error } = await _sb.from('app_state').select('data').eq('id', 'main').single();
     if (!error && data?.data) {
-      state = data.data;
+      merge(data.data);
     } else {
-      // Fallback: try localStorage
       const d = localStorage.getItem('poerp');
-      if (d) state = JSON.parse(d);
+      if (d) merge(JSON.parse(d));
+      else merge({});
     }
   } catch(e) {
     const d = localStorage.getItem('poerp');
-    if (d) state = JSON.parse(d);
+    if (d) merge(JSON.parse(d));
+    else merge({});
     console.warn('Supabase load failed, using localStorage:', e.message);
   }
 }
@@ -2611,8 +2623,7 @@ function clearUserForm() {
 // STARTUP
 // ======================================================
 window.onload = async function() {
-  await await load();
-  state.payments = state.payments || [];
+  await load();
   renderDashboard();
 };
 
