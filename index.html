@@ -260,8 +260,8 @@
         <option value="qs_engineer">QS Engineer</option>
         <option value="technical_director">Technical Director</option>
         <option value="management">Management</option>
-        <option value="purchase_manager">Purchase Manager</option>
-        <option value="qs_manager">QS Manager</option>
+        <option value="purchase_manager">Purchase Department</option>
+        <option value="qs_manager">QS Department</option>
       </select>
     </div>
     <div class="form-group">
@@ -553,7 +553,7 @@
     <div class="tab-content active" id="vendor-upload">
       <div class="card">
         <div class="card-title"><span class="icon">🏢</span> Upload Vendor Details & Comparative Statement</div>
-        <div class="alert alert-info">Procurement team uploads vendor quotes. Approval: Purchase Manager → QS Manager → Management</div>
+        <div class="alert alert-info">Procurement team uploads vendor quotes. Approval: Purchase Department → QS Department → Management</div>
         <div class="form-grid">
           <div class="form-group">
             <label>Select Approved Indent</label>
@@ -624,7 +624,7 @@
     <div class="tab-content active" id="po-create">
       <div class="card">
         <div class="card-title"><span class="icon">📄</span> Generate Purchase Order</div>
-        <div class="alert alert-info">Select an approved CS to auto-generate PO. Approval: Purchase Manager → Management. PO is downloadable after final approval.</div>
+        <div class="alert alert-info">Select an approved CS to auto-generate PO. Approval: Purchase Department → Management. PO is downloadable after final approval.</div>
         <div class="form-grid">
           <div class="form-group">
             <label>Select Approved CS</label>
@@ -997,8 +997,8 @@
           <option value="qs_engineer">QS Engineer</option>
           <option value="technical_director">Technical Director</option>
           <option value="management">Management</option>
-          <option value="purchase_manager">Purchase Manager</option>
-          <option value="qs_manager">QS Manager</option>
+          <option value="purchase_manager">Purchase Department</option>
+          <option value="qs_manager">QS Department</option>
         </select>
       </div>
       <div class="form-group"><label>Passcode</label><input id="um_passcode" placeholder="e.g. RS@2026"></div>
@@ -1021,8 +1021,8 @@
         <option value="site_engineer">Site Engineer</option>
         <option value="qs_engineer">QS Engineer</option>
         <option value="technical_director">Technical Director</option>
-        <option value="purchase_manager">Purchase Manager</option>
-        <option value="qs_manager">QS Manager</option>
+        <option value="purchase_manager">Purchase Department</option>
+        <option value="qs_manager">QS Department</option>
       </select>
     </div>
     <div class="tbl-wrap">
@@ -1055,7 +1055,7 @@ const DEFAULT_USERS = [
   { name: 'QS Engineer 1',              role: 'qs_engineer',        passcode: 'QSE2026'  },
   { name: 'Tech Director',              role: 'technical_director', passcode: 'TD2026'   },
   { name: 'Purchase Mgr',               role: 'purchase_manager',   passcode: 'PM2026'   },
-  { name: 'QS Manager',                 role: 'qs_manager',         passcode: 'QSM2026'  }
+  { name: 'QS Department',                 role: 'qs_manager',         passcode: 'QSM2026'  }
 ];
 
 function populateNames() {
@@ -1141,8 +1141,8 @@ const ROLES = {
   qs_engineer: 'QS Engineer',
   technical_director: 'Technical Director',
   management: 'Management',
-  purchase_manager: 'Purchase Manager',
-  qs_manager: 'QS Manager'
+  purchase_manager: 'Purchase Department',
+  qs_manager: 'QS Department'
 };
 
 // ======================================================
@@ -1291,14 +1291,14 @@ function pendingForRole(doc, role, type) {
   }
   if (type === 'cs') {
     const map = {
-      qs_manager: 'Pending QS Manager',
+      qs_manager: 'Pending QS Department',
       management: 'Pending Management'
     };
-    if (role === 'purchase_manager') return doc.status === 'Pending Purchase Manager';
+    if (role === 'purchase_manager') return doc.status === 'Pending Purchase Department';
     return doc.status === (map[role] || '');
   }
   if (type === 'po') {
-    if (role === 'purchase_manager') return doc.status === 'Pending Purchase Manager';
+    if (role === 'purchase_manager') return doc.status === 'Pending Purchase Department';
     if (role === 'management') return doc.status === 'Pending Management';
     return false;
   }
@@ -1619,11 +1619,11 @@ function indentApprovalSteps() {
 }
 
 function csApprovalSteps() {
-  return ['Purchase Manager', 'QS Manager', 'Management'];
+  return ['Purchase Department', 'QS Department', 'Management'];
 }
 
 function poApprovalSteps() {
-  return ['Purchase Manager', 'Management'];
+  return ['Purchase Department', 'Management'];
 }
 
 function renderApprovalFlow(approvals, steps) {
@@ -1783,7 +1783,7 @@ function submitCS() {
   const cs = {
     id: ref, indentId, project: indent.project, date, preparedby,
     remarks: document.getElementById('cs_remarks').value,
-    lines, status: 'Pending Purchase Manager',
+    lines, status: 'Pending Purchase Department',
     approvals: []
   };
   state.cs.push(cs);
@@ -1840,8 +1840,8 @@ function approveCS(id) {
   const cs = state.cs.find(c => c.id === id);
   if (!cs) return;
   const stepMap = {
-    purchase_manager: { next: 'Pending QS Manager', role: 'Purchase Manager' },
-    qs_manager: { next: 'Pending Management', role: 'QS Manager' },
+    purchase_manager: { next: 'Pending QS Department', role: 'Purchase Department' },
+    qs_manager: { next: 'Pending Management', role: 'QS Department' },
     management: { next: 'Approved', role: 'Management' }
   };
   const step = stepMap[state.role];
@@ -1961,7 +1961,7 @@ function submitPO() {
     instructions: document.getElementById('po_instructions').value,
     lines: poLines.map(l => ({...l})),
     total: grand, vendor: vendors,
-    status: 'Pending Purchase Manager', approvals: []
+    status: 'Pending Purchase Department', approvals: []
   };
   state.pos.push(po);
   addActivity(`PO ${no} created for ${cs.project} — ₹${grand.toFixed(2)}`);
@@ -2022,7 +2022,7 @@ function approvePO(id) {
   const po = state.pos.find(p => p.id === id);
   if (!po) return;
   const stepMap = {
-    purchase_manager: { next: 'Pending Management', role: 'Purchase Manager' },
+    purchase_manager: { next: 'Pending Management', role: 'Purchase Department' },
     management: { next: 'Approved', role: 'Management' }
   };
   const step = stepMap[state.role];
@@ -2111,7 +2111,7 @@ function downloadPO(id) {
   </table>
   <div class="total">Grand Total: ₹${p.total.toFixed(2)}</div>
   <div class="footer">
-    <div class="sign"><div class="sign-line">Purchase Manager</div></div>
+    <div class="sign"><div class="sign-line">Purchase Department</div></div>
     <div class="sign"><div class="sign-line">Management Approval</div></div>
     <div class="sign"><div class="sign-line">Vendor Acceptance</div></div>
   </div>
@@ -2542,7 +2542,7 @@ function loadSampleData() {
 // ======================================================
 // USER MANAGEMENT
 // ======================================================
-const ROLE_LABELS = { site_engineer:'Site Engineer', qs_engineer:'QS Engineer', technical_director:'Technical Director', management:'Management', purchase_manager:'Purchase Manager', qs_manager:'QS Manager' };
+const ROLE_LABELS = { site_engineer:'Site Engineer', qs_engineer:'QS Engineer', technical_director:'Technical Director', management:'Management', purchase_manager:'Purchase Department', qs_manager:'QS Department' };
 
 function renderUserManagement() {
   const filter = document.getElementById('um_filter')?.value||'';
