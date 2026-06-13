@@ -201,51 +201,59 @@
   .toast.show { transform: translateY(0); opacity: 1; }
 
   /* LOGIN SCREEN */
-  #loginScreen { position:fixed;inset:0;background:linear-gradient(135deg,#1a3c5e 0%,#0f2444 60%,#162a40 100%);z-index:10000;display:flex;align-items:center;justify-content:center; }
-  .login-box { background:#fff;border-radius:16px;padding:40px 36px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.4); }
-  .login-logo { text-align:center;margin-bottom:28px; }
-  .login-logo h1 { font-size:22px;font-weight:800;color:var(--primary); }
-  .login-logo p { font-size:13px;color:var(--muted);margin-top:4px; }
-  .login-logo .badge-erp { display:inline-block;background:var(--accent);color:#000;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-top:6px; }
-  .login-box .form-group { margin-bottom:16px; }
-  .login-box label { font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:6px; }
-  .login-box input,.login-box select { width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;outline:none; }
-  .login-box input:focus,.login-box select:focus { border-color:var(--primary-light); }
-  .login-btn { width:100%;padding:12px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px; }
-  .login-btn:hover { background:var(--primary-light); }
-  .login-error { color:#dc2626;font-size:13px;text-align:center;margin-top:8px;display:none; }
-  .login-hint { font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6; }
-  /* PAYMENT */
-  .payment-badge { display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600; }
-  .payment-paid { background:#d1fae5;color:#065f46; }
-  .payment-partial { background:#dbeafe;color:#1e40af; }
-  .payment-overdue { background:#fee2e2;color:#991b1b; }
-  .payment-pending { background:#fef3c7;color:#92400e; }
+  #loginScreen {
+    position: fixed; inset: 0; background: linear-gradient(135deg, #1a3c5e 0%, #0f2444 60%, #162a40 100%);
+    z-index: 10000; display: flex; align-items: center; justify-content: center;
+  }
+  .login-box {
+    background: #fff; border-radius: 16px; padding: 40px 36px; width: 380px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .login-logo { text-align: center; margin-bottom: 28px; }
+  .login-logo h1 { font-size: 22px; font-weight: 800; color: var(--primary); }
+  .login-logo p { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .login-logo .badge-erp { display: inline-block; background: var(--accent); color: #000; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-top: 6px; }
+  .login-box .form-group { margin-bottom: 16px; }
+  .login-box label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px; }
+  .login-box input, .login-box select { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; }
+  .login-box input:focus, .login-box select:focus { border-color: var(--primary-light); }
+  .login-btn { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+  .login-btn:hover { background: var(--primary-light); }
+  .login-error { color: #dc2626; font-size: 13px; text-align: center; margin-top: 8px; display: none; }
+  .login-hint { font-size: 11px; color: var(--muted); text-align: center; margin-top: 14px; line-height: 1.6; }
+
+  /* PAYMENT TRACKING */
+  .payment-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .payment-paid { background: #d1fae5; color: #065f46; }
+  .payment-partial { background: #dbeafe; color: #1e40af; }
+  .payment-overdue { background: #fee2e2; color: #991b1b; }
+  .payment-pending { background: #fef3c7; color: #92400e; }
+
   /* REPORTS */
-  .report-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px; }
-  .chart-card { background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px; }
-  .chart-card h4 { font-size:13px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:6px; }
-  .kpi-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px; }
-  .kpi-card { background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center; }
-  .kpi-card .kpi-val { font-size:24px;font-weight:800;color:var(--primary); }
-  .kpi-card .kpi-lbl { font-size:11px;color:var(--muted);margin-top:4px; }
-  .kpi-card .kpi-sub { font-size:10px;color:var(--success);margin-top:2px;font-weight:600; }
+  .report-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .chart-card h4 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; }
+  .kpi-card .kpi-val { font-size: 24px; font-weight: 800; color: var(--primary); }
+  .kpi-card .kpi-lbl { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .kpi-card .kpi-sub { font-size: 10px; color: var(--success); margin-top: 2px; font-weight: 600; }
 </style>
 </head>
 <body>
-
 
 <!-- LOGIN SCREEN -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">
-      <div style="font-size:36px;">&#127895;</div>
-      <h1>Sankalp Construction</h1>
+      <img src="data:image/jpeg;base64,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" alt="Sankalp" style="height:60px;object-fit:contain;margin-bottom:8px;">
       <p>Purchase Order Management System</p>
       <span class="badge-erp">ERP v2.0</span>
     </div>
-    <div class="form-group"><label>Your Role</label>
-      <select id="loginRole">
+    <div class="form-group">
+      <label>Your Role</label>
+      <select id="loginRole" onchange="populateNames()">
+        <option value="">-- Select Role --</option>
         <option value="site_engineer">Site Engineer</option>
         <option value="qs_engineer">QS Engineer</option>
         <option value="technical_director">Technical Director</option>
@@ -254,56 +262,64 @@
         <option value="qs_manager">QS Manager</option>
       </select>
     </div>
-    <div class="form-group"><label>Passcode</label>
-      <input type="password" id="loginPasscode" placeholder="Enter your passcode" onkeydown="if(event.key===\'Enter\')doLogin()">
+    <div class="form-group">
+      <label>Your Name</label>
+      <select id="loginName" onkeydown="if(event.key==='Enter')doLogin()">
+        <option value="">-- Select your role first --</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Passcode</label>
+      <input type="password" id="loginPasscode" placeholder="Enter your passcode" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
     <button class="login-btn" onclick="doLogin()">Sign In &rarr;</button>
-    <div class="login-error" id="loginError">&#226;&#157;&#140; Incorrect passcode. Please try again.</div>
-    <div class="login-hint">Contact your admin for your role passcode.<br>Each role has a unique access code.</div>
+    <div class="login-error" id="loginError">Invalid name, role, or passcode.</div>
+    <div class="login-hint">Contact your admin to get your name, role &amp; passcode.</div>
   </div>
 </div>
+
 <!-- SIDEBAR -->
 <div id="sidebar">
   <div class="logo">
-    <h1>PO Management<br>ERP System</h1>
-    <p>Sankalp Construction</p>
+    <img src="data:image/jpeg;base64,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" alt="Sankalp" style="height:40px;object-fit:contain;display:block;margin-bottom:4px;">
+    <p style="font-size:10px;opacity:0.7;margin:0;">Purchase Order ERP</p>
   </div>
   <nav>
     <div class="nav-step">Master</div>
     <div class="nav-item active" data-page="dashboard" onclick="nav(this)">
-      <span>&#240;&#159;&#147;&#138;</span> Dashboard
+      <span>📊</span> Dashboard
     </div>
     <div class="nav-item" data-page="master" onclick="nav(this)">
-      <span>&#240;&#159;&#147;&#139;</span> Material Master
+      <span>📋</span> Material Master
     </div>
     <div class="nav-step">Procurement Flow</div>
     <div class="nav-item" data-page="indent" onclick="nav(this)">
-      <span>&#240;&#159;&#147;&#157;</span> Indent
+      <span>📝</span> Indent
       <span class="badge" id="badge-indent">0</span>
     </div>
     <div class="nav-item" data-page="vendor" onclick="nav(this)">
-      <span>&#240;&#159;&#143;&#162;</span> Vendor & CS
+      <span>🏢</span> Vendor & CS
       <span class="badge" id="badge-vendor">0</span>
     </div>
     <div class="nav-item" data-page="po" onclick="nav(this)">
-      <span>&#240;&#159;&#147;&#132;</span> Purchase Order
+      <span>📄</span> Purchase Order
       <span class="badge" id="badge-po">0</span>
     </div>
     <div class="nav-item" data-page="grn" onclick="nav(this)">
-      <span>&#240;&#159;&#147;&#166;</span> GRN
+      <span>📦</span> GRN
       <span class="badge" id="badge-grn">0</span>
     </div>
     <div class="nav-item" data-page="invoice" onclick="nav(this)">
-      <span>&#240;&#159;&#167;&#190;</span> Invoice
+      <span>🧾</span> Invoice
       <span class="badge" id="badge-invoice">0</span>
     </div>
     <div class="nav-step">Analytics</div>
     <div class="nav-item" data-page="reports" onclick="nav(this)">
-      <span>&#240;&#159;&#147;&#138;</span> Reports
+      <span>📊</span> Reports
     </div>
   </nav>
   <div style="padding:12px 16px;border-top:1px solid rgba(255,255,255,0.1);">
-    <button onclick="doLogout()" style="width:100%;padding:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:6px;font-size:12px;cursor:pointer;">&#226;&#172;&#133; Sign Out</button>
+    <button onclick="doLogout()" style="width:100%;padding:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:6px;font-size:12px;cursor:pointer;">⬅ Sign Out</button>
   </div>
 </div>
 
@@ -332,16 +348,16 @@
     <div class="stats-row" id="dashStats"></div>
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
       <div class="card">
-        <div class="card-title"><span class="icon">&#240;&#159;&#148;&#132;</span> Procurement Pipeline</div>
+        <div class="card-title"><span class="icon">🔄</span> Procurement Pipeline</div>
         <div class="pipeline" id="dashPipeline"></div>
       </div>
       <div class="card">
-        <div class="card-title"><span class="icon">&#226;&#143;&#179;</span> Pending My Approvals</div>
+        <div class="card-title"><span class="icon">⏳</span> Pending My Approvals</div>
         <div id="myApprovals"></div>
       </div>
     </div>
     <div class="card mt-16">
-      <div class="card-title"><span class="icon">&#240;&#159;&#147;&#136;</span> Recent Activity</div>
+      <div class="card-title"><span class="icon">📈</span> Recent Activity</div>
       <div id="recentActivity"></div>
     </div>
   </div>
@@ -349,7 +365,7 @@
   <!-- ===== MATERIAL MASTER ===== -->
   <div class="page" id="page-master">
     <div class="card">
-      <div class="card-title"><span class="icon">&#240;&#159;&#147;&#139;</span> Material Master &#226;&#128;&#148; Estimated Requirements</div>
+      <div class="card-title"><span class="icon">📋</span> Material Master — Estimated Requirements</div>
       <div class="alert alert-info">This master stores estimated material requirements per project, categorized by scope (Contractor / Non-Contractual). Indents are raised against these entries.</div>
       <div class="form-grid" id="masterForm">
         <div class="form-group">
@@ -384,7 +400,7 @@
           <input id="m_qty" type="number" placeholder="0">
         </div>
         <div class="form-group">
-          <label>Estimated Rate (&#226;&#130;&#185;)</label>
+          <label>Estimated Rate (₹)</label>
           <input id="m_rate" type="number" placeholder="0">
         </div>
         <div class="form-group">
@@ -433,8 +449,8 @@
     <!-- CREATE -->
     <div class="tab-content active" id="indent-create">
       <div class="card">
-        <div class="card-title"><span class="icon">&#240;&#159;&#147;&#157;</span> New Indent Request</div>
-        <div class="alert alert-info">Raised by Site Engineer. Approval flow: Site Engineer &#226;&#134;&#146; QS Engineer &#226;&#134;&#146; Technical Director &#226;&#134;&#146; Management</div>
+        <div class="card-title"><span class="icon">📝</span> New Indent Request</div>
+        <div class="alert alert-info">Raised by Site Engineer. Approval flow: Site Engineer → QS Engineer → Technical Director → Management</div>
         <div class="form-grid">
           <div class="form-group">
             <label>Indent No</label>
@@ -521,7 +537,7 @@
     <!-- APPROVE -->
     <div class="tab-content" id="indent-approve">
       <div class="card">
-        <div class="card-title"><span class="icon">&#226;&#143;&#179;</span> Indents Pending Your Approval</div>
+        <div class="card-title"><span class="icon">⏳</span> Indents Pending Your Approval</div>
         <div id="indentApproveList"></div>
       </div>
     </div>
@@ -537,8 +553,8 @@
 
     <div class="tab-content active" id="vendor-upload">
       <div class="card">
-        <div class="card-title"><span class="icon">&#240;&#159;&#143;&#162;</span> Upload Vendor Details & Comparative Statement</div>
-        <div class="alert alert-info">Procurement team uploads vendor quotes. Approval: Purchase Manager &#226;&#134;&#146; QS Manager &#226;&#134;&#146; Management</div>
+        <div class="card-title"><span class="icon">🏢</span> Upload Vendor Details & Comparative Statement</div>
+        <div class="alert alert-info">Procurement team uploads vendor quotes. Approval: Purchase Manager → QS Manager → Management</div>
         <div class="form-grid">
           <div class="form-group">
             <label>Select Approved Indent</label>
@@ -592,7 +608,7 @@
 
     <div class="tab-content" id="vendor-approve">
       <div class="card">
-        <div class="card-title"><span class="icon">&#226;&#143;&#179;</span> CS Pending Your Approval</div>
+        <div class="card-title"><span class="icon">⏳</span> CS Pending Your Approval</div>
         <div id="csApproveList"></div>
       </div>
     </div>
@@ -608,8 +624,8 @@
 
     <div class="tab-content active" id="po-create">
       <div class="card">
-        <div class="card-title"><span class="icon">&#240;&#159;&#147;&#132;</span> Generate Purchase Order</div>
-        <div class="alert alert-info">Select an approved CS to auto-generate PO. Approval: Purchase Manager &#226;&#134;&#146; Management. PO is downloadable after final approval.</div>
+        <div class="card-title"><span class="icon">📄</span> Generate Purchase Order</div>
+        <div class="alert alert-info">Select an approved CS to auto-generate PO. Approval: Purchase Manager → Management. PO is downloadable after final approval.</div>
         <div class="form-grid">
           <div class="form-group">
             <label>Select Approved CS</label>
@@ -653,12 +669,12 @@
           <table>
             <thead><tr>
               <th>#</th><th>Description</th><th>UOM</th><th>Qty</th>
-              <th>Vendor</th><th>Unit Rate (&#226;&#130;&#185;)</th><th>GST%</th><th>Total (&#226;&#130;&#185;)</th>
+              <th>Vendor</th><th>Unit Rate (₹)</th><th>GST%</th><th>Total (₹)</th>
             </tr></thead>
             <tbody id="poLineBody"></tbody>
             <tfoot>
               <tr>
-                <td colspan="7" style="text-align:right;font-weight:700;padding:10px 12px;">Grand Total (&#226;&#130;&#185;)</td>
+                <td colspan="7" style="text-align:right;font-weight:700;padding:10px 12px;">Grand Total (₹)</td>
                 <td style="font-weight:700;padding:10px 12px;" id="poGrandTotal">0.00</td>
               </tr>
             </tfoot>
@@ -678,7 +694,7 @@
           <table>
             <thead><tr>
               <th>PO No</th><th>Date</th><th>Vendor</th><th>Indent Ref</th>
-              <th>Amount (&#226;&#130;&#185;)</th><th>Status</th><th>Action</th>
+              <th>Amount (₹)</th><th>Status</th><th>Action</th>
             </tr></thead>
             <tbody id="poListBody"></tbody>
           </table>
@@ -688,7 +704,7 @@
 
     <div class="tab-content" id="po-approve">
       <div class="card">
-        <div class="card-title"><span class="icon">&#226;&#143;&#179;</span> POs Pending Your Approval</div>
+        <div class="card-title"><span class="icon">⏳</span> POs Pending Your Approval</div>
         <div id="poApproveList"></div>
       </div>
     </div>
@@ -703,7 +719,7 @@
 
     <div class="tab-content active" id="grn-create">
       <div class="card">
-        <div class="card-title"><span class="icon">&#240;&#159;&#147;&#166;</span> Goods Receipt Note</div>
+        <div class="card-title"><span class="icon">📦</span> Goods Receipt Note</div>
         <div class="alert alert-info">Enter GRN against each line item of an approved PO when material is received at site.</div>
         <div class="form-grid">
           <div class="form-group">
@@ -738,7 +754,7 @@
           </div>
         </div>
         <hr class="divider">
-        <div class="section-header"><h3>PO Line Items &#226;&#128;&#148; Enter Received Quantities</h3></div>
+        <div class="section-header"><h3>PO Line Items — Enter Received Quantities</h3></div>
         <div class="tbl-wrap">
           <table class="line-items-table">
             <thead><tr>
@@ -781,7 +797,7 @@
 
     <div class="tab-content active" id="invoice-upload">
       <div class="card">
-        <div class="card-title"><span class="icon">&#240;&#159;&#167;&#190;</span> Upload Vendor Invoice</div>
+        <div class="card-title"><span class="icon">🧾</span> Upload Vendor Invoice</div>
         <div class="alert alert-info">Upload invoice against PO number. System auto-validates against GRN quantities.</div>
         <div class="form-grid">
           <div class="form-group">
@@ -803,15 +819,15 @@
             <input id="inv_vendor" placeholder="Vendor name" readonly style="background:#f1f5f9;">
           </div>
           <div class="form-group">
-            <label>Invoice Amount (&#226;&#130;&#185;)</label>
+            <label>Invoice Amount (₹)</label>
             <input id="inv_amount" type="number" placeholder="0">
           </div>
           <div class="form-group">
-            <label>GST Amount (&#226;&#130;&#185;)</label>
+            <label>GST Amount (₹)</label>
             <input id="inv_gst" type="number" placeholder="0">
           </div>
           <div class="form-group">
-            <label>Total with GST (&#226;&#130;&#185;)</label>
+            <label>Total with GST (₹)</label>
             <input id="inv_total" type="number" placeholder="0" readonly style="background:#f1f5f9;">
           </div>
           <div class="form-group">
@@ -839,32 +855,72 @@
 
     <div class="tab-content" id="invoice-list">
       <div class="card">
-        <div class="section-header"><h3>All Invoices</h3></div>
+        <div class="section-header">
+          <h3>All Invoices</h3>
+          <div class="flex-row">
+            <select id="invFilterStatus" onchange="renderInvoiceList()" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;">
+              <option value="">All</option><option value="Pending">Pending</option>
+              <option value="Partial">Partial</option><option value="Paid">Paid</option><option value="Overdue">Overdue</option>
+            </select>
+          </div>
+        </div>
         <div class="tbl-wrap">
           <table>
             <thead><tr>
-              <th>Invoice No</th><th>Invoice Date</th><th>PO No</th><th>Vendor</th>
-              <th>Amount (&#226;&#130;&#185;)</th><th>GST (&#226;&#130;&#185;)</th><th>Total (&#226;&#130;&#185;)</th><th>Due Date</th><th>Status</th><th>Action</th>
+              <th>Invoice No</th><th>Date</th><th>PO No</th><th>Vendor</th>
+              <th>Total (₹)</th><th>Paid (₹)</th><th>Balance (₹)</th><th>Due Date</th><th>Payment</th><th>Action</th>
             </tr></thead>
             <tbody id="invoiceListBody"></tbody>
           </table>
         </div>
       </div>
     </div>
-  
+
+    <!-- PAYMENT TRACKING TAB -->
     <div class="tab-content" id="invoice-payment">
       <div class="card">
-        <div class="card-title"><span class="icon">&#240;&#159;&#146;&#179;</span> Record Payment</div>
+        <div class="card-title"><span class="icon">💳</span> Record Payment</div>
         <div class="form-grid">
-          <div class="form-group"><label>Select Invoice</label><select id="pay_invoice" onchange="loadPaymentInvoice()"><option value="">-- Select Invoice --</option></select></div>
-          <div class="form-group"><label>Invoice Total (&#226;&#130;&#185;)</label><input id="pay_total" readonly style="background:#f1f5f9;"></div>
-          <div class="form-group"><label>Already Paid (&#226;&#130;&#185;)</label><input id="pay_paid_so_far" readonly style="background:#f1f5f9;"></div>
-          <div class="form-group"><label>Balance Due (&#226;&#130;&#185;)</label><input id="pay_balance" readonly style="background:#f1f5f9;"></div>
-          <div class="form-group"><label>Payment Amount (&#226;&#130;&#185;)</label><input id="pay_amount" type="number" placeholder="0"></div>
-          <div class="form-group"><label>Payment Date</label><input id="pay_date" type="date"></div>
-          <div class="form-group"><label>Payment Mode</label><select id="pay_mode"><option>NEFT</option><option>RTGS</option><option>Cheque</option><option>Cash</option><option>UPI</option></select></div>
-          <div class="form-group"><label>Reference / UTR No</label><input id="pay_ref" placeholder="Transaction reference"></div>
-          <div class="form-group form-full"><label>Remarks</label><input id="pay_remarks" placeholder="Optional remarks"></div>
+          <div class="form-group">
+            <label>Select Invoice</label>
+            <select id="pay_invoice" onchange="loadPaymentInvoice()">
+              <option value="">-- Select Invoice --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Invoice Total (₹)</label>
+            <input id="pay_total" readonly style="background:#f1f5f9;">
+          </div>
+          <div class="form-group">
+            <label>Already Paid (₹)</label>
+            <input id="pay_paid_so_far" readonly style="background:#f1f5f9;">
+          </div>
+          <div class="form-group">
+            <label>Balance Due (₹)</label>
+            <input id="pay_balance" readonly style="background:#f1f5f9;">
+          </div>
+          <div class="form-group">
+            <label>Payment Amount (₹)</label>
+            <input id="pay_amount" type="number" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label>Payment Date</label>
+            <input id="pay_date" type="date">
+          </div>
+          <div class="form-group">
+            <label>Payment Mode</label>
+            <select id="pay_mode">
+              <option>NEFT</option><option>RTGS</option><option>Cheque</option><option>Cash</option><option>UPI</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Reference / UTR No</label>
+            <input id="pay_ref" placeholder="Transaction reference number">
+          </div>
+          <div class="form-group form-full">
+            <label>Remarks</label>
+            <input id="pay_remarks" placeholder="Optional remarks">
+          </div>
         </div>
         <div class="flex-row mt-16">
           <button class="btn btn-primary" onclick="recordPayment()">Record Payment</button>
@@ -873,30 +929,61 @@
       </div>
       <div class="card">
         <div class="section-header"><h3>Payment History</h3></div>
-        <div class="tbl-wrap"><table><thead><tr><th>Invoice No</th><th>Vendor</th><th>Date</th><th>Amount (&#226;&#130;&#185;)</th><th>Mode</th><th>Reference</th><th>By</th></tr></thead><tbody id="paymentHistoryBody"></tbody></table></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>Invoice No</th><th>Vendor</th><th>Payment Date</th><th>Amount (₹)</th>
+              <th>Mode</th><th>Reference</th><th>Recorded By</th>
+            </tr></thead>
+            <tbody id="paymentHistoryBody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- REPORTS -->
+  <!-- ===== REPORTS ===== -->
   <div class="page" id="page-reports">
     <div class="kpi-grid" id="reportKPIs"></div>
     <div class="report-grid">
-      <div class="chart-card"><h4>&#240;&#159;&#147;&#138; Project-wise PO Value</h4><canvas id="chartProjectPO" height="220"></canvas></div>
-      <div class="chart-card"><h4>&#240;&#159;&#143;&#162; Top Vendors by Spend</h4><canvas id="chartVendorSpend" height="220"></canvas></div>
-      <div class="chart-card"><h4>&#240;&#159;&#147;&#136; Monthly PO Trend</h4><canvas id="chartMonthlyPO" height="220"></canvas></div>
-      <div class="chart-card"><h4>&#240;&#159;&#146;&#176; Invoice Payment Status</h4><canvas id="chartPaymentStatus" height="220"></canvas></div>
+      <div class="chart-card">
+        <h4>📊 Project-wise PO Value</h4>
+        <canvas id="chartProjectPO" height="220"></canvas>
+      </div>
+      <div class="chart-card">
+        <h4>🏢 Top Vendors by Spend</h4>
+        <canvas id="chartVendorSpend" height="220"></canvas>
+      </div>
+      <div class="chart-card">
+        <h4>📈 Monthly PO Trend</h4>
+        <canvas id="chartMonthlyPO" height="220"></canvas>
+      </div>
+      <div class="chart-card">
+        <h4>💰 Invoice Payment Status</h4>
+        <canvas id="chartPaymentStatus" height="220"></canvas>
+      </div>
     </div>
     <div class="card">
-      <div class="card-title"><span class="icon">&#226;&#154;&#160;&#239;&#184;&#143;</span> Overdue Invoices</div>
-      <div class="tbl-wrap"><table><thead><tr><th>Invoice No</th><th>Vendor</th><th>PO No</th><th>Due Date</th><th>Balance (&#226;&#130;&#185;)</th><th>Days Overdue</th></tr></thead><tbody id="overdueBody"></tbody></table></div>
+      <div class="card-title"><span class="icon">⚠️</span> Overdue Invoices</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Invoice No</th><th>Vendor</th><th>PO No</th><th>Due Date</th><th>Balance (₹)</th><th>Days Overdue</th></tr></thead>
+          <tbody id="overdueBody"></tbody>
+        </table>
+      </div>
     </div>
     <div class="card">
-      <div class="card-title"><span class="icon">&#240;&#159;&#147;&#139;</span> Pending Approvals Summary</div>
-      <div class="tbl-wrap"><table><thead><tr><th>Module</th><th>Pending</th><th>Awaiting Role</th></tr></thead><tbody id="approvalSummaryBody"></tbody></table></div>
+      <div class="card-title"><span class="icon">📋</span> Pending Approvals Summary</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Module</th><th>Pending Count</th><th>Awaiting Role</th></tr></thead>
+          <tbody id="approvalSummaryBody"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
+</div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay">
@@ -908,33 +995,84 @@
 
 <script>
 // ======================================================
-// STATE & STORAGE
+// USER CREDENTIALS
+// To add a new user: add an entry below with name, role, and passcode.
+// Roles: site_engineer | qs_engineer | technical_director | management | purchase_manager | qs_manager
 // ======================================================
-const PASSCODES = { site_engineer:'SE2025', qs_engineer:'QSE2025', technical_director:'TD2025', management:'MGT2025', purchase_manager:'PM2025', qs_manager:'QSM2025' };
+const USERS = [
+  { name: 'Govardhan',       role: 'management',         passcode: 'MGT2025'  },
+  { name: 'Site Engineer 1', role: 'site_engineer',      passcode: 'SE2025'   },
+  { name: 'QS Engineer 1',   role: 'qs_engineer',        passcode: 'QSE2025'  },
+  { name: 'Tech Director',   role: 'technical_director', passcode: 'TD2025'   },
+  { name: 'Purchase Mgr',    role: 'purchase_manager',   passcode: 'PM2025'   },
+  { name: 'QS Manager',      role: 'qs_manager',         passcode: 'QSM2025'  }
+];
+
+function populateNames() {
+  const role = document.getElementById('loginRole').value;
+  const sel  = document.getElementById('loginName');
+  sel.innerHTML = '';
+  if (!role) {
+    sel.innerHTML = '<option value="">-- Select your role first --</option>';
+    return;
+  }
+  const names = USERS.filter(u => u.role === role);
+  if (names.length === 0) {
+    sel.innerHTML = '<option value="">No users for this role</option>';
+    return;
+  }
+  sel.innerHTML = '<option value="">-- Select Name --</option>' +
+    names.map(u => `<option value="${u.name}">${u.name}</option>`).join('');
+}
+
 function doLogin() {
+  const name = document.getElementById('loginName').value.trim();
   const role = document.getElementById('loginRole').value;
   const code = document.getElementById('loginPasscode').value.trim();
-  const err = document.getElementById('loginError');
-  if (code === PASSCODES[role]) {
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('sidebar').style.display='';
-    document.getElementById('topbar').style.display='';
-    document.getElementById('main').style.display='';
-    state.role = role;
+  const err  = document.getElementById('loginError');
+  const user = USERS.find(u =>
+    u.name.toLowerCase() === name.toLowerCase() &&
+    u.role === role &&
+    u.passcode === code
+  );
+  if (user) {
+    document.getElementById('loginScreen').style.display = 'none';
+    state.role     = role;
+    state.userName = user.name;
     document.getElementById('roleSelect').value = role;
     document.getElementById('roleBadge').textContent = ROLES[role];
-    err.style.display='none';
-    renderDashboard(); updateBadges();
-    if(!state.master.length && !state.indents.length) setTimeout(()=>{if(confirm('Load sample data?')) loadSampleData();},400);
-  } else { err.style.display='block'; document.getElementById('loginPasscode').value=''; }
+    err.style.display = 'none';
+    updateBadges();
+    renderDashboard();
+  } else {
+    err.style.display = 'block';
+    document.getElementById('loginPasscode').value = '';
+  }
 }
+
 function doLogout() {
-  document.getElementById('loginPasscode').value='';
-  document.getElementById('loginError').style.display='none';
-  ['sidebar','topbar','main'].forEach(id=>document.getElementById(id).style.display='none');
-  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('loginRole').value = '';
+  document.getElementById('loginName').innerHTML = '<option value="">-- Select your role first --</option>';
+  document.getElementById('loginPasscode').value = '';
+  document.getElementById('loginError').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
 }
-let state = { role:'site_engineer', master:[], indents:[], cs:[], pos:[], grns:[], invoices:[], payments:[], activity:[] };
+
+// ======================================================
+// STATE & STORAGE
+// ======================================================
+let state = {
+  role: 'site_engineer',
+  userName: '',
+  master: [],
+  indents: [],
+  cs: [],
+  pos: [],
+  grns: [],
+  invoices: [],
+  payments: [],
+  activity: []
+};
 
 const ROLES = {
   site_engineer: 'Site Engineer',
@@ -1008,7 +1146,8 @@ function nav(el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
   const titles = {
-    dashboard:'Dashboard',master:'Material Master',indent:'Indent',vendor:'Vendor & Comparative Statement',po:'Purchase Order',grn:'Goods Receipt Note',invoice:'Invoice',reports:'Reports & Analytics'
+    dashboard: 'Dashboard', master: 'Material Master', indent: 'Indent',
+    vendor: 'Vendor & Comparative Statement', po: 'Purchase Order', grn: 'Goods Receipt Note', invoice: 'Invoice', reports: 'Reports & Analytics'
   };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   if (page === 'dashboard') renderDashboard();
@@ -1119,7 +1258,7 @@ function renderDashboard() {
     { val: state.pos.filter(p => p.status === 'Approved').length, lbl: 'Approved POs' },
     { val: state.grns.length, lbl: 'GRNs' },
     { val: state.invoices.length, lbl: 'Invoices' },
-    { val: '&#226;&#130;&#185;' + (state.pos.filter(p => p.status === 'Approved').reduce((s,p) => s + (p.total||0), 0)).toLocaleString('en-IN'), lbl: 'PO Value' }
+    { val: '₹' + (state.pos.filter(p => p.status === 'Approved').reduce((s,p) => s + (p.total||0), 0)).toLocaleString('en-IN'), lbl: 'PO Value' }
   ];
   document.getElementById('dashStats').innerHTML = stats.map(s =>
     `<div class="stat-card"><div class="val">${s.val}</div><div class="lbl">${s.lbl}</div></div>`
@@ -1155,7 +1294,7 @@ function renderDashboard() {
                 ...myPO.map(p => ({type:'PO', id:p.id, status:p.status}))];
   const approvalEl = document.getElementById('myApprovals');
   if (!all.length) {
-    approvalEl.innerHTML = '<div class="empty-state"><div class="icon">&#226;&#156;&#133;</div><p>No pending approvals for your role</p></div>';
+    approvalEl.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>No pending approvals for your role</p></div>';
   } else {
     approvalEl.innerHTML = `<table><thead><tr><th>Type</th><th>ID</th><th>Status</th></tr></thead><tbody>
       ${all.map(a => `<tr><td>${a.type}</td><td><b>${a.id}</b></td><td><span class="status status-pending">${a.status}</span></td></tr>`).join('')}
@@ -1165,7 +1304,7 @@ function renderDashboard() {
   // Activity
   const actEl = document.getElementById('recentActivity');
   if (!state.activity.length) {
-    actEl.innerHTML = '<div class="empty-state"><div class="icon">&#240;&#159;&#147;&#139;</div><p>No activity yet</p></div>';
+    actEl.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>No activity yet</p></div>';
   } else {
     actEl.innerHTML = `<table><thead><tr><th>Time</th><th>Activity</th><th>By</th></tr></thead><tbody>
       ${state.activity.slice(0,10).map(a => `<tr><td class="text-muted">${a.time}</td><td>${a.msg}</td><td>${a.role}</td></tr>`).join('')}
@@ -1197,7 +1336,7 @@ function addMaster() {
   addActivity(`Material master entry added: ${v.m_desc} for ${v.m_project}`);
   save(); renderMaster(); populateProjectDropdowns();
   fields.forEach(f => { const el = document.getElementById(f); if (el) { el.value = ''; if (el.tagName === 'SELECT') el.selectedIndex = 0; }});
-  toast('Material added to master &#226;&#156;&#147;', '#16a34a');
+  toast('Material added to master ✓', '#16a34a');
 }
 
 function renderMaster() {
@@ -1206,7 +1345,7 @@ function renderMaster() {
     !q || m.desc.toLowerCase().includes(q) || m.project.toLowerCase().includes(q) || m.code.toLowerCase().includes(q)
   );
   const body = document.getElementById('masterBody');
-  if (!rows.length) { body.innerHTML = '<tr><td colspan="12"><div class="empty-state"><div class="icon">&#240;&#159;&#147;&#139;</div><p>No master entries yet</p></div></td></tr>'; return; }
+  if (!rows.length) { body.innerHTML = '<tr><td colspan="12"><div class="empty-state"><div class="icon">📋</div><p>No master entries yet</p></div></td></tr>'; return; }
   body.innerHTML = rows.map(m => {
     const val = (m.qty * m.rate).toFixed(0);
     const balance = Math.max(0, m.qty - m.indented);
@@ -1218,8 +1357,8 @@ function renderMaster() {
       <td>${m.category}</td>
       <td>${m.uom}</td>
       <td>${m.qty.toLocaleString('en-IN')}</td>
-      <td>&#226;&#130;&#185;${m.rate.toLocaleString('en-IN')}</td>
-      <td>&#226;&#130;&#185;${parseInt(val).toLocaleString('en-IN')}</td>
+      <td>₹${m.rate.toLocaleString('en-IN')}</td>
+      <td>₹${parseInt(val).toLocaleString('en-IN')}</td>
       <td><span class="tag tag-${m.scope}">${m.scope === 'contractor' ? 'Contractor' : 'Non-Contractual'}</span></td>
       <td>
         ${m.indented.toLocaleString('en-IN')}
@@ -1283,7 +1422,7 @@ function addIndentLine() {
     <td><input id="iqtyest-${idx}" readonly style="width:70px;background:#f1f5f9;"></td>
     <td><input id="iqtyreq-${idx}" type="number" placeholder="0" style="width:80px;"></td>
     <td><input id="irem-${idx}" placeholder="Remarks"></td>
-    <td><button class="btn btn-sm btn-danger" onclick="removeIndentLine(${idx})">&#226;&#156;&#149;</button></td>
+    <td><button class="btn btn-sm btn-danger" onclick="removeIndentLine(${idx})">✕</button></td>
   `;
   document.getElementById('indentLines').appendChild(tr);
 }
@@ -1350,7 +1489,7 @@ function submitIndent() {
   addActivity(`Indent ${no} submitted for ${project} (${lines.length} items)`);
   save(); updateBadges();
   initIndentForm();
-  toast('Indent submitted &#226;&#156;&#147;', '#16a34a');
+  toast('Indent submitted ✓', '#16a34a');
   switchTab('indent', 'list');
   renderIndentList();
 }
@@ -1361,7 +1500,7 @@ function renderIndentList() {
   const filter = document.getElementById('indentFilterStatus')?.value || '';
   const rows = state.indents.filter(i => !filter || i.status === filter);
   const body = document.getElementById('indentListBody');
-  if (!rows.length) { body.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">&#240;&#159;&#147;&#157;</div><p>No indents yet</p></div></td></tr>'; return; }
+  if (!rows.length) { body.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">📝</div><p>No indents yet</p></div></td></tr>'; return; }
   body.innerHTML = rows.slice().reverse().map(i => {
     const sc = statusClass(i.status);
     return `<tr>
@@ -1382,19 +1521,19 @@ function renderIndentApprove() {
   const pending = state.indents.filter(i => pendingForRole(i, role, 'indent'));
   const el = document.getElementById('indentApproveList');
   if (!pending.length) {
-    el.innerHTML = '<div class="empty-state"><div class="icon">&#226;&#156;&#133;</div><p>No indents pending your approval</p></div>';
+    el.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>No indents pending your approval</p></div>';
     return;
   }
   el.innerHTML = pending.map(i => `
     <div style="border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;">
       <div class="flex-row" style="justify-content:space-between;">
         <div>
-          <b>${i.id}</b> &#226;&#128;&#148; ${i.project} &nbsp;
+          <b>${i.id}</b> — ${i.project} &nbsp;
           <span class="status status-pending">${i.status}</span>
         </div>
         <div class="flex-row">
-          <button class="btn btn-success btn-sm" onclick="approveIndent('${i.id}')">&#226;&#156;&#147; Approve</button>
-          <button class="btn btn-danger btn-sm" onclick="rejectIndent('${i.id}')">&#226;&#156;&#149; Reject</button>
+          <button class="btn btn-success btn-sm" onclick="approveIndent('${i.id}')">✓ Approve</button>
+          <button class="btn btn-danger btn-sm" onclick="rejectIndent('${i.id}')">✕ Reject</button>
           <button class="btn btn-outline btn-sm" onclick="viewIndent('${i.id}')">View</button>
         </div>
       </div>
@@ -1426,7 +1565,7 @@ function renderApprovalFlow(approvals, steps) {
       const cls = isDone ? 'done' : isRejected ? 'rejected' : isActive ? 'active' : '';
       return `<div class="approval-step ${cls}">
         <div>
-          <div class="step-dot">${isDone ? '&#226;&#156;&#147;' : isRejected ? '&#226;&#156;&#149;' : idx+1}</div>
+          <div class="step-dot">${isDone ? '✓' : isRejected ? '✕' : idx+1}</div>
           <div class="step-label">${step}</div>
         </div>
         ${idx < steps.length - 1 ? '<div class="step-line"></div>' : ''}
@@ -1450,7 +1589,7 @@ function approveIndent(id) {
   indent.status = step.next;
   addActivity(`Indent ${id} approved by ${ROLES[state.role]}`);
   save(); updateBadges(); renderIndentApprove(); renderIndentList();
-  toast(`Indent approved &#226;&#156;&#147; &#226;&#128;&#148; moved to: ${step.next}`, '#16a34a');
+  toast(`Indent approved ✓ — moved to: ${step.next}`, '#16a34a');
 }
 
 function rejectIndent(id) {
@@ -1470,7 +1609,7 @@ function viewIndent(id) {
   const i = state.indents.find(x => x.id === id);
   if (!i) return;
   openModal(`
-    <div class="modal-title">Indent: ${i.id} <span class="modal-close" onclick="closeModal()">&#226;&#156;&#149;</span></div>
+    <div class="modal-title">Indent: ${i.id} <span class="modal-close" onclick="closeModal()">✕</span></div>
     <div class="flex-row" style="margin-bottom:12px;">
       <div><b>Project:</b> ${i.project}</div>
       <div><b>Date:</b> ${i.date}</div>
@@ -1496,7 +1635,7 @@ function populateCSIndentDropdown() {
   if (!sel) return;
   const approved = state.indents.filter(i => i.status === 'Approved' && !state.cs.find(c => c.indentId === i.id && c.status !== 'Rejected'));
   sel.innerHTML = '<option value="">-- Select Approved Indent --</option>' +
-    approved.map(i => `<option value="${i.id}">${i.id} &#226;&#128;&#148; ${i.project}</option>`).join('');
+    approved.map(i => `<option value="${i.id}">${i.id} — ${i.project}</option>`).join('');
 }
 
 function loadCSIndentItems() {
@@ -1509,9 +1648,9 @@ function loadCSIndentItems() {
   document.getElementById('cs_date').value = today();
   container.innerHTML = indent.lines.map((line, idx) => `
     <div style="border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px;">
-      <div style="font-weight:600;margin-bottom:10px;">${idx+1}. ${line.desc} &#226;&#128;&#148; ${line.reqQty} ${line.uom}</div>
+      <div style="font-weight:600;margin-bottom:10px;">${idx+1}. ${line.desc} — ${line.reqQty} ${line.uom}</div>
       <table class="line-items-table" style="margin-bottom:0;">
-        <thead><tr><th>Vendor Name</th><th>Contact</th><th>Unit Rate (&#226;&#130;&#185;)</th><th>Lead Days</th><th>GST%</th><th>Total (&#226;&#130;&#185;)</th><th>Recommend</th></tr></thead>
+        <thead><tr><th>Vendor Name</th><th>Contact</th><th>Unit Rate (₹)</th><th>Lead Days</th><th>GST%</th><th>Total (₹)</th><th>Recommend</th></tr></thead>
         <tbody>
           ${[1,2,3].map(v => `<tr>
             <td><input id="cv_name_${idx}_${v}" placeholder="Vendor ${v}"></td>
@@ -1580,7 +1719,7 @@ function submitCS() {
   addActivity(`CS ${ref} submitted for indent ${indentId}`);
   save(); updateBadges();
   clearCSForm();
-  toast('Comparative Statement submitted &#226;&#156;&#147;', '#16a34a');
+  toast('Comparative Statement submitted ✓', '#16a34a');
   switchTab('vendor', 'list');
   renderCSList();
 }
@@ -1596,7 +1735,7 @@ function clearCSForm() {
 
 function renderCSList() {
   const body = document.getElementById('csListBody');
-  if (!state.cs.length) { body.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="icon">&#240;&#159;&#143;&#162;</div><p>No comparative statements yet</p></div></td></tr>'; return; }
+  if (!state.cs.length) { body.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="icon">🏢</div><p>No comparative statements yet</p></div></td></tr>'; return; }
   body.innerHTML = state.cs.slice().reverse().map(c => `<tr>
     <td><b>${c.id}</b></td><td>${c.indentId}</td><td>${c.date}</td>
     <td>${c.preparedby}</td>
@@ -1609,14 +1748,14 @@ function renderCSApprove() {
   const role = state.role;
   const pending = state.cs.filter(c => pendingForRole(c, role, 'cs'));
   const el = document.getElementById('csApproveList');
-  if (!pending.length) { el.innerHTML = '<div class="empty-state"><div class="icon">&#226;&#156;&#133;</div><p>No CS pending your approval</p></div>'; return; }
+  if (!pending.length) { el.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>No CS pending your approval</p></div>'; return; }
   el.innerHTML = pending.map(c => `
     <div style="border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;">
       <div class="flex-row" style="justify-content:space-between;">
-        <div><b>${c.id}</b> &#226;&#128;&#148; Indent: ${c.indentId} &nbsp;<span class="status status-pending">${c.status}</span></div>
+        <div><b>${c.id}</b> — Indent: ${c.indentId} &nbsp;<span class="status status-pending">${c.status}</span></div>
         <div class="flex-row">
-          <button class="btn btn-success btn-sm" onclick="approveCS('${c.id}')">&#226;&#156;&#147; Approve</button>
-          <button class="btn btn-danger btn-sm" onclick="rejectCS('${c.id}')">&#226;&#156;&#149; Reject</button>
+          <button class="btn btn-success btn-sm" onclick="approveCS('${c.id}')">✓ Approve</button>
+          <button class="btn btn-danger btn-sm" onclick="rejectCS('${c.id}')">✕ Reject</button>
           <button class="btn btn-outline btn-sm" onclick="viewCS('${c.id}')">View</button>
         </div>
       </div>
@@ -1641,7 +1780,7 @@ function approveCS(id) {
   cs.status = step.next;
   addActivity(`CS ${id} approved by ${ROLES[state.role]}`);
   save(); updateBadges(); renderCSApprove(); renderCSList();
-  toast(`CS approved &#226;&#156;&#147;`, '#16a34a');
+  toast(`CS approved ✓`, '#16a34a');
 }
 
 function rejectCS(id) {
@@ -1661,7 +1800,7 @@ function viewCS(id) {
   const c = state.cs.find(x => x.id === id);
   if (!c) return;
   openModal(`
-    <div class="modal-title">CS: ${c.id} <span class="modal-close" onclick="closeModal()">&#226;&#156;&#149;</span></div>
+    <div class="modal-title">CS: ${c.id} <span class="modal-close" onclick="closeModal()">✕</span></div>
     <div class="flex-row" style="margin-bottom:10px;">
       <b>Indent:</b> ${c.indentId} &nbsp; <b>Project:</b> ${c.project} &nbsp;
       <span class="status ${statusClass(c.status)}">${c.status}</span>
@@ -1670,14 +1809,14 @@ function viewCS(id) {
     <hr class="divider">
     ${(c.lines || []).map((l, idx) => `
       <div style="margin-bottom:14px;">
-        <b>${idx+1}. ${l.desc}</b> &#226;&#128;&#148; ${l.qty} ${l.uom}
+        <b>${idx+1}. ${l.desc}</b> — ${l.qty} ${l.uom}
         <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:6px;">
           <thead><tr><th style="text-align:left;padding:4px;">Vendor</th><th>Rate</th><th>GST%</th><th>Total</th><th>Lead</th><th>Recommended</th></tr></thead>
           <tbody>
             ${(l.vendors || []).map((v, vi) => `<tr style="${vi === l.recommended ? 'background:#f0fdf4;' : ''}">
-              <td style="padding:4px;">${v.name}</td><td>&#226;&#130;&#185;${v.rate}</td><td>${v.gst}%</td>
-              <td>&#226;&#130;&#185;${v.total.toFixed(2)}</td><td>${v.lead} days</td>
-              <td>${vi === l.recommended ? '&#226;&#173;&#144; Yes' : '-'}</td>
+              <td style="padding:4px;">${v.name}</td><td>₹${v.rate}</td><td>${v.gst}%</td>
+              <td>₹${v.total.toFixed(2)}</td><td>${v.lead} days</td>
+              <td>${vi === l.recommended ? '⭐ Yes' : '-'}</td>
             </tr>`).join('')}
           </tbody>
         </table>
@@ -1696,7 +1835,7 @@ function populatePOCSDropdown() {
   if (!sel) return;
   const approved = state.cs.filter(c => c.status === 'Approved' && !state.pos.find(p => p.csId === c.id && p.status !== 'Rejected'));
   sel.innerHTML = '<option value="">-- Select Approved CS --</option>' +
-    approved.map(c => `<option value="${c.id}">${c.id} &#226;&#128;&#148; Indent: ${c.indentId} &#226;&#128;&#148; ${c.project}</option>`).join('');
+    approved.map(c => `<option value="${c.id}">${c.id} — Indent: ${c.indentId} — ${c.project}</option>`).join('');
 }
 
 function loadPOFromCS() {
@@ -1727,11 +1866,11 @@ function renderPOLines() {
     grand += l.total;
     return `<tr>
       <td>${idx+1}</td><td>${l.desc}</td><td>${l.uom}</td><td>${l.qty}</td>
-      <td>${l.vendor}</td><td>&#226;&#130;&#185;${l.rate.toLocaleString('en-IN')}</td><td>${l.gst}%</td>
-      <td>&#226;&#130;&#185;${l.total.toFixed(2)}</td>
+      <td>${l.vendor}</td><td>₹${l.rate.toLocaleString('en-IN')}</td><td>${l.gst}%</td>
+      <td>₹${l.total.toFixed(2)}</td>
     </tr>`;
   }).join('');
-  document.getElementById('poGrandTotal').textContent = '&#226;&#130;&#185;' + grand.toFixed(2);
+  document.getElementById('poGrandTotal').textContent = '₹' + grand.toFixed(2);
 }
 
 function submitPO() {
@@ -1754,10 +1893,10 @@ function submitPO() {
     status: 'Pending Purchase Manager', approvals: []
   };
   state.pos.push(po);
-  addActivity(`PO ${no} created for ${cs.project} &#226;&#128;&#148; &#226;&#130;&#185;${grand.toFixed(2)}`);
+  addActivity(`PO ${no} created for ${cs.project} — ₹${grand.toFixed(2)}`);
   save(); updateBadges();
   clearPOForm();
-  toast('PO created and submitted &#226;&#156;&#147;', '#16a34a');
+  toast('PO created and submitted ✓', '#16a34a');
   switchTab('po', 'list');
   renderPOList();
 }
@@ -1775,14 +1914,14 @@ function clearPOForm() {
 
 function renderPOList() {
   const body = document.getElementById('poListBody');
-  if (!state.pos.length) { body.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">&#240;&#159;&#147;&#132;</div><p>No POs yet</p></div></td></tr>'; return; }
+  if (!state.pos.length) { body.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">📄</div><p>No POs yet</p></div></td></tr>'; return; }
   body.innerHTML = state.pos.slice().reverse().map(p => `<tr>
     <td><b>${p.id}</b></td><td>${p.date}</td><td>${p.vendor}</td>
-    <td>${p.indentId}</td><td>&#226;&#130;&#185;${p.total.toLocaleString('en-IN', {maximumFractionDigits:2})}</td>
+    <td>${p.indentId}</td><td>₹${p.total.toLocaleString('en-IN', {maximumFractionDigits:2})}</td>
     <td><span class="status ${statusClass(p.status)}">${p.status}</span></td>
     <td>
       <button class="btn btn-sm btn-outline" onclick="viewPO('${p.id}')">View</button>
-      ${p.status === 'Approved' ? `<button class="btn btn-sm btn-accent" onclick="downloadPO('${p.id}')">&#226;&#172;&#135; Download</button>` : ''}
+      ${p.status === 'Approved' ? `<button class="btn btn-sm btn-accent" onclick="downloadPO('${p.id}')">⬇ Download</button>` : ''}
     </td>
   </tr>`).join('');
 }
@@ -1791,18 +1930,18 @@ function renderPOApprove() {
   const role = state.role;
   const pending = state.pos.filter(p => pendingForRole(p, role, 'po'));
   const el = document.getElementById('poApproveList');
-  if (!pending.length) { el.innerHTML = '<div class="empty-state"><div class="icon">&#226;&#156;&#133;</div><p>No POs pending your approval</p></div>'; return; }
+  if (!pending.length) { el.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>No POs pending your approval</p></div>'; return; }
   el.innerHTML = pending.map(p => `
     <div style="border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;">
       <div class="flex-row" style="justify-content:space-between;">
-        <div><b>${p.id}</b> &#226;&#128;&#148; ${p.project} &nbsp;<span class="status status-pending">${p.status}</span></div>
+        <div><b>${p.id}</b> — ${p.project} &nbsp;<span class="status status-pending">${p.status}</span></div>
         <div class="flex-row">
-          <button class="btn btn-success btn-sm" onclick="approvePO('${p.id}')">&#226;&#156;&#147; Approve</button>
-          <button class="btn btn-danger btn-sm" onclick="rejectPO('${p.id}')">&#226;&#156;&#149; Reject</button>
+          <button class="btn btn-success btn-sm" onclick="approvePO('${p.id}')">✓ Approve</button>
+          <button class="btn btn-danger btn-sm" onclick="rejectPO('${p.id}')">✕ Reject</button>
           <button class="btn btn-outline btn-sm" onclick="viewPO('${p.id}')">View</button>
         </div>
       </div>
-      <div class="text-muted mt-12">Vendor: ${p.vendor} | Amount: &#226;&#130;&#185;${p.total.toFixed(2)}</div>
+      <div class="text-muted mt-12">Vendor: ${p.vendor} | Amount: ₹${p.total.toFixed(2)}</div>
       ${renderApprovalFlow(p.approvals, poApprovalSteps())}
     </div>
   `).join('');
@@ -1822,7 +1961,7 @@ function approvePO(id) {
   po.status = step.next;
   addActivity(`PO ${id} approved by ${ROLES[state.role]}`);
   save(); updateBadges(); renderPOApprove(); renderPOList();
-  toast('PO approved &#226;&#156;&#147;', '#16a34a');
+  toast('PO approved ✓', '#16a34a');
 }
 
 function rejectPO(id) {
@@ -1842,7 +1981,7 @@ function viewPO(id) {
   const p = state.pos.find(x => x.id === id);
   if (!p) return;
   openModal(`
-    <div class="modal-title">PO: ${p.id} <span class="modal-close" onclick="closeModal()">&#226;&#156;&#149;</span></div>
+    <div class="modal-title">PO: ${p.id} <span class="modal-close" onclick="closeModal()">✕</span></div>
     <div class="flex-row" style="margin-bottom:10px;flex-wrap:wrap;gap:12px;">
       <div><b>Project:</b> ${p.project}</div><div><b>Date:</b> ${p.date}</div>
       <div><b>Vendor:</b> ${p.vendor}</div>
@@ -1853,15 +1992,15 @@ function viewPO(id) {
     </div>
     ${renderApprovalFlow(p.approvals, poApprovalSteps())}
     <hr class="divider">
-    <table><thead><tr><th>#</th><th>Description</th><th>UOM</th><th>Qty</th><th>Vendor</th><th>Rate (&#226;&#130;&#185;)</th><th>GST%</th><th>Total (&#226;&#130;&#185;)</th></tr></thead>
+    <table><thead><tr><th>#</th><th>Description</th><th>UOM</th><th>Qty</th><th>Vendor</th><th>Rate (₹)</th><th>GST%</th><th>Total (₹)</th></tr></thead>
     <tbody>${p.lines.map((l,i) => `<tr>
       <td>${i+1}</td><td>${l.desc}</td><td>${l.uom}</td><td>${l.qty}</td>
       <td>${l.vendor}</td><td>${l.rate.toLocaleString('en-IN')}</td><td>${l.gst}%</td>
       <td><b>${l.total.toFixed(2)}</b></td>
     </tr>`).join('')}</tbody>
-    <tfoot><tr><td colspan="7" style="text-align:right;font-weight:700;padding:10px 8px;">Grand Total</td><td><b>&#226;&#130;&#185;${p.total.toFixed(2)}</b></td></tr></tfoot>
+    <tfoot><tr><td colspan="7" style="text-align:right;font-weight:700;padding:10px 8px;">Grand Total</td><td><b>₹${p.total.toFixed(2)}</b></td></tr></tfoot>
     </table>
-    ${p.status === 'Approved' ? `<div class="flex-row mt-16"><button class="btn btn-accent" onclick="downloadPO('${p.id}');closeModal()">&#226;&#172;&#135; Download PO</button></div>` : ''}
+    ${p.status === 'Approved' ? `<div class="flex-row mt-16"><button class="btn btn-accent" onclick="downloadPO('${p.id}');closeModal()">⬇ Download PO</button></div>` : ''}
   `);
 }
 
@@ -1894,465 +2033,448 @@ function downloadPO(id) {
   <div class="info-box"><b>Vendor:</b> ${p.vendor}<br><b>Delivery Address:</b> ${p.address}</div>
   ${p.instructions ? `<div class="info-box"><b>Special Instructions:</b> ${p.instructions}</div>` : ''}
   <table>
-    <thead><tr><th>#</th><th>Description</th><th>UOM</th><th>Qty</th><th>Unit Rate (&#226;&#130;&#185;)</th><th>GST%</th><th>Total (&#226;&#130;&#185;)</th></tr></thead>
+    <thead><tr><th>#</th><th>Description</th><th>UOM</th><th>Qty</th><th>Unit Rate (₹)</th><th>GST%</th><th>Total (₹)</th></tr></thead>
     <tbody>
       ${p.lines.map((l,i) => `<tr><td>${i+1}</td><td>${l.desc}</td><td>${l.uom}</td><td>${l.qty}</td><td>${l.rate.toLocaleString('en-IN')}</td><td>${l.gst}%</td><td><b>${l.total.toFixed(2)}</b></td></tr>`).join('')}
     </tbody>
   </table>
-  <div class="total">Grand Total: &#226;&#130;&#185;${p.total.toFixed(2)}</div>
+  <div class="total">Grand Total: ₹${p.total.toFixed(2)}</div>
   <div class="footer">
     <div class="sign"><div class="sign-line">Purchase Manager</div></div>
     <div class="sign"><div class="sign-line">Management Approval</div></div>
     <div class="sign"><div class="sign-line">Vendor Acceptance</div></div>
   </div>
-  <div style="text-align:center;margin-top:20px;"><button onclick="window.print()" style="padding:10px 20px;background:#1a3c5e;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px;">&#240;&#159;&#150;&#168; Print / Save as PDF</button></div>
+  <div style="text-align:center;margin-top:20px;"><button onclick="window.print()" style="padding:10px 20px;background:#1a3c5e;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px;">🖨 Print / Save as PDF</button></div>
   </body></html>`;
   const w = window.open('', '_blank');
   w.document.write(html);
   w.document.close();
 }
 
+
 // ======================================================
 // GRN
 // ======================================================
 function populateGRNPODropdown() {
   const sel = document.getElementById('grn_po');
-  if (!sel) return;
   const approved = state.pos.filter(p => p.status === 'Approved');
   sel.innerHTML = '<option value="">-- Select PO --</option>' +
-    approved.map(p => `<option value="${p.id}">${p.id} &#226;&#128;&#148; ${p.project} &#226;&#128;&#148; ${p.vendor}</option>`).join('');
+    approved.map(p => `<option value="${p.id}">${p.id} — ${p.vendor} (${p.project})</option>`).join('');
 }
 
 function loadGRNfromPO() {
   const poId = document.getElementById('grn_po').value;
-  const body = document.getElementById('grnLineBody');
-  if (!poId) { body.innerHTML = ''; return; }
   const po = state.pos.find(p => p.id === poId);
-  if (!po) return;
+  if (!po) { document.getElementById('grnLineBody').innerHTML = ''; return; }
   document.getElementById('grn_no').value = genId('GRN');
   document.getElementById('grn_date').value = today();
-  body.innerHTML = po.lines.map((l, idx) => {
-    const alreadyRecv = state.grns.filter(g => g.poId === poId)
-      .reduce((t, g) => t + (g.lines.find(gl => gl.lineId === l.id)?.received || 0), 0);
-    const balance = Math.max(0, l.qty - alreadyRecv);
+  const tbody = document.getElementById('grnLineBody');
+  tbody.innerHTML = po.lines.map((l, i) => {
+    const prevGRNs = state.grns.filter(g => g.poId === poId);
+    const alreadyReceived = prevGRNs.reduce((s, g) => s + (parseFloat(g.lines[i]?.receivedQty) || 0), 0);
+    const balance = l.qty - alreadyReceived;
     return `<tr>
-      <td>${idx+1}</td><td>${l.desc}</td><td>${l.uom}</td>
-      <td>${l.qty}</td><td>${alreadyRecv}</td><td><b>${balance}</b></td>
-      <td><input id="grn_recv_${idx}" type="number" max="${balance}" min="0" placeholder="0" style="width:80px;"></td>
-      <td>
-        <select id="grn_cond_${idx}" style="width:100px;">
-          <option>Good</option><option>Damaged</option><option>Short</option><option>Excess</option>
-        </select>
-      </td>
-      <td><input id="grn_lrem_${idx}" placeholder="Remarks"></td>
-      <input type="hidden" id="grn_lid_${idx}" value="${l.id}">
+      <td>${i+1}</td>
+      <td>${l.desc}</td>
+      <td>${l.uom}</td>
+      <td>${l.qty}</td>
+      <td>${alreadyReceived}</td>
+      <td>${balance}</td>
+      <td><input type="number" id="grn_recv_${i}" min="0" max="${balance}" value="${balance}" style="width:80px;padding:4px;border:1px solid var(--border);border-radius:4px;"></td>
+      <td><select id="grn_cond_${i}" style="padding:4px;border:1px solid var(--border);border-radius:4px;"><option>Good</option><option>Damaged</option><option>Partial</option></select></td>
+      <td><input type="text" id="grn_rem_${i}" placeholder="Remarks" style="width:120px;padding:4px;border:1px solid var(--border);border-radius:4px;"></td>
     </tr>`;
   }).join('');
-  document.getElementById('_grnLineCount').value = po.lines.length;
 }
 
 function submitGRN() {
   const poId = document.getElementById('grn_po').value;
-  const no = document.getElementById('grn_no').value;
-  const date = document.getElementById('grn_date').value;
-  if (!poId) { toast('Select a PO', '#dc2626'); return; }
   const po = state.pos.find(p => p.id === poId);
-  const lineCount = parseInt(document.getElementById('_grnLineCount').value || 0);
-  const lines = [];
-  for (let idx = 0; idx < lineCount; idx++) {
-    const recv = parseFloat(document.getElementById(`grn_recv_${idx}`)?.value || 0);
-    if (recv > 0) {
-      lines.push({
-        lineId: document.getElementById(`grn_lid_${idx}`)?.value,
-        received: recv,
-        condition: document.getElementById(`grn_cond_${idx}`)?.value,
-        remarks: document.getElementById(`grn_lrem_${idx}`)?.value || ''
-      });
-    }
-  }
-  if (!lines.length) { toast('Enter received quantities for at least one line', '#dc2626'); return; }
+  if (!po) { toast('Select a PO first', '#dc2626'); return; }
+  const grno = document.getElementById('grn_no').value;
+  const date = document.getElementById('grn_date').value;
+  if (!date) { toast('Enter receipt date', '#dc2626'); return; }
+  const lines = po.lines.map((l, i) => ({
+    desc: l.desc, uom: l.uom, poQty: l.qty,
+    receivedQty: parseFloat(document.getElementById('grn_recv_'+i)?.value) || 0,
+    condition: document.getElementById('grn_cond_'+i)?.value || 'Good',
+    remarks: document.getElementById('grn_rem_'+i)?.value || ''
+  }));
   const grn = {
-    id: no, poId, vendor: po.vendor, project: po.project,
-    date, challan: document.getElementById('grn_challan').value,
+    id: grno, poId, vendor: po.vendor, project: po.project, date,
+    challan: document.getElementById('grn_challan').value,
     receivedBy: document.getElementById('grn_receivedby').value,
     challanDate: document.getElementById('grn_challandate').value,
     remarks: document.getElementById('grn_remarks').value,
-    lines, status: 'Complete'
+    lines, status: 'Completed', createdBy: state.userName
   };
   state.grns.push(grn);
-  addActivity(`GRN ${no} entered for PO ${poId} &#226;&#128;&#148; ${lines.length} lines`);
-  save(); updateBadges();
-  clearGRNForm();
-  toast('GRN saved &#226;&#156;&#147;', '#16a34a');
+  addActivity(`GRN ${grno} created for PO ${poId}`);
+  save(); updateBadges(); clearGRNForm(); renderGRNList();
+  toast('GRN saved successfully ✓', '#16a34a');
   switchTab('grn', 'list');
-  renderGRNList();
 }
 
 function clearGRNForm() {
   document.getElementById('grn_po').value = '';
   document.getElementById('grn_no').value = '';
-  document.getElementById('grn_date').value = today();
+  document.getElementById('grn_date').value = '';
   document.getElementById('grn_challan').value = '';
   document.getElementById('grn_receivedby').value = '';
+  document.getElementById('grn_challandate').value = '';
   document.getElementById('grn_remarks').value = '';
   document.getElementById('grnLineBody').innerHTML = '';
 }
 
 function renderGRNList() {
-  const body = document.getElementById('grnListBody');
-  if (!state.grns.length) { body.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">&#240;&#159;&#147;&#166;</div><p>No GRNs yet</p></div></td></tr>'; return; }
-  body.innerHTML = state.grns.slice().reverse().map(g => `<tr>
-    <td><b>${g.id}</b></td><td>${g.date}</td><td>${g.poId}</td>
-    <td>${g.vendor}</td><td>${g.challan}</td><td>${g.receivedBy}</td>
-    <td><span class="status status-complete">Complete</span></td>
-    <td><button class="btn btn-sm btn-outline" onclick="viewGRN('${g.id}')">View</button> <button class="btn btn-sm btn-accent" onclick="downloadGRN('${g.id}')">&#226;&#172;&#135; PDF</button></td>
-  </tr>`).join('');
+  const tbody = document.getElementById('grnListBody');
+  if (!tbody) return;
+  if (!state.grns.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px;">No GRNs yet</td></tr>';
+    return;
+  }
+  tbody.innerHTML = state.grns.slice().reverse().map(g => `
+    <tr>
+      <td><b>${g.id}</b></td>
+      <td>${g.date}</td>
+      <td>${g.poId}</td>
+      <td>${g.vendor}</td>
+      <td>${g.challan || '—'}</td>
+      <td>${g.receivedBy || '—'}</td>
+      <td><span class="status status-approved">${g.status}</span></td>
+      <td><button class="btn btn-sm btn-outline" onclick='viewGRN("${g.id}")'>View</button></td>
+    </tr>`).join('');
 }
 
 function viewGRN(id) {
   const g = state.grns.find(x => x.id === id);
   if (!g) return;
-  const po = state.pos.find(p => p.id === g.poId);
-  openModal(`
-    <div class="modal-title">GRN: ${g.id} <span class="modal-close" onclick="closeModal()">&#226;&#156;&#149;</span></div>
-    <div class="flex-row" style="margin-bottom:10px;gap:16px;">
-      <div><b>PO:</b> ${g.poId}</div><div><b>Date:</b> ${g.date}</div>
-      <div><b>Vendor:</b> ${g.vendor}</div><div><b>Challan:</b> ${g.challan}</div>
+  showModal(`
+    <h3 style="margin:0 0 12px;color:var(--primary);">GRN: ${g.id}</h3>
+    <div class="info-grid">
+      <div><b>PO No:</b> ${g.poId}</div><div><b>Date:</b> ${g.date}</div>
+      <div><b>Vendor:</b> ${g.vendor}</div><div><b>Project:</b> ${g.project}</div>
+      <div><b>Challan No:</b> ${g.challan||'—'}</div><div><b>Received By:</b> ${g.receivedBy||'—'}</div>
     </div>
-    <div><b>Received By:</b> ${g.receivedBy} | <b>Remarks:</b> ${g.remarks || '-'}</div>
     <hr class="divider">
-    <table><thead><tr><th>Line</th><th>Description</th><th>PO Qty</th><th>Received</th><th>Condition</th><th>Remarks</th></tr></thead>
-    <tbody>${g.lines.map(l => {
-      const poLine = po?.lines.find(pl => pl.id === l.lineId);
-      return `<tr>
-        <td>${l.lineId}</td><td>${poLine?.desc || '-'}</td>
-        <td>${poLine?.qty || '-'}</td><td><b>${l.received}</b></td>
-        <td>${l.condition}</td><td>${l.remarks || '-'}</td>
-      </tr>`;
-    }).join('')}</tbody></table>
+    <table><thead><tr><th>#</th><th>Description</th><th>UOM</th><th>PO Qty</th><th>Received</th><th>Condition</th></tr></thead>
+    <tbody>${g.lines.map((l,i) => `<tr><td>${i+1}</td><td>${l.desc}</td><td>${l.uom}</td><td>${l.poQty}</td><td><b>${l.receivedQty}</b></td><td>${l.condition}</td></tr>`).join('')}</tbody>
+    </table>
   `);
 }
 
 // ======================================================
-// INVOICE
+// INVOICE & PAYMENT
 // ======================================================
 function populateInvoicePODropdown() {
   const sel = document.getElementById('inv_po');
-  if (!sel) return;
-  const withGRN = state.pos.filter(p => p.status === 'Approved' && state.grns.some(g => g.poId === p.id));
+  const posWithGRN = state.pos.filter(p => p.status === 'Approved' && state.grns.some(g => g.poId === p.id));
   sel.innerHTML = '<option value="">-- Select PO (with GRN) --</option>' +
-    withGRN.map(p => `<option value="${p.id}">${p.id} &#226;&#128;&#148; ${p.project} &#226;&#128;&#148; ${p.vendor}</option>`).join('');
+    posWithGRN.map(p => `<option value="${p.id}">${p.id} — ${p.vendor} (${p.project})</option>`).join('');
+  renderInvoiceList();
+  renderPaymentHistory();
 }
 
 function loadInvoicePO() {
   const poId = document.getElementById('inv_po').value;
-  const el = document.getElementById('invGRNSummary');
-  if (!poId) { el.innerHTML = ''; document.getElementById('inv_vendor').value = ''; return; }
   const po = state.pos.find(p => p.id === poId);
   if (!po) return;
   document.getElementById('inv_vendor').value = po.vendor;
-  document.getElementById('inv_date').value = today();
-  const poGRNs = state.grns.filter(g => g.poId === poId);
-  el.innerHTML = `<table><thead><tr><th>GRN No</th><th>Date</th><th>Lines Received</th><th>Challan</th></tr></thead>
-    <tbody>${poGRNs.map(g => `<tr>
-      <td>${g.id}</td><td>${g.date}</td><td>${g.lines.length}</td><td>${g.challan}</td>
-    </tr>`).join('')}</tbody></table>
-    <div class="text-muted mt-12">PO Total: &#226;&#130;&#185;${po.total.toFixed(2)}</div>`;
+  const grns = state.grns.filter(g => g.poId === poId);
+  const summary = document.getElementById('invGRNSummary');
+  summary.innerHTML = grns.length
+    ? `<div class="alert alert-info">${grns.length} GRN(s) found for this PO. Total lines received: ${grns.reduce((s,g)=>s+g.lines.length,0)}</div>`
+    : '<div class="alert alert-warning">No GRNs found for this PO.</div>';
+  document.getElementById('inv_amount').oninput = function() {
+    const amt = parseFloat(this.value)||0;
+    const gst = parseFloat(document.getElementById('inv_gst').value)||0;
+    document.getElementById('inv_total').value = (amt+gst).toFixed(2);
+  };
+  document.getElementById('inv_gst').oninput = function() {
+    const amt = parseFloat(document.getElementById('inv_amount').value)||0;
+    const gst = parseFloat(this.value)||0;
+    document.getElementById('inv_total').value = (amt+gst).toFixed(2);
+  };
 }
-
-document.addEventListener('input', function(e) {
-  if (e.target.id === 'inv_amount' || e.target.id === 'inv_gst') {
-    const amt = parseFloat(document.getElementById('inv_amount').value || 0);
-    const gst = parseFloat(document.getElementById('inv_gst').value || 0);
-    document.getElementById('inv_total').value = (amt + gst).toFixed(2);
-  }
-});
 
 function submitInvoice() {
   const poId = document.getElementById('inv_po').value;
-  const no = document.getElementById('inv_no').value;
-  const date = document.getElementById('inv_date').value;
-  const amount = parseFloat(document.getElementById('inv_amount').value || 0);
-  const gst = parseFloat(document.getElementById('inv_gst').value || 0);
-  if (!poId || !no) { toast('Select PO and enter invoice number', '#dc2626'); return; }
+  const invNo = document.getElementById('inv_no').value.trim();
+  const invDate = document.getElementById('inv_date').value;
+  const amount = parseFloat(document.getElementById('inv_amount').value)||0;
+  const gst = parseFloat(document.getElementById('inv_gst').value)||0;
+  const total = parseFloat(document.getElementById('inv_total').value)||0;
+  const dueDate = document.getElementById('inv_duedate').value;
+  if (!poId || !invNo || !invDate || !total) { toast('Fill all required fields', '#dc2626'); return; }
   const po = state.pos.find(p => p.id === poId);
-  const invoice = {
-    id: genId('INV'), invoiceNo: no, poId, vendor: po?.vendor || '',
-    date, amount, gst, total: amount + gst,
+  const inv = {
+    id: genId('INV'), invNo, poId, vendor: po?.vendor||'', project: po?.project||'',
+    date: invDate, amount, gst, total, dueDate,
     file: document.getElementById('inv_file').value,
-    dueDate: document.getElementById('inv_duedate').value,
     remarks: document.getElementById('inv_remarks').value,
-    status: 'Pending'
+    paidAmount: 0, status: 'Pending', createdBy: state.userName
   };
-  state.invoices.push(invoice);
-  addActivity(`Invoice ${no} uploaded for PO ${poId} &#226;&#128;&#148; &#226;&#130;&#185;${(amount+gst).toFixed(2)}`);
-  save(); updateBadges();
-  clearInvoiceForm();
-  toast('Invoice uploaded &#226;&#156;&#147;', '#16a34a');
-  switchTab('invoice', 'list');
-  renderInvoiceList();
+  state.invoices.push(inv);
+  addActivity(`Invoice ${invNo} submitted for PO ${poId}`);
+  save(); updateBadges(); clearInvoiceForm(); renderInvoiceList();
+  toast('Invoice submitted ✓', '#16a34a');
+  switchTab('invoice','list');
 }
 
 function clearInvoiceForm() {
-  ['inv_po','inv_no','inv_date','inv_amount','inv_gst','inv_total','inv_file','inv_duedate','inv_remarks'].forEach(id => {
+  ['inv_po','inv_no','inv_date','inv_vendor','inv_amount','inv_gst','inv_total','inv_duedate','inv_file','inv_remarks'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
-  document.getElementById('inv_vendor').value = '';
-  document.getElementById('invGRNSummary').innerHTML = '';
+  const s = document.getElementById('invGRNSummary');
+  if (s) s.innerHTML = '';
 }
 
 function renderInvoiceList() {
-  const body = document.getElementById('invoiceListBody');
-  if (!state.invoices.length) { body.innerHTML = '<tr><td colspan="10"><div class="empty-state"><div class="icon">&#240;&#159;&#167;&#190;</div><p>No invoices yet</p></div></td></tr>'; return; }
-  const statusColors = {Paid:'payment-paid',Partial:'payment-partial',Overdue:'payment-overdue',Pending:'payment-pending'};
-  body.innerHTML = state.invoices.slice().reverse().map(i => {
-    const paid=getInvoicePaid(i.id), balance=(i.total||0)-paid, status=getInvoiceStatus(i);
+  const tbody = document.getElementById('invoiceListBody');
+  if (!tbody) return;
+  const filter = document.getElementById('invFilterStatus')?.value || '';
+  let invs = state.invoices.slice().reverse();
+  if (filter) invs = invs.filter(i => i.status === filter);
+  // Check overdue
+  invs.forEach(inv => {
+    if (inv.status !== 'Paid' && inv.dueDate && inv.dueDate < today()) inv.status = 'Overdue';
+  });
+  if (!invs.length) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:20px;">No invoices yet</td></tr>';
+    return;
+  }
+  tbody.innerHTML = invs.map(inv => {
+    const balance = inv.total - (inv.paidAmount||0);
+    const statusClass = inv.status === 'Paid' ? 'status-approved' : inv.status === 'Overdue' ? 'status-rejected' : 'status-pending';
     return `<tr>
-    <td><b>${i.invoiceNo}</b></td><td>${i.date}</td><td>${i.poId}</td>
-    <td>${i.vendor}</td><td>&#226;&#130;&#185;${(i.total||0).toLocaleString('en-IN')}</td>
-    <td>&#226;&#130;&#185;${paid.toLocaleString('en-IN')}</td><td><b>&#226;&#130;&#185;${balance.toLocaleString('en-IN')}</b></td>
-    <td>${i.dueDate || '-'}</td>
-    <td><span class="payment-badge ${statusColors[status]}">${status}</span></td>
-    <td>
-      <button class="btn btn-sm btn-outline" onclick="viewInvoice('${i.id}')">View</button>
-      <button class="btn btn-sm btn-accent" onclick="downloadInvoicePDF('${i.id}')">&#226;&#172;&#135; PDF</button>
-    </td>
-  </tr>`;
+      <td><b>${inv.invNo}</b></td>
+      <td>${inv.date}</td>
+      <td>${inv.poId}</td>
+      <td>${inv.vendor}</td>
+      <td>₹${inv.total.toLocaleString('en-IN')}</td>
+      <td>₹${(inv.paidAmount||0).toLocaleString('en-IN')}</td>
+      <td>₹${balance.toLocaleString('en-IN')}</td>
+      <td>${inv.dueDate||'—'}</td>
+      <td><span class="status ${statusClass}">${inv.status}</span></td>
+      <td><button class="btn btn-sm btn-outline" onclick='viewInvoice("${inv.id}")'>View</button></td>
+    </tr>`;
   }).join('');
 }
 
-function markPaid(id) {
-  const inv = state.invoices.find(i => i.id === id);
-  if (!inv) return;
-  inv.status = 'Paid';
-  addActivity(`Invoice ${inv.invoiceNo} marked as Paid`);
-  save(); updateBadges(); renderInvoiceList();
-  toast('Invoice marked as Paid &#226;&#156;&#147;', '#16a34a');
-}
-
 function viewInvoice(id) {
-  const i = state.invoices.find(x => x.id === id);
-  if (!i) return;
-  openModal(`
-    <div class="modal-title">Invoice: ${i.invoiceNo} <span class="modal-close" onclick="closeModal()">&#226;&#156;&#149;</span></div>
-    <div class="flex-row" style="gap:20px;flex-wrap:wrap;margin-bottom:12px;">
-      <div><b>PO:</b> ${i.poId}</div><div><b>Vendor:</b> ${i.vendor}</div>
-      <div><b>Date:</b> ${i.date}</div><div><b>Due:</b> ${i.dueDate || '-'}</div>
-      <span class="status ${i.status === 'Paid' ? 'status-complete' : 'status-pending'}">${i.status}</span>
+  const inv = state.invoices.find(x => x.id === id);
+  if (!inv) return;
+  showModal(`
+    <h3 style="margin:0 0 12px;color:var(--primary);">Invoice: ${inv.invNo}</h3>
+    <div class="info-grid">
+      <div><b>PO No:</b> ${inv.poId}</div><div><b>Date:</b> ${inv.date}</div>
+      <div><b>Vendor:</b> ${inv.vendor}</div><div><b>Due Date:</b> ${inv.dueDate||'—'}</div>
+      <div><b>Amount:</b> ₹${inv.amount.toLocaleString('en-IN')}</div><div><b>GST:</b> ₹${inv.gst.toLocaleString('en-IN')}</div>
+      <div><b>Total:</b> ₹${inv.total.toLocaleString('en-IN')}</div><div><b>Paid:</b> ₹${(inv.paidAmount||0).toLocaleString('en-IN')}</div>
+      <div><b>Status:</b> ${inv.status}</div><div><b>File:</b> ${inv.file||'—'}</div>
     </div>
-    <table><thead><tr><th>Description</th><th>Amount (&#226;&#130;&#185;)</th></tr></thead>
-    <tbody>
-      <tr><td>Invoice Amount (excl. GST)</td><td>&#226;&#130;&#185;${i.amount.toFixed(2)}</td></tr>
-      <tr><td>GST Amount</td><td>&#226;&#130;&#185;${i.gst.toFixed(2)}</td></tr>
-      <tr><td><b>Total Invoice Amount</b></td><td><b>&#226;&#130;&#185;${i.total.toFixed(2)}</b></td></tr>
-    </tbody></table>
-    ${i.file ? `<div class="mt-12"><b>File:</b> ${i.file}</div>` : ''}
-    ${i.remarks ? `<div class="mt-12"><b>Remarks:</b> ${i.remarks}</div>` : ''}
+    ${inv.remarks ? `<div class="alert alert-info" style="margin-top:12px;">${inv.remarks}</div>` : ''}
   `);
 }
 
-
-// ======================================================
-// PAYMENT TRACKING
-// ======================================================
-function getInvoicePaid(invId) { return (state.payments||[]).filter(p=>p.invId===invId).reduce((s,p)=>s+p.amount,0); }
-function getInvoiceStatus(inv) {
-  const paid=getInvoicePaid(inv.id), total=inv.total||0;
-  if(paid>=total) return 'Paid';
-  if(paid>0) return 'Partial';
-  if(inv.dueDate && new Date(inv.dueDate)<new Date()) return 'Overdue';
-  return 'Pending';
-}
 function populatePaymentDropdown() {
-  const sel=document.getElementById('pay_invoice'); if(!sel) return;
-  const unpaid=state.invoices.filter(i=>getInvoiceStatus(i)!=='Paid');
-  sel.innerHTML='<option value="">-- Select Invoice --</option>'+unpaid.map(i=>`<option value="${i.id}">${i.invoiceNo} &#226;&#128;&#148; ${i.vendor} &#226;&#128;&#148; &#226;&#130;&#185;${(i.total||0).toLocaleString('en-IN')}</option>`).join('');
+  const sel = document.getElementById('pay_invoice');
+  const unpaid = state.invoices.filter(i => i.status !== 'Paid');
+  sel.innerHTML = '<option value="">-- Select Invoice --</option>' +
+    unpaid.map(i => `<option value="${i.id}">${i.invNo} — ${i.vendor} (Balance: ₹${(i.total-(i.paidAmount||0)).toLocaleString('en-IN')})</option>`).join('');
+  renderPaymentHistory();
 }
+
 function loadPaymentInvoice() {
-  const invId=document.getElementById('pay_invoice').value; if(!invId) return;
-  const inv=state.invoices.find(i=>i.id===invId); if(!inv) return;
-  const paid=getInvoicePaid(invId), balance=(inv.total||0)-paid;
-  document.getElementById('pay_total').value='&#226;&#130;&#185;'+(inv.total||0).toLocaleString('en-IN');
-  document.getElementById('pay_paid_so_far').value='&#226;&#130;&#185;'+paid.toLocaleString('en-IN');
-  document.getElementById('pay_balance').value='&#226;&#130;&#185;'+balance.toLocaleString('en-IN');
-  document.getElementById('pay_date').value=today();
-  document.getElementById('pay_amount').value=balance;
+  const id = document.getElementById('pay_invoice').value;
+  const inv = state.invoices.find(i => i.id === id);
+  if (!inv) return;
+  document.getElementById('pay_total').value = '₹' + inv.total.toLocaleString('en-IN');
+  document.getElementById('pay_paid_so_far').value = '₹' + (inv.paidAmount||0).toLocaleString('en-IN');
+  document.getElementById('pay_balance').value = '₹' + (inv.total-(inv.paidAmount||0)).toLocaleString('en-IN');
+  document.getElementById('pay_date').value = today();
 }
+
 function recordPayment() {
-  const invId=document.getElementById('pay_invoice').value, amount=parseFloat(document.getElementById('pay_amount').value||0), date=document.getElementById('pay_date').value;
-  if(!invId||!amount||!date){toast('Fill all required fields','#dc2626');return;}
-  const inv=state.invoices.find(i=>i.id===invId), balance=(inv.total||0)-getInvoicePaid(invId);
-  if(amount>balance){toast('Payment exceeds balance','#dc2626');return;}
-  if(!state.payments) state.payments=[];
-  state.payments.push({id:genId('PAY'),invId,invoiceNo:inv.invoiceNo,vendor:inv.vendor,amount,date,mode:document.getElementById('pay_mode').value,ref:document.getElementById('pay_ref').value,remarks:document.getElementById('pay_remarks').value,recordedBy:ROLES[state.role]});
-  addActivity(`Payment &#226;&#130;&#185;${amount.toLocaleString('en-IN')} recorded for ${inv.invoiceNo}`);
-  save(); updateBadges(); renderInvoiceList(); renderPaymentHistory(); clearPaymentForm();
-  toast('Payment recorded &#226;&#156;&#147;','#16a34a');
+  const invId = document.getElementById('pay_invoice').value;
+  const inv = state.invoices.find(i => i.id === invId);
+  if (!inv) { toast('Select an invoice', '#dc2626'); return; }
+  const amount = parseFloat(document.getElementById('pay_amount').value)||0;
+  if (!amount || amount <= 0) { toast('Enter a valid payment amount', '#dc2626'); return; }
+  const balance = inv.total - (inv.paidAmount||0);
+  if (amount > balance) { toast('Payment exceeds balance due', '#dc2626'); return; }
+  const payment = {
+    id: genId('PAY'), invId, invNo: inv.invNo, vendor: inv.vendor, poId: inv.poId,
+    amount, date: document.getElementById('pay_date').value,
+    mode: document.getElementById('pay_mode').value,
+    ref: document.getElementById('pay_ref').value,
+    remarks: document.getElementById('pay_remarks').value,
+    recordedBy: state.userName
+  };
+  state.payments = state.payments || [];
+  state.payments.push(payment);
+  inv.paidAmount = (inv.paidAmount||0) + amount;
+  inv.status = inv.paidAmount >= inv.total ? 'Paid' : 'Partial';
+  addActivity(`Payment ₹${amount.toLocaleString('en-IN')} recorded for invoice ${inv.invNo}`);
+  save(); updateBadges(); clearPaymentForm(); renderPaymentHistory(); renderInvoiceList();
+  toast('Payment recorded ✓', '#16a34a');
 }
-function clearPaymentForm() { ['pay_invoice','pay_total','pay_paid_so_far','pay_balance','pay_amount','pay_date','pay_ref','pay_remarks'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';}); }
+
+function clearPaymentForm() {
+  ['pay_invoice','pay_total','pay_paid_so_far','pay_balance','pay_amount','pay_date','pay_ref','pay_remarks'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+}
+
 function renderPaymentHistory() {
-  const body=document.getElementById('paymentHistoryBody'); if(!body) return;
-  const payments=(state.payments||[]).slice().reverse();
-  if(!payments.length){body.innerHTML='<tr><td colspan="7"><div class="empty-state"><div class="icon">&#240;&#159;&#146;&#179;</div><p>No payments recorded yet</p></div></td></tr>';return;}
-  body.innerHTML=payments.map(p=>`<tr><td><b>${p.invoiceNo}</b></td><td>${p.vendor}</td><td>${p.date}</td><td><b>&#226;&#130;&#185;${p.amount.toLocaleString('en-IN')}</b></td><td>${p.mode}</td><td>${p.ref||'-'}</td><td>${p.recordedBy}</td></tr>`).join('');
+  const tbody = document.getElementById('paymentHistoryBody');
+  if (!tbody) return;
+  const payments = state.payments || [];
+  if (!payments.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px;">No payments recorded yet</td></tr>';
+    return;
+  }
+  tbody.innerHTML = payments.slice().reverse().map(p => `<tr>
+    <td><b>${p.invNo}</b></td>
+    <td>${p.vendor}</td>
+    <td>${p.date}</td>
+    <td>₹${p.amount.toLocaleString('en-IN')}</td>
+    <td>${p.mode}</td>
+    <td>${p.ref||'—'}</td>
+    <td>${p.recordedBy||'—'}</td>
+  </tr>`).join('');
 }
+
 // ======================================================
 // REPORTS
 // ======================================================
-let _charts={};
 function renderReports() {
-  const totalPO=state.pos.filter(p=>p.status==='Approved').reduce((s,p)=>s+(p.total||0),0);
-  const totalPaid=(state.payments||[]).reduce((s,p)=>s+p.amount,0);
-  const totalInv=state.invoices.reduce((s,i)=>s+(i.total||0),0);
-  const overdueInvs=state.invoices.filter(i=>getInvoiceStatus(i)==='Overdue');
-  const pendingAll=state.indents.filter(i=>i.status.includes('Pending')).length+state.cs.filter(c=>c.status.includes('Pending')).length+state.pos.filter(p=>p.status.includes('Pending')).length;
-  document.getElementById('reportKPIs').innerHTML=[
-    {val:'&#226;&#130;&#185;'+totalPO.toLocaleString('en-IN'),lbl:'Approved PO Value',sub:state.pos.filter(p=>p.status==='Approved').length+' POs'},
-    {val:'&#226;&#130;&#185;'+totalPaid.toLocaleString('en-IN'),lbl:'Total Payments',sub:(state.payments||[]).length+' transactions'},
-    {val:'&#226;&#130;&#185;'+(totalInv-totalPaid).toLocaleString('en-IN'),lbl:'Outstanding',sub:state.invoices.filter(i=>getInvoiceStatus(i)!=='Paid').length+' invoices'},
-    {val:overdueInvs.length,lbl:'Overdue',sub:'Needs attention'},
-    {val:pendingAll,lbl:'Pending Approvals',sub:'All modules'},
-    {val:state.grns.length,lbl:'GRNs',sub:'Total receipts'}
-  ].map(k=>`<div class="kpi-card"><div class="kpi-val">${k.val}</div><div class="kpi-lbl">${k.lbl}</div><div class="kpi-sub">${k.sub}</div></div>`).join('');
-  const projMap={};
-  state.pos.filter(p=>p.status==='Approved').forEach(p=>{projMap[p.project]=(projMap[p.project]||0)+(p.total||0);});
-  renderChart('chartProjectPO','bar',Object.keys(projMap),Object.values(projMap),'PO Value (&#226;&#130;&#185;)');
-  const vMap={};
-  state.pos.filter(p=>p.status==='Approved').forEach(p=>{(p.vendor||'').split(',').map(v=>v.trim()).filter(Boolean).forEach(v=>{vMap[v]=(vMap[v]||0)+(p.total||0);});});
-  const tv=Object.entries(vMap).sort((a,b)=>b[1]-a[1]).slice(0,6);
-  renderChart('chartVendorSpend','bar',tv.map(v=>v[0]),tv.map(v=>v[1]),'Spend (&#226;&#130;&#185;)',true);
-  const mMap={};
-  state.pos.filter(p=>p.status==='Approved').forEach(p=>{const m=(p.date||'').substring(0,7);if(m) mMap[m]=(mMap[m]||0)+(p.total||0);});
-  const months=Object.keys(mMap).sort();
-  renderChart('chartMonthlyPO','line',months,months.map(m=>mMap[m]),'PO Value (&#226;&#130;&#185;)');
-  const sc=[state.invoices.filter(i=>getInvoiceStatus(i)==='Paid').length,state.invoices.filter(i=>getInvoiceStatus(i)==='Partial').length,overdueInvs.length,state.invoices.filter(i=>getInvoiceStatus(i)==='Pending').length];
-  renderDoughnut('chartPaymentStatus',['Paid','Partial','Overdue','Pending'],sc);
-  const ob=document.getElementById('overdueBody');
-  if(!overdueInvs.length){ob.innerHTML='<tr><td colspan="6"><div class="empty-state"><div class="icon">&#226;&#156;&#133;</div><p>No overdue invoices</p></div></td></tr>';}
-  else ob.innerHTML=overdueInvs.map(i=>{const bal=(i.total||0)-getInvoicePaid(i.id),days=Math.floor((new Date()-new Date(i.dueDate))/(86400000));return `<tr><td><b>${i.invoiceNo}</b></td><td>${i.vendor}</td><td>${i.poId}</td><td style="color:#dc2626">${i.dueDate}</td><td><b>&#226;&#130;&#185;${bal.toLocaleString('en-IN')}</b></td><td><span class="status status-rejected">${days}d</span></td></tr>`;}).join('');
-  document.getElementById('approvalSummaryBody').innerHTML=[{m:'Indent',p:state.indents.filter(i=>i.status.includes('Pending'))},{m:'CS',p:state.cs.filter(c=>c.status.includes('Pending'))},{m:'PO',p:state.pos.filter(p=>p.status.includes('Pending'))}].map(r=>`<tr><td><b>${r.m}</b></td><td><span class="status ${r.p.length?'status-pending':'status-complete'}">${r.p.length}</span></td><td>${r.p.length?[...new Set(r.p.map(x=>x.status))].join(', '):'&#226;&#128;&#148;'}</td></tr>`).join('');
+  // KPIs
+  const totalPOValue = state.pos.filter(p=>p.status==='Approved').reduce((s,p)=>s+(p.total||0),0);
+  const totalPaid = (state.payments||[]).reduce((s,p)=>s+p.amount,0);
+  const totalPending = state.invoices.filter(i=>i.status!=='Paid').reduce((s,i)=>s+(i.total-(i.paidAmount||0)),0);
+  const overdueCount = state.invoices.filter(i=>i.status==='Overdue').length;
+  document.getElementById('reportKPIs').innerHTML = [
+    { val: state.pos.filter(p=>p.status==='Approved').length, lbl: 'Approved POs' },
+    { val: '₹'+totalPOValue.toLocaleString('en-IN'), lbl: 'Total PO Value' },
+    { val: '₹'+totalPaid.toLocaleString('en-IN'), lbl: 'Total Paid' },
+    { val: overdueCount, lbl: 'Overdue Invoices' }
+  ].map(k => `<div class="stat-card"><div class="val">${k.val}</div><div class="lbl">${k.lbl}</div></div>`).join('');
+
+  // Chart 1: Project-wise PO Value
+  const projMap = {};
+  state.pos.filter(p=>p.status==='Approved').forEach(p => { projMap[p.project]=(projMap[p.project]||0)+(p.total||0); });
+  drawChart('chartProjectPO', Object.keys(projMap), Object.values(projMap), 'bar', '₹');
+
+  // Chart 2: Top vendors by spend
+  const vendMap = {};
+  state.pos.filter(p=>p.status==='Approved').forEach(p => { vendMap[p.vendor]=(vendMap[p.vendor]||0)+(p.total||0); });
+  const topVend = Object.entries(vendMap).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  drawChart('chartVendorSpend', topVend.map(v=>v[0]), topVend.map(v=>v[1]), 'bar', '₹');
+
+  // Chart 3: Monthly PO trend
+  const monthMap = {};
+  state.pos.forEach(p => { const m = (p.date||'').slice(0,7); if(m) monthMap[m]=(monthMap[m]||0)+1; });
+  const months = Object.keys(monthMap).sort();
+  drawChart('chartMonthlyPO', months, months.map(m=>monthMap[m]), 'line', '');
+
+  // Chart 4: Payment status
+  const paid = state.invoices.filter(i=>i.status==='Paid').length;
+  const partial = state.invoices.filter(i=>i.status==='Partial').length;
+  const pending = state.invoices.filter(i=>i.status==='Pending').length;
+  const overdue = state.invoices.filter(i=>i.status==='Overdue').length;
+  drawChart('chartPaymentStatus', ['Paid','Partial','Pending','Overdue'], [paid,partial,pending,overdue], 'doughnut', '');
+
+  // Overdue table
+  const od = state.invoices.filter(i=>i.status==='Overdue'||( i.dueDate && i.dueDate < today() && i.status!=='Paid'));
+  document.getElementById('overdueBody').innerHTML = od.length
+    ? od.map(i => {
+        const days = Math.floor((new Date()-new Date(i.dueDate))/(1000*86400));
+        return `<tr><td><b>${i.invNo}</b></td><td>${i.vendor}</td><td>${i.poId}</td><td>${i.dueDate}</td><td>₹${(i.total-(i.paidAmount||0)).toLocaleString('en-IN')}</td><td><span class="status status-rejected">${days}d</span></td></tr>`;
+      }).join('')
+    : '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px;">No overdue invoices ✓</td></tr>';
+
+  // Approval summary
+  const roles = Object.keys(ROLES);
+  document.getElementById('approvalSummaryBody').innerHTML = [
+    { module:'Indent', pending: state.indents.filter(i=>i.status&&i.status.startsWith('Pending')).length, role:'See workflow' },
+    { module:'CS/Vendor', pending: state.cs.filter(c=>c.status&&c.status.startsWith('Pending')).length, role:'See workflow' },
+    { module:'Purchase Order', pending: state.pos.filter(p=>p.status&&p.status.startsWith('Pending')).length, role:'See workflow' }
+  ].map(r=>`<tr><td>${r.module}</td><td><b>${r.pending}</b></td><td>${r.role}</td></tr>`).join('');
 }
-function renderChart(id,type,labels,data,label,horizontal=false) {
-  if(_charts[id]){_charts[id].destroy();}
-  const ctx=document.getElementById(id)?.getContext('2d'); if(!ctx) return;
-  _charts[id]=new Chart(ctx,{type,data:{labels,datasets:[{label,data,backgroundColor:['#2563a8','#f59e0b','#16a34a','#dc2626','#8b5cf6','#06b6d4'],borderColor:'#2563a8',borderWidth:type==='line'?2:0,fill:type==='line'}]},options:{indexAxis:horizontal?'y':'x',responsive:true,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
-}
-function renderDoughnut(id,labels,data) {
-  if(_charts[id]){_charts[id].destroy();}
-  const ctx=document.getElementById(id)?.getContext('2d'); if(!ctx) return;
-  _charts[id]=new Chart(ctx,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:['#16a34a','#2563a8','#dc2626','#f59e0b']}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}});
-}
-// ======================================================
-// PDF EXPORTS &#226;&#128;&#148; GRN & INVOICE
-// ======================================================
-function downloadGRN(id) {
-  var g=state.grns.find(function(x){return x.id===id;}); if(!g) return;
-  var po=state.pos.find(function(p){return p.id===g.poId;});
-  var rows='';
-  g.lines.forEach(function(l,i){
-    var pl=po?po.lines.find(function(x){return x.id===l.lineId;}):null;
-    rows+='<tr><td>'+(i+1)+'</td><td>'+(pl?pl.desc:'-')+'</td><td>'+(pl?pl.uom:'-')+'</td><td>'+(pl?pl.qty:'-')+'</td><td><b>'+l.received+'</b></td><td>'+l.condition+'</td></tr>';
+
+function drawChart(canvasId, labels, data, type, prefix) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  if (canvas._chartInstance) canvas._chartInstance.destroy();
+  const colors = ['#1a3c5e','#3b82f6','#f59e0b','#10b981','#8b5cf6','#ef4444','#06b6d4','#84cc16'];
+  canvas._chartInstance = new Chart(canvas, {
+    type,
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: type==='line' ? 'rgba(59,130,246,0.15)' : colors.slice(0,data.length),
+        borderColor: type==='line' ? '#3b82f6' : colors.slice(0,data.length),
+        borderWidth: 2,
+        fill: type==='line',
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: {
+        legend: { display: type==='doughnut', position:'bottom' },
+        tooltip: { callbacks: { label: ctx => prefix + (ctx.parsed.y||ctx.parsed||'').toLocaleString('en-IN') } }
+      },
+      scales: type==='doughnut' ? {} : { y: { beginAtZero:true, ticks:{ callback: v=>prefix+v.toLocaleString('en-IN') } } }
+    }
   });
-  var html='<!DOCTYPE html><html><head><title>GRN '+g.id+'</title><style>body{font-family:Arial;margin:40px;}h1{color:#1a3c5e;border-bottom:2px solid #1a3c5e;padding-bottom:8px;}.info-box{background:#f8fafc;border:1px solid #e2e8f0;padding:12px;border-radius:6px;margin-bottom:16px;}table{width:100%;border-collapse:collapse;}th{background:#1a3c5e;color:#fff;padding:10px;text-align:left;}td{padding:8px 10px;border-bottom:1px solid #e2e8f0;}.footer{margin-top:40px;display:flex;justify-content:space-around;border-top:1px solid #e2e8f0;padding-top:20px;}.sign{text-align:center;min-width:150px;}.sign-line{border-top:1px solid #333;margin-top:40px;padding-top:6px;}@media print{button{display:none}}</style></head><body>'
-    +'<div style="text-align:center;margin-bottom:20px;"><h1>GOODS RECEIPT NOTE</h1><h3 style="color:#64748b;margin:0;">Sankalp Construction</h3></div>'
-    +'<div class="info-box"><b>GRN No:</b> '+g.id+' &nbsp;&nbsp; <b>Date:</b> '+g.date+' &nbsp;&nbsp; <b>PO No:</b> '+g.poId+'<br><b>Vendor:</b> '+g.vendor+' &nbsp;&nbsp; <b>Challan:</b> '+(g.challan||'-')+' &nbsp;&nbsp; <b>Received By:</b> '+g.receivedBy+'</div>'
-    +'<table><thead><tr><th>#</th><th>Description</th><th>UOM</th><th>PO Qty</th><th>Received</th><th>Condition</th></tr></thead><tbody>'+rows+'</tbody></table>'
-    +'<div class="footer"><div class="sign"><div class="sign-line">Store In-charge</div></div><div class="sign"><div class="sign-line">Site Engineer</div></div><div class="sign"><div class="sign-line">Vendor</div></div></div>'
-    +'<div style="text-align:center;margin-top:20px;"><button onclick="window.print()" style="padding:10px 20px;background:#1a3c5e;color:#fff;border:none;border-radius:6px;cursor:pointer;">Print / PDF</button></div>'
-    +'</body></html>';
-  var w=window.open('','_blank'); w.document.write(html); w.document.close();
-}
-function downloadInvoicePDF(id) {
-  var i=state.invoices.find(function(x){return x.id===id;}); if(!i) return;
-  var paid=getInvoicePaid(id), balance=(i.total||0)-paid, status=getInvoiceStatus(i);
-  var pyms=(state.payments||[]).filter(function(p){return p.invId===id;});
-  var pymRows='';
-  pyms.forEach(function(p){ pymRows+='<tr><td>'+p.date+'</td><td>Rs.'+p.amount.toLocaleString('en-IN')+'</td><td>'+p.mode+'</td><td>'+(p.ref||'-')+'</td></tr>'; });
-  var html='<!DOCTYPE html><html><head><title>Invoice '+i.invoiceNo+'</title><style>body{font-family:Arial;margin:40px;}h1{color:#1a3c5e;border-bottom:2px solid #1a3c5e;padding-bottom:8px;}.info-box{background:#f8fafc;border:1px solid #e2e8f0;padding:12px;border-radius:6px;margin-bottom:16px;}table{width:100%;border-collapse:collapse;}th{background:#1a3c5e;color:#fff;padding:8px 10px;text-align:left;}td{padding:8px 10px;border-bottom:1px solid #e2e8f0;}@media print{button{display:none}}</style></head><body>'
-    +'<div style="text-align:center;margin-bottom:20px;"><h1>VENDOR INVOICE</h1><h3 style="color:#64748b;margin:0;">Sankalp Construction</h3></div>'
-    +'<div class="info-box"><b>Invoice No:</b> '+i.invoiceNo+' &nbsp;&nbsp; <b>Date:</b> '+i.date+' &nbsp;&nbsp; <b>PO No:</b> '+i.poId+'<br><b>Vendor:</b> '+i.vendor+' &nbsp;&nbsp; <b>Due Date:</b> '+(i.dueDate||'-')+' &nbsp;&nbsp; <b>Status:</b> '+status+'</div>'
-    +'<table><thead><tr><th>Description</th><th>Amount</th></tr></thead><tbody>'
-    +'<tr><td>Invoice Amount (excl. GST)</td><td>Rs.'+(i.amount||0).toFixed(2)+'</td></tr>'
-    +'<tr><td>GST Amount</td><td>Rs.'+(i.gst||0).toFixed(2)+'</td></tr>'
-    +'<tr><td><b>Total Invoice</b></td><td><b>Rs.'+(i.total||0).toFixed(2)+'</b></td></tr>'
-    +'<tr><td>Total Paid</td><td>Rs.'+paid.toFixed(2)+'</td></tr>'
-    +'<tr><td><b>Balance Outstanding</b></td><td><b>Rs.'+balance.toFixed(2)+'</b></td></tr>'
-    +'</tbody></table>'
-    +(pymRows?'<h3 style="margin-top:24px;color:#1a3c5e;">Payment History</h3><table><thead><tr><th>Date</th><th>Amount</th><th>Mode</th><th>Reference</th></tr></thead><tbody>'+pymRows+'</tbody></table>':'')
-    +'<div style="text-align:center;margin-top:20px;"><button onclick="window.print()" style="padding:10px 20px;background:#1a3c5e;color:#fff;border:none;border-radius:6px;cursor:pointer;">Print / PDF</button></div>'
-    +'</body></html>';
-  var w=window.open('','_blank'); w.document.write(html); w.document.close();
 }
 
 // ======================================================
-// HELPERS// ======================================================
-// HELPERS
+// MODAL HELPER
 // ======================================================
-function statusClass(s) {
-  if (!s) return 'status-draft';
-  if (s === 'Approved') return 'status-approved';
-  if (s === 'Rejected') return 'status-rejected';
-  if (s.includes('Pending')) return 'status-pending';
-  if (s === 'Complete') return 'status-complete';
-  if (s === 'Paid') return 'status-complete';
-  return 'status-draft';
+function showModal(html) {
+  document.getElementById('modalContent').innerHTML = html +
+    '<div class="flex-row mt-16"><button class="btn btn-outline" onclick="closeModal()">Close</button></div>';
+  document.getElementById('modalOverlay').style.display = 'flex';
 }
-
-function openModal(html) {
-  document.getElementById('modalContent').innerHTML = html;
-  document.getElementById('modalOverlay').classList.add('open');
-}
-
 function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
+  document.getElementById('modalOverlay').style.display = 'none';
 }
 
-document.getElementById('modalOverlay').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
-
 // ======================================================
-// INIT
+// SAMPLE DATA
 // ======================================================
-
-// Add hidden helpers
-document.body.insertAdjacentHTML('beforeend', `
-  <input type="hidden" id="_csLineCount" value="0">
-  <input type="hidden" id="_grnLineCount" value="0">
-`);
-
-// Show loading indicator while connecting to Supabase
-document.body.insertAdjacentHTML('afterbegin', `
-  <div id="sb-loader" style="position:fixed;inset:0;background:rgba(26,60,94,0.92);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;">
-    <div style="font-size:32px;margin-bottom:12px;">&#240;&#159;&#148;&#132;</div>
-    <div style="font-size:16px;font-weight:600;">Connecting to Supabase...</div>
-    <div style="font-size:12px;opacity:0.7;margin-top:6px;">Loading your PO data</div>
-  </div>
-`);
-
-(async () => {
-  await load();
-  document.getElementById('sb-loader')?.remove();
-  // Hide ERP until login
-  ['sidebar','topbar','main'].forEach(id=>document.getElementById(id).style.display='none');
-})();
-
 function loadSampleData() {
-  state.master = [
-    { id:'MAT-00001', project:'Block A Construction', code:'MAT-001', desc:'TMT Steel 16mm', category:'Structure', uom:'MT', qty:50, rate:62000, scope:'noncontract', remarks:'IS 1786 Grade Fe500', indented:15 },
-    { id:'MAT-00002', project:'Block A Construction', code:'MAT-002', desc:'OPC Cement 53 Grade', category:'Civil', uom:'BAG', qty:2000, rate:380, scope:'noncontract', remarks:'53 Grade PPC', indented:500 },
-    { id:'MAT-00003', project:'Block A Construction', code:'MAT-003', desc:'M-Sand', category:'Civil', uom:'CUM', qty:300, rate:1800, scope:'contractor', remarks:'Zone II sand', indented:80 },
-    { id:'MAT-00004', project:'Block B Finishing', code:'MAT-004', desc:'Ceramic Floor Tiles 600x600', category:'Finishing', uom:'SFT', qty:5000, rate:45, scope:'noncontract', remarks:'Vitrified, anti-skid', indented:0 },
-    { id:'MAT-00005', project:'Block B Finishing', code:'MAT-005', desc:'CPVC Pipes 25mm', category:'Plumbing', uom:'RFT', qty:800, rate:120, scope:'noncontract', remarks:'ISI Marked', indented:200 }
+  if (state.master.length) return;
+  const items = [
+    { id: genId('MAT'), name:'Cement OPC 53 Grade', category:'Cement', uom:'Bag', specs:'50kg bag, ISI marked', rate:420, project:'Site A - Foundation' },
+    { id: genId('MAT'), name:'TMT Steel Bars 12mm', category:'Steel', uom:'MT', specs:'Fe500D grade, BIS certified', rate:72000, project:'Site A - Foundation' },
+    { id: genId('MAT'), name:'River Sand', category:'Aggregates', uom:'CFT', specs:'M-sand, Zone II', rate:45, project:'Site B - Structure' }
   ];
+  state.master.push(...items);
   addActivity('Sample data loaded');
   save();
   populateProjectDropdowns();
   renderMaster();
   updateBadges();
-  toast('Sample data loaded &#226;&#156;&#147;', '#16a34a');
+  toast('Sample data loaded ✓', '#16a34a');
 }
+
+// ======================================================
+// STARTUP
+// ======================================================
+window.onload = async function() {
+  await load();
+  state.payments = state.payments || [];
+  renderDashboard();
+};
+
+
 </script>
 </body>
 </html>
