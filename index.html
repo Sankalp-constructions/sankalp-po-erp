@@ -2372,6 +2372,7 @@ function recordPayment() {
     recordedBy: state.userName
   };
   state.payments = state.payments || [];
+  if (!state.managedUsers || !state.managedUsers.length) { state.managedUsers = DEFAULT_USERS.slice(); save(); }
   if (!state.managedUsers || !state.managedUsers.length) { state.managedUsers = DEFAULT_USERS; save(); }
   if (!state.managedUsers || state.managedUsers.length === 0) { state.managedUsers = DEFAULT_USERS; save(); }
   state.payments.push(payment);
@@ -2609,7 +2610,7 @@ function clearUserForm() {
 // STARTUP
 // ======================================================
 window.onload = async function() {
-  load();
+  await load();
   state.payments = state.payments || [];
   renderDashboard();
 };
