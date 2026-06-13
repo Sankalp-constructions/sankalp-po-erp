@@ -319,6 +319,9 @@
     <div class="nav-item" data-page="reports" onclick="nav(this)">
       <span>📊</span> Reports
     </div>
+    <div class="nav-item" id="navTemplates" data-page="templates" onclick="nav(this)" style="display:none;">
+      ⚙️ <span>Template Settings</span>
+    </div>
     <div class="nav-step" id="navAdminSection" style="display:none;">Admin</div>
     <div class="nav-item" id="navUserMgmt" data-page="usermgmt" onclick="nav(this)" style="display:none;">
       👥 <span>User Management</span>
@@ -984,6 +987,62 @@
 
 </div>
 
+
+<!-- TEMPLATE SETTINGS PAGE -->
+<div class="page" id="page-templates">
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('templates','company')">Company Details</div>
+    <div class="tab" onclick="switchTab('templates','workflow')">Approval Workflow</div>
+    <div class="tab" onclick="switchTab('templates','prefixes')">Document Numbering</div>
+  </div>
+
+  <div class="tab-content active" id="templates-company">
+    <div class="card">
+      <div class="card-title"><span class="icon">🏢</span> Company Details</div>
+      <div class="alert alert-info">These details appear on all printed Purchase Orders and documents.</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Company Name</label><input id="tmpl_name" placeholder="Sankalp Construction"></div>
+        <div class="form-group"><label>GSTIN</label><input id="tmpl_gstin" placeholder="GST Number"></div>
+        <div class="form-group form-full"><label>Address</label><textarea id="tmpl_address" placeholder="Full company address"></textarea></div>
+        <div class="form-group"><label>Phone</label><input id="tmpl_phone" placeholder="+91 00000 00000"></div>
+        <div class="form-group"><label>Email</label><input id="tmpl_email" placeholder="info@company.com"></div>
+      </div>
+      <div class="flex-row mt-16">
+        <button class="btn btn-primary" onclick="saveCompanySettings()">Save Company Details</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="templates-workflow">
+    <div class="card">
+      <div class="card-title"><span class="icon">✅</span> Approval Workflow</div>
+      <div class="alert alert-info">Configure who approves each document type and in what order. Tick the roles and drag to reorder.</div>
+      <div id="workflowEditor"></div>
+      <div class="flex-row mt-16">
+        <button class="btn btn-primary" onclick="saveWorkflowSettings()">Save Workflow</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="templates-prefixes">
+    <div class="card">
+      <div class="card-title"><span class="icon">📋</span> Document ID Numbering</div>
+      <div class="alert alert-info">Set the prefix used when generating document IDs (e.g. IND-2026-12345).</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Indent Prefix</label><input id="pfx_indent" placeholder="IND"></div>
+        <div class="form-group"><label>Comp. Statement Prefix</label><input id="pfx_cs" placeholder="CS"></div>
+        <div class="form-group"><label>Purchase Order Prefix</label><input id="pfx_po" placeholder="PO"></div>
+        <div class="form-group"><label>GRN Prefix</label><input id="pfx_grn" placeholder="GRN"></div>
+        <div class="form-group"><label>Invoice Prefix</label><input id="pfx_invoice" placeholder="INV"></div>
+        <div class="form-group"><label>Payment Prefix</label><input id="pfx_payment" placeholder="PAY"></div>
+      </div>
+      <div class="flex-row mt-16">
+        <button class="btn btn-primary" onclick="savePrefixSettings()">Save Numbering</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- USER MANAGEMENT PAGE -->
 <div class="page" id="page-usermgmt">
   <div class="card">
@@ -1046,6 +1105,20 @@
 // To add a new user: add an entry below with name, role, and passcode.
 // Roles: site_engineer | qs_engineer | technical_director | management | purchase_manager | qs_manager
 // ======================================================
+
+const DEFAULT_SETTINGS = {
+  company: { name: 'Sankalp Construction', address: '', phone: '', email: '', gstin: '' },
+  prefixes: { indent: 'IND', cs: 'CS', po: 'PO', grn: 'GRN', invoice: 'INV', payment: 'PAY' },
+  workflow: {
+    indent: ['site_engineer','qs_engineer','technical_director','management'],
+    cs:     ['purchase_manager','qs_manager','management'],
+    po:     ['purchase_manager','management']
+  }
+};
+function getSetting(path, fallback) {
+  const s = state.settings || DEFAULT_SETTINGS;
+  return path.split('.').reduce((o,k) => (o||{})[k], s) ?? fallback;
+}
 const DEFAULT_USERS = [
   { name: 'Chairman Managing Director', role: 'management', passcode: 'CMD@2026', superAdmin: true },
   { name: 'Nikhil Jagadish',            role: 'management', passcode: 'NJ@2026',  superAdmin: true },
@@ -1097,6 +1170,7 @@ function doLogin() {
     // Show User Management nav for super admins
     const showAdmin = user.superAdmin === true;
     document.getElementById('navUserMgmt').style.display    = showAdmin ? 'flex' : 'none';
+    document.getElementById('navTemplates').style.display   = showAdmin ? 'flex' : 'none';
     document.getElementById('navAdminSection').style.display = showAdmin ? 'block' : 'none';
     document.getElementById('userNameBadge').textContent = (user.superAdmin ? '👑 ' : '') + user.name;
     err.style.display = 'none';
@@ -1114,6 +1188,7 @@ function doLogout() {
   document.getElementById('loginPasscode').value = '';
   document.getElementById('loginError').style.display = 'none';
   document.getElementById('navUserMgmt').style.display = 'none';
+  document.getElementById('navTemplates').style.display = 'none';
   document.getElementById('navAdminSection').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
 }
@@ -1126,6 +1201,7 @@ let state = {
   userName: '',
   superAdmin: false,
   managedUsers: [],
+  settings: null,
   master: [],
   indents: [],
   cs: [],
@@ -1173,6 +1249,7 @@ async function load() {
     state.payments      = loaded.payments      || [];
     state.activity      = loaded.activity      || [];
     state.managedUsers  = (loaded.managedUsers && loaded.managedUsers.length) ? loaded.managedUsers : DEFAULT_USERS.slice();
+    state.settings      = loaded.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
   }
   try {
     const { data, error } = await _sb.from('app_state').select('data').eq('id', 'main').single();
@@ -1191,7 +1268,9 @@ async function load() {
   }
 }
 
-function genId(prefix) {
+function genId(type) {
+  const prefMap = { IND:'indent', CS:'cs', PO:'po', GRN:'grn', INV:'invoice', PAY:'payment' };
+  const prefix = getSetting('prefixes.' + (prefMap[type]||type.toLowerCase()), type);
   return prefix + '-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-5);
 }
 
@@ -1221,7 +1300,7 @@ function nav(el) {
   document.getElementById('page-' + page).classList.add('active');
   const titles = {
     dashboard: 'Dashboard', master: 'Material Master', indent: 'Indent',
-    vendor: 'Vendor & Comparative Statement', po: 'Purchase Order', grn: 'Goods Receipt Note', invoice: 'Invoice', reports: 'Reports & Analytics', usermgmt: 'User Management'
+    vendor: 'Vendor & Comparative Statement', po: 'Purchase Order', grn: 'Goods Receipt Note', invoice: 'Invoice', reports: 'Reports & Analytics', usermgmt: 'User Management', templates: 'Template Settings'
   };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   if (page === 'dashboard') renderDashboard();
@@ -1233,6 +1312,7 @@ function nav(el) {
   if (page === 'invoice') { populateInvoicePODropdown(); renderInvoiceList(); renderPaymentHistory(); }
   if (page === 'reports') { renderReports(); }
   if (page === 'usermgmt') { renderUserManagement(); }
+  if (page === 'templates') { renderTemplateSettings(); }
 }
 
 function switchTab(section, tab) {
@@ -1614,17 +1694,11 @@ function renderIndentApprove() {
   `).join('');
 }
 
-function indentApprovalSteps() {
-  return ['Site Engineer', 'QS Engineer', 'Technical Director', 'Management'];
-}
+function indentApprovalSteps() { return getSetting('workflow.indent', DEFAULT_SETTINGS.workflow.indent).map(r => ROLES[r]||r); }
 
-function csApprovalSteps() {
-  return ['Purchase Department', 'QS Department', 'Management'];
-}
+function csApprovalSteps() { return getSetting('workflow.cs', DEFAULT_SETTINGS.workflow.cs).map(r => ROLES[r]||r); }
 
-function poApprovalSteps() {
-  return ['Purchase Department', 'Management'];
-}
+function poApprovalSteps() { return getSetting('workflow.po', DEFAULT_SETTINGS.workflow.po).map(r => ROLES[r]||r); }
 
 function renderApprovalFlow(approvals, steps) {
   return `<div class="approval-flow" style="margin-top:10px;">` +
@@ -2095,7 +2169,7 @@ function downloadPO(id) {
   </style></head><body>
   <div style="text-align:center;margin-bottom:20px;">
     <h1>PURCHASE ORDER</h1>
-    <h3 style="color:#64748b;margin:0;">Sankalp Construction</h3>
+    <h3 style="color:#64748b;margin:0;">' + (getSetting('company.name','Sankalp Construction')) + '</h3>
   </div>
   <div class="header">
     <div><b>PO No:</b> ${p.id}<br><b>PO Date:</b> ${p.date}<br><b>Indent Ref:</b> ${p.indentId}</div>
@@ -2537,6 +2611,124 @@ function loadSampleData() {
   renderMaster();
   updateBadges();
   toast('Sample data loaded ✓', '#16a34a');
+}
+
+
+// ======================================================
+// TEMPLATE SETTINGS
+// ======================================================
+function renderTemplateSettings() {
+  const s = state.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  // Company
+  document.getElementById('tmpl_name').value    = s.company.name    || '';
+  document.getElementById('tmpl_address').value = s.company.address || '';
+  document.getElementById('tmpl_phone').value   = s.company.phone   || '';
+  document.getElementById('tmpl_email').value   = s.company.email   || '';
+  document.getElementById('tmpl_gstin').value   = s.company.gstin   || '';
+  // Prefixes
+  document.getElementById('pfx_indent').value   = s.prefixes.indent   || 'IND';
+  document.getElementById('pfx_cs').value        = s.prefixes.cs       || 'CS';
+  document.getElementById('pfx_po').value        = s.prefixes.po       || 'PO';
+  document.getElementById('pfx_grn').value       = s.prefixes.grn      || 'GRN';
+  document.getElementById('pfx_invoice').value   = s.prefixes.invoice  || 'INV';
+  document.getElementById('pfx_payment').value   = s.prefixes.payment  || 'PAY';
+  // Workflow editor
+  renderWorkflowEditor(s);
+}
+
+function renderWorkflowEditor(s) {
+  const allRoles = Object.entries(ROLES);
+  const modules = [
+    { key: 'indent', label: 'Indent Approval' },
+    { key: 'cs',     label: 'Comparative Statement Approval' },
+    { key: 'po',     label: 'Purchase Order Approval' }
+  ];
+  const el = document.getElementById('workflowEditor');
+  el.innerHTML = modules.map(m => {
+    const current = s.workflow[m.key] || [];
+    const roleRows = allRoles.map(([rk, rl]) => {
+      const checked = current.includes(rk);
+      const order   = current.indexOf(rk);
+      return `<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:0.5px solid var(--border);">
+        <input type="checkbox" id="wf_${m.key}_${rk}" ${checked?'checked':''} style="width:auto;" onchange="updateWorkflowOrder('${m.key}')">
+        <label for="wf_${m.key}_${rk}" style="flex:1;font-size:13px;cursor:pointer;">${rl}</label>
+        ${checked ? `<div style="display:flex;gap:4px;">
+          <button class="btn btn-sm btn-outline" onclick="moveWorkflowRole('${m.key}','${rk}',-1)" title="Move up">↑</button>
+          <button class="btn btn-sm btn-outline" onclick="moveWorkflowRole('${m.key}','${rk}',1)" title="Move down">↓</button>
+          <span style="font-size:11px;color:var(--muted);min-width:30px;text-align:center;">Step ${order+1}</span>
+        </div>` : ''}
+      </div>`;
+    }).join('');
+    return `<div class="card" style="margin-bottom:12px;">
+      <div class="card-title" style="margin-bottom:8px;">${m.label}</div>
+      <div id="wf_order_${m.key}" style="margin-bottom:4px;font-size:12px;color:var(--muted);">
+        Current order: ${current.map(r=>ROLES[r]||r).join(' → ') || 'None'}
+      </div>
+      ${roleRows}
+    </div>`;
+  }).join('');
+}
+
+function updateWorkflowOrder(module) {
+  const s = state.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  const allRoles = Object.keys(ROLES);
+  const current = s.workflow[module] || [];
+  // Keep existing order for checked, add newly checked at end
+  const newOrder = [];
+  current.forEach(r => {
+    const el = document.getElementById('wf_' + module + '_' + r);
+    if (el && el.checked) newOrder.push(r);
+  });
+  allRoles.forEach(r => {
+    const el = document.getElementById('wf_' + module + '_' + r);
+    if (el && el.checked && !newOrder.includes(r)) newOrder.push(r);
+  });
+  s.workflow[module] = newOrder;
+  state.settings = s;
+  renderWorkflowEditor(s);
+}
+
+function moveWorkflowRole(module, role, dir) {
+  const s = state.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  const arr = s.workflow[module] || [];
+  const idx = arr.indexOf(role);
+  if (idx === -1) return;
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= arr.length) return;
+  [arr[idx], arr[newIdx]] = [arr[newIdx], arr[idx]];
+  s.workflow[module] = arr;
+  state.settings = s;
+  renderWorkflowEditor(s);
+}
+
+function saveCompanySettings() {
+  state.settings = state.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  state.settings.company = {
+    name:    document.getElementById('tmpl_name').value.trim()    || 'Sankalp Construction',
+    address: document.getElementById('tmpl_address').value.trim() || '',
+    phone:   document.getElementById('tmpl_phone').value.trim()   || '',
+    email:   document.getElementById('tmpl_email').value.trim()   || '',
+    gstin:   document.getElementById('tmpl_gstin').value.trim()   || ''
+  };
+  save(); toast('Company details saved ✓', '#16a34a');
+}
+
+function saveWorkflowSettings() {
+  save(); toast('Approval workflow saved ✓', '#16a34a');
+  renderTemplateSettings();
+}
+
+function savePrefixSettings() {
+  state.settings = state.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  state.settings.prefixes = {
+    indent:  document.getElementById('pfx_indent').value.trim()  || 'IND',
+    cs:      document.getElementById('pfx_cs').value.trim()      || 'CS',
+    po:      document.getElementById('pfx_po').value.trim()      || 'PO',
+    grn:     document.getElementById('pfx_grn').value.trim()     || 'GRN',
+    invoice: document.getElementById('pfx_invoice').value.trim() || 'INV',
+    payment: document.getElementById('pfx_payment').value.trim() || 'PAY'
+  };
+  save(); toast('Document numbering saved ✓', '#16a34a');
 }
 
 // ======================================================
