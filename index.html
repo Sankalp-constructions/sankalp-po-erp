@@ -317,6 +317,10 @@
     <div class="nav-item" data-page="reports" onclick="nav(this)">
       <span>📊</span> Reports
     </div>
+    <div class="nav-step" id="navAdminSection" style="display:none;">Admin</div>
+    <div class="nav-item" id="navUserMgmt" data-page="usermgmt" onclick="nav(this)" style="display:none;">
+      👥 <span>User Management</span>
+    </div>
   </nav>
   <div style="padding:12px 16px;border-top:1px solid rgba(255,255,255,0.1);">
     <button onclick="doLogout()" style="width:100%;padding:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:6px;font-size:12px;cursor:pointer;">⬅ Sign Out</button>
@@ -978,6 +982,54 @@
 
 </div>
 
+<!-- USER MANAGEMENT PAGE -->
+<div class="page" id="page-usermgmt">
+  <div class="card">
+    <div class="card-title"><span class="icon">👥</span> Add New User</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Full Name</label><input id="um_name" placeholder="e.g. Rahul Sharma"></div>
+      <div class="form-group"><label>Role</label>
+        <select id="um_role">
+          <option value="">-- Select Role --</option>
+          <option value="site_engineer">Site Engineer</option>
+          <option value="qs_engineer">QS Engineer</option>
+          <option value="technical_director">Technical Director</option>
+          <option value="management">Management</option>
+          <option value="purchase_manager">Purchase Manager</option>
+          <option value="qs_manager">QS Manager</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Passcode</label><input id="um_passcode" placeholder="e.g. RS@2026"></div>
+      <div class="form-group" style="display:flex;align-items:flex-end;">
+        <label><input type="checkbox" id="um_superadmin" style="width:auto;margin-right:6px;"> Super Admin (Management only)</label>
+      </div>
+    </div>
+    <div class="flex-row mt-16">
+      <button class="btn btn-primary" onclick="addUser()">Add User</button>
+      <button class="btn btn-outline" onclick="clearUserForm()">Clear</button>
+    </div>
+    <div id="um_error" style="color:#dc2626;font-size:13px;margin-top:8px;display:none;"></div>
+  </div>
+  <div class="card">
+    <div class="section-header">
+      <h3>All Users</h3>
+      <select id="um_filter" onchange="renderUserManagement()" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;">
+        <option value="">All Roles</option>
+        <option value="management">Management</option>
+        <option value="site_engineer">Site Engineer</option>
+        <option value="qs_engineer">QS Engineer</option>
+        <option value="technical_director">Technical Director</option>
+        <option value="purchase_manager">Purchase Manager</option>
+        <option value="qs_manager">QS Manager</option>
+      </select>
+    </div>
+    <div class="tbl-wrap">
+      <table><thead><tr><th>#</th><th>Name</th><th>Role</th><th>Passcode</th><th>Access</th><th>Actions</th></tr></thead>
+      <tbody id="userListBody"></tbody></table>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal" id="modalContent"></div>
@@ -992,11 +1044,11 @@
 // To add a new user: add an entry below with name, role, and passcode.
 // Roles: site_engineer | qs_engineer | technical_director | management | purchase_manager | qs_manager
 // ======================================================
-const USERS = [
+const DEFAULT_USERS = [
   { name: 'Chairman Managing Director', role: 'management', passcode: 'CMD@2026', superAdmin: true },
   { name: 'Nikhil Jagadish',            role: 'management', passcode: 'NJ@2026',  superAdmin: true },
   { name: 'Vishnu Jagadish',            role: 'management', passcode: 'VJ@2026',  superAdmin: true },
-  { name: 'Govardhan Reddy',                  role: 'management', passcode: 'GOV@2026', superAdmin: true },
+  { name: 'Govardhan Reddy',            role: 'management', passcode: 'GOV@2026', superAdmin: true },
   { name: 'Site Engineer 1',            role: 'site_engineer',      passcode: 'SE2026'   },
   { name: 'QS Engineer 1',              role: 'qs_engineer',        passcode: 'QSE2026'  },
   { name: 'Tech Director',              role: 'technical_director', passcode: 'TD2026'   },
@@ -1012,7 +1064,7 @@ function populateNames() {
     sel.innerHTML = '<option value="">-- Select your role first --</option>';
     return;
   }
-  const names = USERS.filter(u => u.role === role);
+  const names = state.managedUsers.filter(u => u.role === role);
   if (names.length === 0) {
     sel.innerHTML = '<option value="">No users for this role</option>';
     return;
@@ -1026,7 +1078,7 @@ function doLogin() {
   const role = document.getElementById('loginRole').value;
   const code = document.getElementById('loginPasscode').value.trim();
   const err  = document.getElementById('loginError');
-  const user = USERS.find(u =>
+  const user = state.managedUsers.find(u =>
     u.name.toLowerCase() === name.toLowerCase() &&
     u.role === role &&
     u.passcode === code
@@ -1038,6 +1090,10 @@ function doLogin() {
     state.userName = user.name;
     // role fixed at login
     document.getElementById('roleBadge').textContent = ROLES[role];
+    // Show User Management nav for super admins
+    const showAdmin = user.superAdmin === true;
+    document.getElementById('navUserMgmt').style.display    = showAdmin ? 'flex' : 'none';
+    document.getElementById('navAdminSection').style.display = showAdmin ? 'block' : 'none';
     document.getElementById('userNameBadge').textContent = (user.superAdmin ? '👑 ' : '') + user.name;
     err.style.display = 'none';
     updateBadges();
@@ -1053,6 +1109,8 @@ function doLogout() {
   document.getElementById('loginName').innerHTML = '<option value="">-- Select your role first --</option>';
   document.getElementById('loginPasscode').value = '';
   document.getElementById('loginError').style.display = 'none';
+  document.getElementById('navUserMgmt').style.display = 'none';
+  document.getElementById('navAdminSection').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
 }
 
@@ -1063,6 +1121,7 @@ let state = {
   role: 'site_engineer',
   userName: '',
   superAdmin: false,
+  managedUsers: [],
   master: [],
   indents: [],
   cs: [],
@@ -1146,7 +1205,7 @@ function nav(el) {
   document.getElementById('page-' + page).classList.add('active');
   const titles = {
     dashboard: 'Dashboard', master: 'Material Master', indent: 'Indent',
-    vendor: 'Vendor & Comparative Statement', po: 'Purchase Order', grn: 'Goods Receipt Note', invoice: 'Invoice', reports: 'Reports & Analytics'
+    vendor: 'Vendor & Comparative Statement', po: 'Purchase Order', grn: 'Goods Receipt Note', invoice: 'Invoice', reports: 'Reports & Analytics', usermgmt: 'User Management'
   };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   if (page === 'dashboard') renderDashboard();
@@ -1157,6 +1216,7 @@ function nav(el) {
   if (page === 'grn') { populateGRNPODropdown(); renderGRNList(); }
   if (page === 'invoice') { populateInvoicePODropdown(); renderInvoiceList(); renderPaymentHistory(); }
   if (page === 'reports') { renderReports(); }
+  if (page === 'usermgmt') { renderUserManagement(); }
 }
 
 function switchTab(section, tab) {
@@ -2308,6 +2368,7 @@ function recordPayment() {
     recordedBy: state.userName
   };
   state.payments = state.payments || [];
+  if (!state.managedUsers || state.managedUsers.length === 0) { state.managedUsers = DEFAULT_USERS; await save(); }
   state.payments.push(payment);
   inv.paidAmount = (inv.paidAmount||0) + amount;
   inv.status = inv.paidAmount >= inv.total ? 'Paid' : 'Partial';
@@ -2458,6 +2519,85 @@ function loadSampleData() {
   renderMaster();
   updateBadges();
   toast('Sample data loaded ✓', '#16a34a');
+}
+
+// ======================================================
+// USER MANAGEMENT
+// ======================================================
+const ROLE_LABELS = { site_engineer:'Site Engineer', qs_engineer:'QS Engineer', technical_director:'Technical Director', management:'Management', purchase_manager:'Purchase Manager', qs_manager:'QS Manager' };
+
+function renderUserManagement() {
+  const filter = document.getElementById('um_filter')?.value||'';
+  const tbody = document.getElementById('userListBody');
+  if(!tbody) return;
+  let users = state.managedUsers;
+  if(filter) users = users.filter(u=>u.role===filter);
+  tbody.innerHTML = users.map((u,i)=>{
+    const idx = state.managedUsers.indexOf(u);
+    return `<tr><td>${i+1}</td><td><b>${u.name}</b></td><td>${ROLE_LABELS[u.role]||u.role}</td>
+      <td><span style="font-family:monospace;background:#f1f5f9;padding:2px 8px;border-radius:4px;">${u.passcode}</span></td>
+      <td>${u.superAdmin?'<span class="status status-approved">Crown Super Admin</span>':'<span class="status status-draft">Standard</span>'}</td>
+      <td><button class="btn btn-sm btn-outline" onclick="editUserPrompt(${idx})">Edit</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteUser(${idx})" style="margin-left:4px;">Delete</button></td></tr>`;
+  }).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px;">No users found</td></tr>';
+}
+
+function addUser() {
+  const name=document.getElementById('um_name').value.trim();
+  const role=document.getElementById('um_role').value;
+  const passcode=document.getElementById('um_passcode').value.trim();
+  const superAdmin=document.getElementById('um_superadmin').checked;
+  const errEl=document.getElementById('um_error');
+  if(!name||!role||!passcode){errEl.textContent='Name, role and passcode are required.';errEl.style.display='block';return;}
+  if(state.managedUsers.find(u=>u.name.toLowerCase()===name.toLowerCase()&&u.role===role)){errEl.textContent='User with this name and role already exists.';errEl.style.display='block';return;}
+  errEl.style.display='none';
+  state.managedUsers.push({name,role,passcode,superAdmin:superAdmin&&role==='management'});
+  save(); clearUserForm(); renderUserManagement();
+  toast('User "'+name+'" added successfully', '#16a34a');
+}
+
+function deleteUser(idx) {
+  const u=state.managedUsers[idx]; if(!u) return;
+  if(!confirm('Delete user "'+u.name+'"? They will lose access immediately.')) return;
+  state.managedUsers.splice(idx,1); save(); renderUserManagement();
+  toast('User "'+u.name+'" deleted','#dc2626');
+}
+
+function editUserPrompt(idx) {
+  const u=state.managedUsers[idx]; if(!u) return;
+  showModal(`<h3 style="margin:0 0 16px;color:var(--primary);">Edit User: ${u.name}</h3>
+    <div class="form-grid">
+      <div class="form-group"><label>Full Name</label><input id="edit_name" value="${u.name}" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;"></div>
+      <div class="form-group"><label>Role</label><select id="edit_role" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;">
+        ${Object.entries(ROLE_LABELS).map(([v,l])=>'<option value="'+v+'"'+(u.role===v?' selected':'')+'>'+l+'</option>').join('')}
+      </select></div>
+      <div class="form-group"><label>Passcode</label><input id="edit_passcode" value="${u.passcode}" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;"></div>
+      <div class="form-group" style="display:flex;align-items:center;gap:8px;padding-top:20px;">
+        <input type="checkbox" id="edit_superadmin" ${u.superAdmin?'checked':''} style="width:auto;">
+        <label style="font-size:13px;text-transform:none;letter-spacing:0;">Super Admin</label>
+      </div>
+    </div>
+    <div class="flex-row mt-16">
+      <button class="btn btn-primary" onclick="saveUserEdit(${idx})">Save Changes</button>
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+    </div>`);
+}
+
+function saveUserEdit(idx) {
+  const name=document.getElementById('edit_name').value.trim();
+  const role=document.getElementById('edit_role').value;
+  const passcode=document.getElementById('edit_passcode').value.trim();
+  const superAdmin=document.getElementById('edit_superadmin').checked;
+  if(!name||!passcode){toast('Name and passcode required','#dc2626');return;}
+  state.managedUsers[idx]={name,role,passcode,superAdmin:superAdmin&&role==='management'};
+  save(); closeModal(); renderUserManagement();
+  toast('User "'+name+'" updated','#16a34a');
+}
+
+function clearUserForm() {
+  ['um_name','um_role','um_passcode'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('um_superadmin').checked=false;
+  document.getElementById('um_error').style.display='none';
 }
 
 // ======================================================
