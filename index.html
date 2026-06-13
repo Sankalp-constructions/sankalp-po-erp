@@ -1064,7 +1064,8 @@ function populateNames() {
     sel.innerHTML = '<option value="">-- Select your role first --</option>';
     return;
   }
-  const names = state.managedUsers.filter(u => u.role === role);
+  const userList = (state.managedUsers && state.managedUsers.length > 0) ? state.managedUsers : DEFAULT_USERS;
+  const names = userList.filter(u => u.role === role);
   if (names.length === 0) {
     sel.innerHTML = '<option value="">No users for this role</option>';
     return;
@@ -1078,7 +1079,8 @@ function doLogin() {
   const role = document.getElementById('loginRole').value;
   const code = document.getElementById('loginPasscode').value.trim();
   const err  = document.getElementById('loginError');
-  const user = state.managedUsers.find(u =>
+  const activeUsers = (state.managedUsers && state.managedUsers.length > 0) ? state.managedUsers : DEFAULT_USERS;
+  const user = activeUsers.find(u =>
     u.name.toLowerCase() === name.toLowerCase() &&
     u.role === role &&
     u.passcode === code
