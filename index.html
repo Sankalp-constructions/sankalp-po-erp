@@ -993,12 +993,15 @@
 // Roles: site_engineer | qs_engineer | technical_director | management | purchase_manager | qs_manager
 // ======================================================
 const USERS = [
-  { name: 'Govardhan',       role: 'management',         passcode: 'MGT2025'  },
-  { name: 'Site Engineer 1', role: 'site_engineer',      passcode: 'SE2025'   },
-  { name: 'QS Engineer 1',   role: 'qs_engineer',        passcode: 'QSE2025'  },
-  { name: 'Tech Director',   role: 'technical_director', passcode: 'TD2025'   },
-  { name: 'Purchase Mgr',    role: 'purchase_manager',   passcode: 'PM2025'   },
-  { name: 'QS Manager',      role: 'qs_manager',         passcode: 'QSM2025'  }
+  { name: 'Chairman Managing Director', role: 'management', passcode: 'CMD@2025', superAdmin: true },
+  { name: 'Nikhil Jagadish',            role: 'management', passcode: 'NJ@2025',  superAdmin: true },
+  { name: 'Vishnu Jagadish',            role: 'management', passcode: 'VJ@2025',  superAdmin: true },
+  { name: 'Govardhan',                  role: 'management', passcode: 'GOV@2025', superAdmin: true },
+  { name: 'Site Engineer 1',            role: 'site_engineer',      passcode: 'SE2025'   },
+  { name: 'QS Engineer 1',              role: 'qs_engineer',        passcode: 'QSE2025'  },
+  { name: 'Tech Director',              role: 'technical_director', passcode: 'TD2025'   },
+  { name: 'Purchase Mgr',               role: 'purchase_manager',   passcode: 'PM2025'   },
+  { name: 'QS Manager',                 role: 'qs_manager',         passcode: 'QSM2025'  }
 ];
 
 function populateNames() {
@@ -1030,11 +1033,12 @@ function doLogin() {
   );
   if (user) {
     document.getElementById('loginScreen').style.display = 'none';
-    state.role     = role;
+    state.role = role;
+    state.superAdmin = user.superAdmin || false;
     state.userName = user.name;
     // role fixed at login
     document.getElementById('roleBadge').textContent = ROLES[role];
-    document.getElementById('userNameBadge').textContent = '(' + user.name + ')';
+    document.getElementById('userNameBadge').textContent = (user.superAdmin ? '👑 ' : '') + user.name;
     err.style.display = 'none';
     updateBadges();
     renderDashboard();
@@ -1058,6 +1062,7 @@ function doLogout() {
 let state = {
   role: 'site_engineer',
   userName: '',
+  superAdmin: false,
   master: [],
   indents: [],
   cs: [],
