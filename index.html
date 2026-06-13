@@ -2557,6 +2557,7 @@ function addUser() {
   if(!name||!role||!passcode){errEl.textContent='Name, role and passcode are required.';errEl.style.display='block';return;}
   if(state.managedUsers.find(u=>u.name.toLowerCase()===name.toLowerCase()&&u.role===role)){errEl.textContent='User with this name and role already exists.';errEl.style.display='block';return;}
   errEl.style.display='none';
+  state.managedUsers = state.managedUsers || [];
   state.managedUsers.push({name,role,passcode,superAdmin:superAdmin&&role==='management'});
   save(); clearUserForm(); renderUserManagement();
   toast('User "'+name+'" added successfully', '#16a34a');
@@ -2610,7 +2611,7 @@ function clearUserForm() {
 // STARTUP
 // ======================================================
 window.onload = async function() {
-  await load();
+  await await load();
   state.payments = state.payments || [];
   renderDashboard();
 };
