@@ -328,15 +328,8 @@
   <h2 id="pageTitle">Dashboard</h2>
   <div class="role-wrap">
     <label>Logged in as:</label>
-    <select id="roleSelect" onchange="changeRole()">
-      <option value="site_engineer">Site Engineer</option>
-      <option value="qs_engineer">QS Engineer</option>
-      <option value="technical_director">Technical Director</option>
-      <option value="management">Management</option>
-      <option value="purchase_manager">Purchase Manager</option>
-      <option value="qs_manager">QS Manager</option>
-    </select>
     <span class="role-badge" id="roleBadge">Site Engineer</span>
+    <span id="userNameBadge" style="font-size:12px;color:var(--muted);margin-left:4px;"></span>
   </div>
 </div>
 
@@ -1039,8 +1032,9 @@ function doLogin() {
     document.getElementById('loginScreen').style.display = 'none';
     state.role     = role;
     state.userName = user.name;
-    document.getElementById('roleSelect').value = role;
+    // role fixed at login
     document.getElementById('roleBadge').textContent = ROLES[role];
+    document.getElementById('userNameBadge').textContent = '(' + user.name + ')';
     err.style.display = 'none';
     updateBadges();
     renderDashboard();
@@ -1186,11 +1180,7 @@ function switchTab(section, tab) {
   }
 }
 
-function changeRole() {
-  state.role = document.getElementById('roleSelect').value;
-  document.getElementById('roleBadge').textContent = ROLES[state.role];
-  updateBadges();
-}
+
 
 // ======================================================
 // BADGES
