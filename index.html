@@ -1172,7 +1172,7 @@ function doLogin() {
     document.getElementById('navUserMgmt').style.display    = showAdmin ? 'flex' : 'none';
     document.getElementById('navTemplates').style.display   = showAdmin ? 'flex' : 'none';
     document.getElementById('navAdminSection').style.display = showAdmin ? 'block' : 'none';
-    document.getElementById('userNameBadge').textContent = (user.superAdmin ? '👑 ' : '') + user.name;
+    document.getElementById('userNameBadge').textContent = user.name;
     err.style.display = 'none';
     updateBadges();
     renderDashboard();
@@ -2746,7 +2746,7 @@ function renderUserManagement() {
     const idx = state.managedUsers.indexOf(u);
     return `<tr><td>${i+1}</td><td><b>${u.name}</b></td><td>${ROLE_LABELS[u.role]||u.role}</td>
       <td><span style="font-family:monospace;background:#f1f5f9;padding:2px 8px;border-radius:4px;">${u.passcode}</span></td>
-      <td>${u.superAdmin?'<span class="status status-approved">Crown Super Admin</span>':'<span class="status status-draft">Standard</span>'}</td>
+      <td>${u.superAdmin?'<span class="status status-approved">Super Admin</span>':'<span class="status status-draft">Standard</span>'}</td>
       <td><button class="btn btn-sm btn-outline" onclick="editUserPrompt(${idx})">Edit</button>
           <button class="btn btn-sm btn-danger" onclick="deleteUser(${idx})" style="margin-left:4px;">Delete</button></td></tr>`;
   }).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px;">No users found</td></tr>';
