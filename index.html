@@ -454,26 +454,42 @@
       <button class="btn btn-primary btn-sm" onclick="openAddVendorForm()">+ Add Vendor</button>
     </div>
     <div class="card" id="vendorFormCard" style="display:none;margin-bottom:18px;">
-      <h4 id="vendorFormTitle" style="margin:0 0 14px;font-size:14px;">New Vendor</h4>
+      <h4 id="vendorFormTitle" style="margin:0 0 18px;font-size:15px;font-weight:600;">New Vendor</h4>
       <input type="hidden" id="vm_edit_idx" value="-1">
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;">
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Basic Information</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;">
         <div><label>Vendor Code *</label><input type="text" id="vm_code" placeholder="Auto-generated" readonly style="background:var(--bg);"></div>
         <div><label>Vendor Name *</label><input type="text" id="vm_name" placeholder="Company / Firm name"></div>
         <div><label>Contact Person *</label><input type="text" id="vm_contact" placeholder="Name"></div>
         <div><label>Phone</label><input type="text" id="vm_phone" placeholder="+91 XXXXX XXXXX"></div>
         <div><label>Email</label><input type="email" id="vm_email" placeholder="vendor@example.com"></div>
-        <div style="grid-column:span 2;"><label>Address</label><textarea id="vm_address" rows="2" placeholder="Full address with city and PIN"></textarea></div>
+        <div><label>Address</label><textarea id="vm_address" rows="2" placeholder="Full address with city and PIN" style="resize:vertical;"></textarea></div>
+      </div>
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Legal &amp; Tax</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;">
+        <div><label>GST Number</label><input type="text" id="vm_gst" placeholder="22AAAAA0000A1Z5" oninput="this.value=this.value.toUpperCase()"></div>
+        <div><label>PAN Number</label><input type="text" id="vm_pan" placeholder="AAAAA9999A" oninput="this.value=this.value.toUpperCase()" maxlength="10"></div>
+        <div><label>MSME / Registration No.</label><input type="text" id="vm_msme" placeholder="MSME or trade licence no."></div>
+      </div>
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Bank Details</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;">
         <div><label>Bank Name</label><input type="text" id="vm_bank_name" placeholder="Bank name"></div>
         <div><label>Account Number</label><input type="text" id="vm_acc_no" placeholder="Account number"></div>
-        <div><label>IFSC Code</label><input type="text" id="vm_ifsc" placeholder="IFSCXXXXXX"></div>
+        <div><label>IFSC Code</label><input type="text" id="vm_ifsc" placeholder="IFSCXXXXXX" oninput="this.value=this.value.toUpperCase()"></div>
         <div><label>Branch</label><input type="text" id="vm_branch" placeholder="Branch name"></div>
-        <div style="grid-column:1/-1;"><label>Supply Categories</label>
-          <div id="vm_categories" style="display:flex;flex-wrap:wrap;gap:4px;padding:8px;border:1px solid var(--border);border-radius:6px;min-height:38px;"></div>
-        </div>
       </div>
-      <div class="flex-row" style="margin-top:14px;gap:8px;">
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Supply Categories</p>
+      <div id="vm_categories" style="display:flex;flex-wrap:wrap;gap:6px;padding:10px;border:1px solid var(--border);border-radius:6px;min-height:42px;margin-bottom:20px;"></div>
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Documents</p>
+      <div style="border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:20px;background:var(--bg);">
+        <input type="file" id="vm_doc_upload" multiple accept=".pdf,.jpg,.jpeg,.png,.xlsx,.xls,.doc,.docx" style="display:none;" onchange="addVendorDocs(this)">
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('vm_doc_upload').click()" type="button">+ Upload Documents</button>
+        <span style="font-size:11px;color:var(--muted);margin-left:10px;">PDF, Images, Word, Excel (max 5MB each)</span>
+        <div id="vm_doc_list" style="margin-top:10px;"></div>
+      </div>
+      <div class="flex-row" style="gap:8px;">
         <button class="btn btn-primary" onclick="saveVendor()">Save Vendor</button>
-        <button class="btn btn-outline" onclick="document.getElementById('vendorFormCard').style.display='none';clearVendorForm();">Cancel</button>
+        <button class="btn btn-outline" onclick="document.getElementById('vendorFormCard').style.display='none';clearVendorForm();" type="button">Cancel</button>
       </div>
     </div>
     <div class="card">
@@ -482,7 +498,7 @@
       </div>
       <div style="overflow-x:auto;">
         <table>
-          <thead><tr><th>Code</th><th>Vendor Name</th><th>Contact</th><th>Phone</th><th>Email</th><th>Categories</th><th>Bank</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Code</th><th>Vendor Name</th><th>Contact</th><th>Phone</th><th>GST / PAN</th><th>Categories</th><th>Bank</th><th>Docs</th><th>Actions</th></tr></thead>
           <tbody id="vendorMasterBody"></tbody>
         </table>
         <div id="vmEmpty" class="empty-state" style="display:none;">No vendors found. Click "+ Add Vendor" to onboard one.</div>
@@ -1596,55 +1612,92 @@ function getMaterialCategories() {
   return cats.length ? cats : ['Civil','Electrical','Plumbing','Steel','Tiles','Hardware','Paints','Labour'];
 }
 function clearVendorForm() {
-  ['vm_code','vm_name','vm_contact','vm_phone','vm_email','vm_address','vm_bank_name','vm_acc_no','vm_ifsc','vm_branch'].forEach(function(id){
+  ['vm_code','vm_name','vm_contact','vm_phone','vm_email','vm_address','vm_gst','vm_pan','vm_msme','vm_bank_name','vm_acc_no','vm_ifsc','vm_branch'].forEach(function(id){
     var el = document.getElementById(id); if (el) el.value = '';
   });
   document.getElementById('vm_edit_idx').value = '-1';
   document.getElementById('vendorFormTitle').textContent = 'New Vendor';
+  _vmPendingDocs = []; renderVmDocList();
 }
+var _vmPendingDocs = [];
+function addVendorDocs(input) {
+  Array.from(input.files).forEach(function(f) {
+    if (f.size > 5*1024*1024) { toast('File ' + f.name + ' exceeds 5MB'); return; }
+    var r = new FileReader();
+    r.onload = function(e) { _vmPendingDocs.push({name:f.name,type:f.type,size:f.size,data:e.target.result,added:new Date().toISOString().split('T')[0]}); renderVmDocList(); };
+    r.readAsDataURL(f);
+  }); input.value = '';
+}
+function renderVmDocList() {
+  var el = document.getElementById('vm_doc_list'); if (!el) return;
+  if (!_vmPendingDocs.length) { el.innerHTML = ''; return; }
+  el.innerHTML = _vmPendingDocs.map(function(d,i){
+    var kb = Math.round(d.size/1024);
+    return '<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:4px;">'+
+      '<span style="flex:1;font-size:13px;">&#128196; '+d.name+'</span>'+
+      '<span style="font-size:11px;color:var(--muted);">'+kb+' KB</span>'+
+      '<a href="'+d.data+'" download="'+d.name+'" style="font-size:11px;color:var(--primary);">Download</a>'+
+      '<button class="btn btn-sm" onclick="removeVmDoc('+i+')" style="padding:2px 8px;font-size:11px;background:transparent;color:var(--danger);border:1px solid var(--danger);">Remove</button>'+
+      '</div>';
+  }).join('');
+}
+function removeVmDoc(i) { _vmPendingDocs.splice(i,1); renderVmDocList(); }
 function saveVendor() {
   var name = document.getElementById('vm_name').value.trim();
   var contact = document.getElementById('vm_contact').value.trim();
   if (!name) { toast('Vendor Name is required'); return; }
   if (!contact) { toast('Contact Person is required'); return; }
-  var cats = [...document.querySelectorAll('#vm_categories input:checked')].map(function(x){ return x.value; });
+  var cats = [...document.querySelectorAll('#vm_categories input:checked')].map(function(x){return x.value;});
+  var idx = parseInt(document.getElementById('vm_edit_idx').value);
+  var existingDocs = (idx>=0 && state.vendors[idx] && state.vendors[idx].documents) ? state.vendors[idx].documents : [];
   var record = {
     code: document.getElementById('vm_code').value.trim(), name: name, contact: contact,
     phone: document.getElementById('vm_phone').value.trim(), email: document.getElementById('vm_email').value.trim(),
-    address: document.getElementById('vm_address').value.trim(), bank_name: document.getElementById('vm_bank_name').value.trim(),
+    address: document.getElementById('vm_address').value.trim(),
+    gst: document.getElementById('vm_gst').value.trim(), pan: document.getElementById('vm_pan').value.trim(),
+    msme: document.getElementById('vm_msme').value.trim(),
+    bank_name: document.getElementById('vm_bank_name').value.trim(),
     acc_no: document.getElementById('vm_acc_no').value.trim(), ifsc: document.getElementById('vm_ifsc').value.trim(),
     branch: document.getElementById('vm_branch').value.trim(), categories: cats,
-    created: new Date().toISOString().split('T')[0]
+    documents: existingDocs.concat(_vmPendingDocs),
+    created: (idx>=0 && state.vendors[idx] && state.vendors[idx].created) ? state.vendors[idx].created : new Date().toISOString().split('T')[0]
   };
-  var idx = parseInt(document.getElementById('vm_edit_idx').value);
   if (!state.vendors) state.vendors = [];
   if (idx >= 0) { record.code = state.vendors[idx].code; state.vendors[idx] = record; toast('Vendor updated'); }
   else { state.vendors.push(record); toast('Vendor added'); }
-  save();
-  document.getElementById('vendorFormCard').style.display = 'none';
-  clearVendorForm(); renderVendorMaster();
+  save(); document.getElementById('vendorFormCard').style.display = 'none'; clearVendorForm(); renderVendorMaster();
 }
 function openAddVendorForm() {
   clearVendorForm();
   document.getElementById('vm_code').value = autoVendorCode();
   var cats = getMaterialCategories();
-  document.getElementById('vm_categories').innerHTML = cats.map(function(c){
-    return '<label style="display:inline-block;margin:3px 8px 3px 0;font-weight:400"><input type="checkbox" value="' + c + '" style="width:auto;margin-right:4px;">' + c + '</label>';
+  document.getElementById('vm_categories').innerHTML = cats.map(function(x){
+    return '<label style="display:inline-flex;align-items:center;gap:5px;margin:3px 10px 3px 0;font-weight:400;cursor:pointer;"><input type="checkbox" value="'+x+'" style="width:auto;">'+x+'</label>';
   }).join('');
   document.getElementById('vendorFormCard').style.display = 'block';
+  document.getElementById('vendorFormCard').scrollIntoView({behavior:'smooth'});
 }
 function editVendor(idx) {
-  var v = state.vendors[idx];
+  var v = state.vendors[idx]; _vmPendingDocs = [];
   document.getElementById('vm_edit_idx').value = idx;
-  document.getElementById('vendorFormTitle').textContent = 'Edit Vendor';
-  ['vm_code','vm_name','vm_contact','vm_phone','vm_email','vm_address','vm_bank_name','vm_acc_no','vm_ifsc','vm_branch'].forEach(function(f){
-    var key = f.replace('vm_',''); document.getElementById(f).value = v[key] || '';
-  });
-  document.getElementById('vm_code').value = v.code || '';
+  document.getElementById('vendorFormTitle').textContent = 'Edit Vendor - ' + (v.name||'');
+  var flds = ['vm_code','vm_name','vm_contact','vm_phone','vm_email','vm_address','vm_gst','vm_pan','vm_msme','vm_bank_name','vm_acc_no','vm_ifsc','vm_branch'];
+  var keys = ['code','name','contact','phone','email','address','gst','pan','msme','bank_name','acc_no','ifsc','branch'];
+  flds.forEach(function(f,i){ document.getElementById(f).value = v[keys[i]]||''; });
   var allCats = getMaterialCategories();
-  document.getElementById('vm_categories').innerHTML = allCats.map(function(c){
-    return '<label style="display:inline-block;margin:3px 8px 3px 0;font-weight:400"><input type="checkbox" value="' + c + '" style="width:auto;margin-right:4px;" ' + ((v.categories||[]).includes(c)?'checked':'') + '>' + c + '</label>';
+  document.getElementById('vm_categories').innerHTML = allCats.map(function(x){
+    return '<label style="display:inline-flex;align-items:center;gap:5px;margin:3px 10px 3px 0;font-weight:400;cursor:pointer;"><input type="checkbox" value="'+x+'" style="width:auto;" '+((v.categories||[]).includes(x)?'checked':'')+'>'+x+'</label>';
   }).join('');
+  var docEl = document.getElementById('vm_doc_list');
+  if (docEl && v.documents && v.documents.length) {
+    docEl.innerHTML = '<p style="font-size:12px;color:var(--muted);margin:0 0 6px;">Saved (' + v.documents.length + '):</p>' +
+      v.documents.map(function(d){ var kb=Math.round((d.size||0)/1024);
+        return '<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:4px;">'+
+          '<span style="flex:1;font-size:13px;">&#128196; '+d.name+'</span>'+
+          '<span style="font-size:11px;color:var(--muted);">'+kb+' KB</span>'+
+          (d.data?'<a href="'+d.data+'" download="'+d.name+'" style="font-size:11px;color:var(--primary);">Download</a>':'')+'</div>';
+      }).join('');
+  }
   document.getElementById('vendorFormCard').style.display = 'block';
   document.getElementById('vendorFormCard').scrollIntoView({behavior:'smooth'});
 }
@@ -1665,9 +1718,16 @@ function renderVendorMaster() {
   if (empty) empty.style.display = 'none';
   tbody.innerHTML = filtered.map(function(v){
     var ri = state.vendors.indexOf(v);
-    var cats = (v.categories||[]).map(function(x){ return '<span class="tag" style="font-size:10px;">'+x+'</span>'; }).join(' ') || '-';
-    var bank = v.bank_name ? (v.bank_name+'<br><span style="opacity:0.6">'+(v.acc_no||'')+' | '+(v.ifsc||'')+'</span>') : '-';
-    return '<tr><td><span class="tag">'+(v.code||'')+'</span></td><td><strong>'+(v.name||'')+'</strong></td><td>'+(v.contact||'')+'</td><td>'+(v.phone||'-')+'</td><td>'+(v.email||'-')+'</td><td style="max-width:160px;">'+cats+'</td><td style="font-size:12px;">'+bank+'</td><td><button class="btn btn-sm btn-outline" onclick="editVendor('+ri+')">Edit</button> <button class="btn btn-sm btn-danger" onclick="deleteVendor('+ri+')" style="margin-left:4px;">Delete</button></td></tr>';
+    var cats = (v.categories||[]).map(function(x){return '<span class="tag" style="font-size:10px;">'+x+'</span>';}).join(' ')||'-';
+    var bank = v.bank_name ? (v.bank_name+'<br><span style="font-size:11px;opacity:0.6">'+(v.acc_no||'')+'</span>') : '-';
+    var gstpan = (v.gst?'<span style="font-size:11px;display:block;">GST: '+v.gst+'</span>':'')+(v.pan?'<span style="font-size:11px;display:block;">PAN: '+v.pan+'</span>':'') || '-';
+    var dc = (v.documents||[]).length;
+    return '<tr><td><span class="tag">'+(v.code||'')+'</span></td>'+
+      '<td><strong>'+(v.name||'')+'</strong><br><span style="font-size:11px;color:var(--muted);">'+(v.email||'')+'</span></td>'+
+      '<td>'+(v.contact||'-')+'</td><td>'+(v.phone||'-')+'</td><td>'+gstpan+'</td>'+
+      '<td style="max-width:140px;">'+cats+'</td><td style="font-size:12px;">'+bank+'</td>'+
+      '<td style="text-align:center;">'+(dc?'<span class="tag" style="font-size:11px;">'+dc+' file'+(dc>1?'s':'')+'</span>':'-')+'</td>'+
+      '<td style="white-space:nowrap;"><button class="btn btn-sm btn-outline" onclick="editVendor('+ri+')">Edit</button> <button class="btn btn-sm btn-danger" onclick="deleteVendor('+ri+')" style="margin-left:4px;">Delete</button></td></tr>';
   }).join('');
 }
 
