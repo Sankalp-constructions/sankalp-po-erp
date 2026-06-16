@@ -567,6 +567,13 @@
             <tbody id="indentLines"></tbody>
           </table>
         </div>
+        <div style="border:1px solid var(--border);border-radius:6px;padding:12px;margin-top:16px;background:var(--bg);">
+          <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Attach Documents</p>
+          <input type="file" id="docs_indent" multiple accept=".pdf,.jpg,.jpeg,.png,.xlsx,.xls,.doc,.docx" style="display:none;" onchange="addStageDocs('indent',this)">
+          <button class="btn btn-outline btn-sm" onclick="document.getElementById('docs_indent').click()" type="button">+ Attach Documents</button>
+          <span style="font-size:11px;color:var(--muted);margin-left:10px;">PDF, Images, Word, Excel (max 5MB each)</span>
+          <div id="doclist_indent" style="margin-top:10px;"></div>
+        </div>
         <div class="flex-row mt-16">
           <button class="btn btn-primary" onclick="submitIndent()">Submit Indent</button>
           <button class="btn btn-outline" onclick="clearIndentForm()">Clear</button>
@@ -653,6 +660,13 @@
           <p class="text-muted">Enter up to 3 vendor quotes per line item. The recommended vendor will be highlighted.</p>
         </div>
         <div id="csLineItems"></div>
+        <div style="border:1px solid var(--border);border-radius:6px;padding:12px;margin-top:16px;background:var(--bg);">
+          <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Attach Documents</p>
+          <input type="file" id="docs_cs" multiple accept=".pdf,.jpg,.jpeg,.png,.xlsx,.xls,.doc,.docx" style="display:none;" onchange="addStageDocs('cs',this)">
+          <button class="btn btn-outline btn-sm" onclick="document.getElementById('docs_cs').click()" type="button">+ Attach Documents</button>
+          <span style="font-size:11px;color:var(--muted);margin-left:10px;">PDF, Images, Word, Excel (max 5MB each)</span>
+          <div id="doclist_cs" style="margin-top:10px;"></div>
+        </div>
         <div class="flex-row mt-16">
           <button class="btn btn-primary" onclick="submitCS()">Submit for Approval</button>
           <button class="btn btn-outline" onclick="clearCSForm()">Clear</button>
@@ -838,6 +852,13 @@
             </tr></thead>
             <tbody id="grnLineBody"></tbody>
           </table>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:6px;padding:12px;margin-top:16px;background:var(--bg);">
+          <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Attach Documents</p>
+          <input type="file" id="docs_grn" multiple accept=".pdf,.jpg,.jpeg,.png,.xlsx,.xls,.doc,.docx" style="display:none;" onchange="addStageDocs('grn',this)">
+          <button class="btn btn-outline btn-sm" onclick="document.getElementById('docs_grn').click()" type="button">+ Attach Documents</button>
+          <span style="font-size:11px;color:var(--muted);margin-left:10px;">PDF, Images, Word, Excel (max 5MB each)</span>
+          <div id="doclist_grn" style="margin-top:10px;"></div>
         </div>
         <div class="flex-row mt-16">
           <button class="btn btn-primary" onclick="submitGRN()">Save GRN</button>
@@ -1752,6 +1773,40 @@ function populateProjectDropdowns() {
       projects.map(p => `<option value="${p}" ${p===cur?'selected':''}>${p}</option>`).join('');
   }
 }
+
+// ======================================================
+// STAGE DOCUMENT UPLOAD (shared)
+// ======================================================
+var _stageDocs = {};
+function addStageDocs(stage, input) {
+  if (!_stageDocs[stage]) _stageDocs[stage] = [];
+  Array.from(input.files).forEach(function(f) {
+    if (f.size > 5*1024*1024) { toast('File ' + f.name + ' exceeds 5MB'); return; }
+    var r = new FileReader();
+    r.onload = function(e) {
+      _stageDocs[stage].push({name:f.name,type:f.type,size:f.size,data:e.target.result,added:new Date().toISOString().split('T')[0]});
+      renderStageDocs(stage);
+    };
+    r.readAsDataURL(f);
+  }); input.value = '';
+}
+function renderStageDocs(stage) {
+  var el = document.getElementById('doclist_' + stage);
+  if (!el) return;
+  var docs = _stageDocs[stage] || [];
+  if (!docs.length) { el.innerHTML = ''; return; }
+  el.innerHTML = docs.map(function(d,i) {
+    var kb = Math.round(d.size/1024);
+    return '<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:4px;">' +
+      '<span style="flex:1;font-size:13px;">&#128196; ' + d.name + '</span>' +
+      '<span style="font-size:11px;color:var(--muted);">' + kb + ' KB</span>' +
+      '<a href="' + d.data + '" download="' + d.name + '" style="font-size:11px;color:var(--primary);">Download</a>' +
+      '<button class="btn btn-sm" onclick="removeStageDoc(\'' + stage + '\',' + i + ')" style="padding:2px 8px;font-size:11px;background:transparent;color:var(--danger);border:1px solid var(--danger);">Remove</button>' +
+      '</div>';
+  }).join('');
+}
+function removeStageDoc(stage, i) { _stageDocs[stage].splice(i,1); renderStageDocs(stage); }
+function clearStageDocs(stage) { _stageDocs[stage] = []; renderStageDocs(stage); }
 
 // ======================================================
 // INDENT
