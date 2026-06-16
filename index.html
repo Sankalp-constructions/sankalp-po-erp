@@ -748,6 +748,13 @@
             </tfoot>
           </table>
         </div>
+        <div style="border:1px solid var(--border);border-radius:6px;padding:12px;margin-top:16px;background:var(--bg);">
+          <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Attach Documents</p>
+          <input type="file" id="docs_po" multiple accept=".pdf,.jpg,.jpeg,.png,.xlsx,.xls,.doc,.docx" style="display:none;" onchange="addStageDocs('po',this)">
+          <button class="btn btn-outline btn-sm" onclick="document.getElementById('docs_po').click()" type="button">+ Attach Documents</button>
+          <span style="font-size:11px;color:var(--muted);margin-left:10px;">PDF, Images, Word, Excel (max 5MB each)</span>
+          <div id="doclist_po" style="margin-top:10px;"></div>
+        </div>
         <div class="flex-row mt-16">
           <button class="btn btn-primary" onclick="submitPO()">Create & Submit PO</button>
           <button class="btn btn-outline" onclick="clearPOForm()">Clear</button>
@@ -903,10 +910,6 @@
             <input id="inv_duedate" type="date">
           </div>
           <div class="form-group form-full">
-            <label>Invoice File (Reference / Filename)</label>
-            <input id="inv_file" placeholder="e.g. Invoice_Vendor_Nov2026.pdf">
-          </div>
-          <div class="form-group form-full">
             <label>Remarks</label>
             <textarea id="inv_remarks" placeholder="Any discrepancies or notes..."></textarea>
           </div>
@@ -914,6 +917,13 @@
         <hr class="divider">
         <div class="section-header"><h3>GRN Summary for this PO</h3></div>
         <div id="invGRNSummary"></div>
+        <div style="border:1px solid var(--border);border-radius:6px;padding:12px;margin-top:16px;background:var(--bg);">
+          <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Attach Documents</p>
+          <input type="file" id="docs_invoice" multiple accept=".pdf,.jpg,.jpeg,.png,.xlsx,.xls,.doc,.docx" style="display:none;" onchange="addStageDocs('invoice',this)">
+          <button class="btn btn-outline btn-sm" onclick="document.getElementById('docs_invoice').click()" type="button">+ Attach Documents</button>
+          <span style="font-size:11px;color:var(--muted);margin-left:10px;">PDF, Images, Word, Excel (max 5MB each)</span>
+          <div id="doclist_invoice" style="margin-top:10px;"></div>
+        </div>
         <div class="flex-row mt-16">
           <button class="btn btn-primary" onclick="submitInvoice()">Submit Invoice</button>
           <button class="btn btn-outline" onclick="clearInvoiceForm()">Clear</button>
@@ -1837,7 +1847,8 @@ function submitIndent() {
     id: no, project, date, reqdate, location, priority, purpose, lines,
     status: 'Pending QS Engineer',
     raisedBy: ROLES[state.role],
-    approvals: [{ role: 'Site Engineer', status: 'Approved', by: ROLES[state.role], time: new Date().toLocaleString('en-IN') }]
+    approvals: [{ role: 'Site Engineer', status: 'Approved', by: ROLES[state.role], time: new Date().toLocaleString('en-IN') }],
+    documents: (_stageDocs['indent'] || []).slice()
   };
   state.indents.push(indent);
   addActivity(`Indent ${no} submitted for ${project} (${lines.length} items)`);
@@ -1848,7 +1859,7 @@ function submitIndent() {
   renderIndentList();
 }
 
-function clearIndentForm() { initIndentForm(); }
+function clearIndentForm() { clearStageDocs('indent'); initIndentForm(); }
 
 function renderIndentList() {
   const filter = document.getElementById('indentFilterStatus')?.value || '';
@@ -2061,7 +2072,7 @@ function submitCS() {
     id: ref, indentId, project: indent.project, date, preparedby,
     remarks: document.getElementById('cs_remarks').value,
     lines, status: 'Pending Purchase Department',
-    approvals: []
+    approvals: [], documents: (_stageDocs['cs'] || []).slice()
   };
   state.cs.push(cs);
   addActivity(`CS ${ref} submitted for indent ${indentId}`);
@@ -2079,6 +2090,7 @@ function clearCSForm() {
   document.getElementById('cs_preparedby').value = '';
   document.getElementById('cs_remarks').value = '';
   document.getElementById('csLineItems').innerHTML = '';
+  clearStageDocs('cs');
 }
 
 function renderCSList() {
@@ -2238,7 +2250,8 @@ function submitPO() {
     instructions: document.getElementById('po_instructions').value,
     lines: poLines.map(l => ({...l})),
     total: grand, vendor: vendors,
-    status: 'Pending Purchase Department', approvals: []
+    status: 'Pending Purchase Department', approvals: [],
+    documents: (_stageDocs['po'] || []).slice()
   };
   state.pos.push(po);
   addActivity(`PO ${no} created for ${cs.project} — ₹${grand.toFixed(2)}`);
@@ -2258,6 +2271,7 @@ function clearPOForm() {
   document.getElementById('poLineBody').innerHTML = '';
   document.getElementById('poGrandTotal').textContent = '0.00';
   poLines = [];
+  clearStageDocs('po');
 }
 
 function renderPOList() {
@@ -2454,7 +2468,8 @@ function submitGRN() {
     receivedBy: document.getElementById('grn_receivedby').value,
     challanDate: document.getElementById('grn_challandate').value,
     remarks: document.getElementById('grn_remarks').value,
-    lines, status: 'Completed', createdBy: state.userName
+    lines, status: 'Completed', createdBy: state.userName,
+    documents: (_stageDocs['grn'] || []).slice()
   };
   state.grns.push(grn);
   addActivity(`GRN ${grno} created for PO ${poId}`);
@@ -2472,6 +2487,7 @@ function clearGRNForm() {
   document.getElementById('grn_challandate').value = '';
   document.getElementById('grn_remarks').value = '';
   document.getElementById('grnLineBody').innerHTML = '';
+  clearStageDocs('grn');
 }
 
 function renderGRNList() {
@@ -2558,9 +2574,9 @@ function submitInvoice() {
   const inv = {
     id: genId('INV'), invNo, poId, vendor: po?.vendor||'', project: po?.project||'',
     date: invDate, amount, gst, total, dueDate,
-    file: document.getElementById('inv_file').value,
     remarks: document.getElementById('inv_remarks').value,
-    paidAmount: 0, status: 'Pending', createdBy: state.userName
+    paidAmount: 0, status: 'Pending', createdBy: state.userName,
+    documents: (_stageDocs['invoice'] || []).slice()
   };
   state.invoices.push(inv);
   addActivity(`Invoice ${invNo} submitted for PO ${poId}`);
@@ -2570,12 +2586,13 @@ function submitInvoice() {
 }
 
 function clearInvoiceForm() {
-  ['inv_po','inv_no','inv_date','inv_vendor','inv_amount','inv_gst','inv_total','inv_duedate','inv_file','inv_remarks'].forEach(id => {
+  ['inv_po','inv_no','inv_date','inv_vendor','inv_amount','inv_gst','inv_total','inv_duedate','inv_remarks'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
   const s = document.getElementById('invGRNSummary');
   if (s) s.innerHTML = '';
+  clearStageDocs('invoice');
 }
 
 function renderInvoiceList() {
