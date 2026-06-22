@@ -268,7 +268,7 @@
         <option value="">-- Select Role --</option>
         <option value="site_engineer">Site Engineer</option>
         <option value="qs_engineer">QS Engineer</option>
-        <option value="technical_director">Technical Director</option>
+        <option value="site_incharge">Site Incharge</option>
         <option value="management">Management</option>
         <option value="purchase_manager">Purchase Department</option>
         <option value="qs_manager">QS Department</option>
@@ -297,40 +297,71 @@
     <p style="font-size:10px;opacity:0.7;margin:0;">Purchase Order ERP</p>
   </div>
   <nav>
+    <!-- MASTER SECTION -->
     <div class="nav-section" id="sec-master">
       <div class="nav-section-header" onclick="toggleSection('sec-master')">
-        <span>Master</span><span class="sec-arrow">&#9660;</span>
+        <span>Master</span><span class="sec-arrow">▾</span>
       </div>
       <div class="nav-section-body">
-        <div class="nav-item active" data-page="dashboard" onclick="nav(this)"><span>&#128202;</span> Dashboard</div>
-        <div class="nav-item" data-page="master" onclick="nav(this)"><span>&#128203;</span> Material Master</div>
-        <div class="nav-item" data-page="vendor_master" onclick="nav(this)"><span>&#127981;</span> Vendor Master</div>
+        <div class="nav-item active" data-page="dashboard" onclick="nav(this)">
+          <span>📊</span> Dashboard
+        </div>
+        <div class="nav-item" data-page="master" onclick="nav(this)">
+          <span>📋</span> Material Master
+        </div>
+        <div class="nav-item" data-page="vendor_master" onclick="nav(this)">
+          <span>🏭</span> Vendor Master
+        </div>
       </div>
     </div>
+    <!-- PROCUREMENT FLOW SECTION -->
     <div class="nav-section" id="sec-procurement">
       <div class="nav-section-header" onclick="toggleSection('sec-procurement')">
-        <span>Procurement Flow</span><span class="sec-arrow">&#9660;</span>
+        <span>Procurement Flow</span><span class="sec-arrow">▾</span>
       </div>
       <div class="nav-section-body">
-        <div class="nav-item" data-page="indent" onclick="nav(this)"><span>&#128221;</span> Indent <span class="badge" id="badge-indent">0</span></div>
-        <div class="nav-item" data-page="vendor" onclick="nav(this)"><span>&#127970;</span> Vendor &amp; CS <span class="badge" id="badge-vendor">0</span></div>
-        <div class="nav-item" data-page="po" onclick="nav(this)"><span>&#128196;</span> Purchase Order <span class="badge" id="badge-po">0</span></div>
-        <div class="nav-item" data-page="grn" onclick="nav(this)"><span>&#128230;</span> GRN <span class="badge" id="badge-grn">0</span></div>
-        <div class="nav-item" data-page="invoice" onclick="nav(this)"><span>&#129534;</span> Invoice <span class="badge" id="badge-invoice">0</span></div>
+        <div class="nav-item" data-page="indent" onclick="nav(this)">
+          <span>📝</span> Indent
+          <span class="badge" id="badge-indent">0</span>
+        </div>
+        <div class="nav-item" data-page="vendor" onclick="nav(this)">
+          <span>🏢</span> Vendor & CS
+          <span class="badge" id="badge-vendor">0</span>
+        </div>
+        <div class="nav-item" data-page="po" onclick="nav(this)">
+          <span>📄</span> Purchase Order
+          <span class="badge" id="badge-po">0</span>
+        </div>
+        <div class="nav-item" data-page="grn" onclick="nav(this)">
+          <span>📦</span> GRN
+          <span class="badge" id="badge-grn">0</span>
+        </div>
+        <div class="nav-item" data-page="invoice" onclick="nav(this)">
+          <span>🧾</span> Invoice
+          <span class="badge" id="badge-invoice">0</span>
+        </div>
       </div>
     </div>
+    <!-- ANALYTICS SECTION -->
     <div class="nav-section" id="sec-analytics">
       <div class="nav-section-header" onclick="toggleSection('sec-analytics')">
-        <span>Analytics</span><span class="sec-arrow">&#9660;</span>
+        <span>Analytics</span><span class="sec-arrow">▾</span>
       </div>
       <div class="nav-section-body">
-        <div class="nav-item" data-page="reports" onclick="nav(this)"><span>&#128202;</span> Reports</div>
-        <div class="nav-item" id="navTemplates" data-page="templates" onclick="nav(this)" style="display:none;">&#9881;&#65039; <span>Template Settings</span></div>
+        <div class="nav-item" data-page="reports" onclick="nav(this)">
+          <span>📊</span> Reports
+        </div>
+        <div class="nav-item" id="navTemplates" data-page="templates" onclick="nav(this)" style="display:none;">
+          ⚙️ <span>Template Settings</span>
+        </div>
       </div>
     </div>
+    <!-- ADMIN SECTION (hidden, shown only for Super Admin) -->
     <div id="navAdminSection" style="display:none;">
       <div class="nav-step">Admin</div>
-      <div class="nav-item" id="navUserMgmt" data-page="usermgmt" onclick="nav(this)">&#128101; <span>User Management</span></div>
+      <div class="nav-item" id="navUserMgmt" data-page="usermgmt" onclick="nav(this)">
+        👥 <span>User Management</span>
+      </div>
     </div>
   </nav>
   <div style="padding:12px 16px;border-top:1px solid rgba(255,255,255,0.1);">
@@ -446,16 +477,19 @@
     </div>
   </div>
 
-
   <!-- ===== VENDOR MASTER ===== -->
   <div class="page" id="page-vendor_master">
     <div class="section-header">
       <h3>Vendor Master</h3>
       <button class="btn btn-primary btn-sm" onclick="openAddVendorForm()">+ Add Vendor</button>
     </div>
+
+    <!-- ADD / EDIT FORM -->
     <div class="card" id="vendorFormCard" style="display:none;margin-bottom:18px;">
       <h4 id="vendorFormTitle" style="margin:0 0 18px;font-size:15px;font-weight:600;">New Vendor</h4>
       <input type="hidden" id="vm_edit_idx" value="-1">
+
+      <!-- Basic Information -->
       <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Basic Information</p>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;">
         <div><label>Vendor Code *</label><input type="text" id="vm_code" placeholder="Auto-generated" readonly style="background:var(--bg);"></div>
@@ -465,12 +499,16 @@
         <div><label>Email</label><input type="email" id="vm_email" placeholder="vendor@example.com"></div>
         <div><label>Address</label><textarea id="vm_address" rows="2" placeholder="Full address with city and PIN" style="resize:vertical;"></textarea></div>
       </div>
+
+      <!-- Legal & Tax -->
       <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Legal &amp; Tax</p>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;">
         <div><label>GST Number</label><input type="text" id="vm_gst" placeholder="22AAAAA0000A1Z5" oninput="this.value=this.value.toUpperCase()"></div>
         <div><label>PAN Number</label><input type="text" id="vm_pan" placeholder="AAAAA9999A" oninput="this.value=this.value.toUpperCase()" maxlength="10"></div>
         <div><label>MSME / Registration No.</label><input type="text" id="vm_msme" placeholder="MSME or trade licence no."></div>
       </div>
+
+      <!-- Bank Details -->
       <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Bank Details</p>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;">
         <div><label>Bank Name</label><input type="text" id="vm_bank_name" placeholder="Bank name"></div>
@@ -478,27 +516,39 @@
         <div><label>IFSC Code</label><input type="text" id="vm_ifsc" placeholder="IFSCXXXXXX" oninput="this.value=this.value.toUpperCase()"></div>
         <div><label>Branch</label><input type="text" id="vm_branch" placeholder="Branch name"></div>
       </div>
+
+      <!-- Supply Categories -->
       <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Supply Categories</p>
       <div id="vm_categories" style="display:flex;flex-wrap:wrap;gap:6px;padding:10px;border:1px solid var(--border);border-radius:6px;min-height:42px;margin-bottom:20px;"></div>
+
+      <!-- Documents -->
       <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Documents</p>
       <div style="border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:20px;background:var(--bg);">
         <input type="file" id="vm_doc_upload" multiple accept=".pdf,.jpg,.jpeg,.png,.xlsx,.xls,.doc,.docx" style="display:none;" onchange="addVendorDocs(this)">
         <button class="btn btn-outline btn-sm" onclick="document.getElementById('vm_doc_upload').click()" type="button">+ Upload Documents</button>
-        <span style="font-size:11px;color:var(--muted);margin-left:10px;">PDF, Images, Word, Excel (max 5MB each)</span>
+        <span style="font-size:11px;color:var(--muted);margin-left:10px;">PDF, Images, Word, Excel supported</span>
         <div id="vm_doc_list" style="margin-top:10px;"></div>
       </div>
+
       <div class="flex-row" style="gap:8px;">
         <button class="btn btn-primary" onclick="saveVendor()">Save Vendor</button>
         <button class="btn btn-outline" onclick="document.getElementById('vendorFormCard').style.display='none';clearVendorForm();" type="button">Cancel</button>
       </div>
     </div>
+
+    <!-- SEARCH + TABLE -->
     <div class="card">
       <div class="flex-row" style="margin-bottom:12px;gap:8px;">
         <input type="text" id="vmSearch" placeholder="Search vendors..." style="max-width:260px;" oninput="renderVendorMaster()">
       </div>
       <div style="overflow-x:auto;">
         <table>
-          <thead><tr><th>Code</th><th>Vendor Name</th><th>Contact</th><th>Phone</th><th>GST / PAN</th><th>Categories</th><th>Bank</th><th>Docs</th><th>Actions</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Code</th><th>Vendor Name</th><th>Contact</th><th>Phone</th>
+              <th>GST / PAN</th><th>Categories</th><th>Bank</th><th>Docs</th><th>Actions</th>
+            </tr>
+          </thead>
           <tbody id="vendorMasterBody"></tbody>
         </table>
         <div id="vmEmpty" class="empty-state" style="display:none;">No vendors found. Click "+ Add Vendor" to onboard one.</div>
@@ -518,7 +568,7 @@
     <div class="tab-content active" id="indent-create">
       <div class="card">
         <div class="card-title"><span class="icon">📝</span> New Indent Request</div>
-        <div class="alert alert-info">Raised by Site Engineer. Approval flow: Site Engineer → QS Engineer → Technical Director → Management</div>
+        <div class="alert alert-info">Raised by Site Engineer. Approval flow: Site Engineer → QS Engineer (site) → Site Incharge → Approved</div>
         <div class="form-grid">
           <div class="form-group">
             <label>Indent No</label>
@@ -590,8 +640,7 @@
             <select id="indentFilterStatus" onchange="renderIndentList()" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;">
               <option value="">All Status</option>
               <option value="Pending QS Engineer">Pending QS Engineer</option>
-              <option value="Pending Technical Director">Pending Technical Director</option>
-              <option value="Pending Management">Pending Management</option>
+              <option value="Pending Site Incharge">Pending Site Incharge</option>
               <option value="Approved">Approved</option>
               <option value="Rejected">Rejected</option>
             </select>
@@ -629,7 +678,7 @@
     <div class="tab-content active" id="vendor-upload">
       <div class="card">
         <div class="card-title"><span class="icon">🏢</span> Upload Vendor Details & Comparative Statement</div>
-        <div class="alert alert-info">Procurement team uploads vendor quotes. Approval: Purchase Department → QS Department → Management</div>
+        <div class="alert alert-info">Purchase Department prepares the vendor-based comparative statement against the approved Indent. Approval: Management</div>
         <div class="form-grid">
           <div class="form-group">
             <label>Select Approved Indent</label>
@@ -707,7 +756,7 @@
     <div class="tab-content active" id="po-create">
       <div class="card">
         <div class="card-title"><span class="icon">📄</span> Generate Purchase Order</div>
-        <div class="alert alert-info">Select an approved CS to auto-generate PO. Approval: Purchase Department → Management. PO is downloadable after final approval.</div>
+        <div class="alert alert-info">Select an approved CS — PO details auto-fill from the Indent and CS. Approval: QS Department (for issuance). PO is downloadable once approved.</div>
         <div class="form-grid">
           <div class="form-group">
             <label>Select Approved CS</label>
@@ -778,12 +827,22 @@
 
     <div class="tab-content" id="po-list">
       <div class="card">
-        <div class="section-header"><h3>All Purchase Orders</h3></div>
+        <div class="section-header">
+          <h3>All Purchase Orders</h3>
+          <div class="flex-row">
+            <select id="poFilterClosure" onchange="renderPOList()" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;">
+              <option value="">All POs</option>
+              <option value="Active">Active (nothing received)</option>
+              <option value="Partially Closed">Partially Closed</option>
+              <option value="Fully Closed">Fully Closed</option>
+            </select>
+          </div>
+        </div>
         <div class="tbl-wrap">
           <table>
             <thead><tr>
               <th>PO No</th><th>Date</th><th>Vendor</th><th>Indent Ref</th>
-              <th>Amount (₹)</th><th>Status</th><th>Action</th>
+              <th>Amount (₹)</th><th>Approval Status</th><th>GRN Status</th><th>Action</th>
             </tr></thead>
             <tbody id="poListBody"></tbody>
           </table>
@@ -894,7 +953,7 @@
     <div class="tab-content active" id="invoice-upload">
       <div class="card">
         <div class="card-title"><span class="icon">🧾</span> Upload Vendor Invoice</div>
-        <div class="alert alert-info">Upload invoice against PO number. System auto-validates against GRN quantities.</div>
+        <div class="alert alert-info">Select a PO with at least one GRN. Line items auto-fill from the PO; the system matches invoiced quantity and amount against what was actually received on the GRN.</div>
         <div class="form-grid">
           <div class="form-group">
             <label>Select PO</label>
@@ -916,11 +975,11 @@
           </div>
           <div class="form-group">
             <label>Invoice Amount (₹)</label>
-            <input id="inv_amount" type="number" placeholder="0">
+            <input id="inv_amount" type="number" placeholder="0" readonly style="background:#f1f5f9;">
           </div>
           <div class="form-group">
             <label>GST Amount (₹)</label>
-            <input id="inv_gst" type="number" placeholder="0">
+            <input id="inv_gst" type="number" placeholder="0" readonly style="background:#f1f5f9;">
           </div>
           <div class="form-group">
             <label>Total with GST (₹)</label>
@@ -936,8 +995,17 @@
           </div>
         </div>
         <hr class="divider">
-        <div class="section-header"><h3>GRN Summary for this PO</h3></div>
+        <div class="section-header"><h3>PO–GRN–Invoice match (per line)</h3></div>
         <div id="invGRNSummary"></div>
+        <div class="tbl-wrap">
+          <table class="line-items-table">
+            <thead><tr>
+              <th>#</th><th>Description</th><th>UOM</th><th>PO Qty</th><th>PO Rate (₹)</th>
+              <th>GRN Received</th><th>Invoiced Qty</th><th>Invoiced Rate (₹)</th><th>Line Amount (₹)</th><th>Match</th>
+            </tr></thead>
+            <tbody id="invLineBody"></tbody>
+          </table>
+        </div>
         <div style="border:1px solid var(--border);border-radius:6px;padding:12px;margin-top:16px;background:var(--bg);">
           <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 8px;">Attach Documents</p>
           <input type="file" id="docs_invoice" multiple accept=".pdf,.jpg,.jpeg,.png,.xlsx,.xls,.doc,.docx" style="display:none;" onchange="addStageDocs('invoice',this)">
@@ -967,7 +1035,7 @@
           <table>
             <thead><tr>
               <th>Invoice No</th><th>Date</th><th>PO No</th><th>Vendor</th>
-              <th>Total (₹)</th><th>Paid (₹)</th><th>Balance (₹)</th><th>Due Date</th><th>Payment</th><th>Action</th>
+              <th>Total (₹)</th><th>Paid (₹)</th><th>Balance (₹)</th><th>Due Date</th><th>Payment</th><th>Match</th><th>Action</th>
             </tr></thead>
             <tbody id="invoiceListBody"></tbody>
           </table>
@@ -1151,7 +1219,7 @@
           <option value="">-- Select Role --</option>
           <option value="site_engineer">Site Engineer</option>
           <option value="qs_engineer">QS Engineer</option>
-          <option value="technical_director">Technical Director</option>
+          <option value="site_incharge">Site Incharge</option>
           <option value="management">Management</option>
           <option value="purchase_manager">Purchase Department</option>
           <option value="qs_manager">QS Department</option>
@@ -1176,7 +1244,7 @@
         <option value="management">Management</option>
         <option value="site_engineer">Site Engineer</option>
         <option value="qs_engineer">QS Engineer</option>
-        <option value="technical_director">Technical Director</option>
+        <option value="site_incharge">Site Incharge</option>
         <option value="purchase_manager">Purchase Department</option>
         <option value="qs_manager">QS Department</option>
       </select>
@@ -1200,16 +1268,23 @@
 // ======================================================
 // USER CREDENTIALS
 // To add a new user: add an entry below with name, role, and passcode.
-// Roles: site_engineer | qs_engineer | technical_director | management | purchase_manager | qs_manager
+// Roles: site_engineer | qs_engineer | site_incharge | management | purchase_manager | qs_manager
+// ======================================================
+//
+// Approval chains (fixed by business rule, not reconfigurable via the
+// Templates editor below — that editor only controls the display stepper):
+//   Indent  : Site Engineer (raises) -> QS Engineer (site) -> Site Incharge -> Approved
+//   CS      : Purchase Department (prepares) -> Management -> Approved
+//   PO      : Purchase Department (prepares, auto-filled from Indent+CS) -> QS Department -> Approved (issued)
 // ======================================================
 
 const DEFAULT_SETTINGS = {
   company: { name: 'Sankalp Construction', address: '', phone: '', email: '', gstin: '' },
   prefixes: { indent: 'IND', cs: 'CS', po: 'PO', grn: 'GRN', invoice: 'INV', payment: 'PAY' },
   workflow: {
-    indent: ['site_engineer','qs_engineer','technical_director','management'],
-    cs:     ['purchase_manager','qs_manager','management'],
-    po:     ['purchase_manager','management']
+    indent: ['site_engineer','qs_engineer','site_incharge'],
+    cs:     ['management'],
+    po:     ['qs_manager']
   }
 };
 function getSetting(path, fallback) {
@@ -1223,7 +1298,7 @@ const DEFAULT_USERS = [
   { name: 'Govardhan Reddy',            role: 'management', passcode: 'GOV@2026', superAdmin: true },
   { name: 'Site Engineer 1',            role: 'site_engineer',      passcode: 'SE2026'   },
   { name: 'QS Engineer 1',              role: 'qs_engineer',        passcode: 'QSE2026'  },
-  { name: 'Tech Director',              role: 'technical_director', passcode: 'TD2026'   },
+  { name: 'Site Incharge 1',            role: 'site_incharge',      passcode: 'SI2026'   },
   { name: 'Purchase Mgr',               role: 'purchase_manager',   passcode: 'PM2026'   },
   { name: 'QS Department',                 role: 'qs_manager',         passcode: 'QSM2026'  }
 ];
@@ -1313,7 +1388,7 @@ let state = {
 const ROLES = {
   site_engineer: 'Site Engineer',
   qs_engineer: 'QS Engineer',
-  technical_director: 'Technical Director',
+  site_incharge: 'Site Incharge',
   management: 'Management',
   purchase_manager: 'Purchase Department',
   qs_manager: 'QS Department'
@@ -1373,6 +1448,36 @@ function genId(type) {
 }
 
 function today() { return new Date().toISOString().slice(0,10); }
+
+function statusClass(status) {
+  if (!status) return 'status-draft';
+  if (status === 'Approved' || status === 'Paid') return 'status-approved';
+  if (status === 'Rejected' || status === 'Overdue') return 'status-rejected';
+  if (status === 'Partial' || status === 'Partially Closed') return 'status-partial';
+  if (status === 'Completed' || status === 'Fully Closed') return 'status-complete';
+  if (status.indexOf('Pending') === 0) return 'status-pending';
+  return 'status-draft';
+}
+
+// Cumulative quantity received against PO line `idx`, across every GRN saved for that PO.
+function grnReceivedForLine(poId, idx) {
+  return state.grns.filter(g => g.poId === poId)
+    .reduce((s, g) => s + (parseFloat(g.lines[idx]?.receivedQty) || 0), 0);
+}
+
+// Active: nothing received yet. Partially Closed: some but not all lines fully received.
+// Fully Closed: every line's received quantity has reached its ordered quantity.
+function poClosureStatus(po) {
+  if (!po.lines || !po.lines.length) return 'Active';
+  let totalOrdered = 0, totalReceived = 0;
+  po.lines.forEach((l, idx) => {
+    totalOrdered += l.qty;
+    totalReceived += Math.min(l.qty, grnReceivedForLine(po.id, idx));
+  });
+  if (totalReceived <= 0) return 'Active';
+  if (totalReceived >= totalOrdered) return 'Fully Closed';
+  return 'Partially Closed';
+}
 
 function addActivity(msg) {
   state.activity.unshift({ time: new Date().toLocaleString('en-IN'), msg, role: ROLES[state.role] });
@@ -1467,23 +1572,18 @@ function pendingForRole(doc, role, type) {
   if (type === 'indent') {
     const map = {
       qs_engineer: 'Pending QS Engineer',
-      technical_director: 'Pending Technical Director',
-      management: 'Pending Management'
+      site_incharge: 'Pending Site Incharge'
     };
     return doc.status === (map[role] || '');
   }
   if (type === 'cs') {
-    const map = {
-      qs_manager: 'Pending QS Department',
-      management: 'Pending Management'
-    };
-    if (role === 'purchase_manager') return doc.status === 'Pending Purchase Department';
-    return doc.status === (map[role] || '');
+    // Single-step approval: Purchase Department prepares, Management approves.
+    return role === 'management' && doc.status === 'Pending Management';
   }
   if (type === 'po') {
-    if (role === 'purchase_manager') return doc.status === 'Pending Purchase Department';
-    if (role === 'management') return doc.status === 'Pending Management';
-    return false;
+    // Single-step approval: Purchase Department prepares (auto-filled from Indent+CS),
+    // QS Department approves for issuance.
+    return role === 'qs_manager' && doc.status === 'Pending QS Department';
   }
   return false;
 }
@@ -1491,11 +1591,7 @@ function pendingForRole(doc, role, type) {
 function totalGRNBalance(poId) {
   const po = state.pos.find(p => p.id === poId);
   if (!po) return 0;
-  return po.lines.reduce((s, l) => {
-    const recv = state.grns.filter(g => g.poId === poId)
-      .reduce((t, g) => t + (g.lines.find(gl => gl.lineId === l.id)?.received || 0), 0);
-    return s + Math.max(0, l.qty - recv);
-  }, 0);
+  return po.lines.reduce((s, l, idx) => s + Math.max(0, l.qty - grnReceivedForLine(poId, idx)), 0);
 }
 
 // ======================================================
@@ -1635,130 +1731,202 @@ function deleteMaster(id) {
 // VENDOR MASTER
 // ======================================================
 function autoVendorCode() {
-  var n = (state.vendors || []).length + 1;
+  const n = (state.vendors || []).length + 1;
   return 'VEN-' + String(n).padStart(4, '0');
 }
+
 function getMaterialCategories() {
-  var cats = [...new Set((state.master || []).map(function(m){ return m.category; }).filter(Boolean))];
-  return cats.length ? cats : ['Civil','Electrical','Plumbing','Steel','Tiles','Hardware','Paints','Labour'];
+  const cats = [...new Set((state.master || []).map(m => m.category).filter(Boolean))];
+  return cats.length ? cats : ['Civil', 'Electrical', 'Plumbing', 'Steel', 'Tiles', 'Hardware', 'Paints', 'Labour'];
 }
+
+var _vmPendingDocs = [];
+
 function clearVendorForm() {
-  ['vm_code','vm_name','vm_contact','vm_phone','vm_email','vm_address','vm_gst','vm_pan','vm_msme','vm_bank_name','vm_acc_no','vm_ifsc','vm_branch'].forEach(function(id){
-    var el = document.getElementById(id); if (el) el.value = '';
+  ['vm_code','vm_name','vm_contact','vm_phone','vm_email','vm_address',
+   'vm_gst','vm_pan','vm_msme',
+   'vm_bank_name','vm_acc_no','vm_ifsc','vm_branch'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.value = '';
   });
   document.getElementById('vm_edit_idx').value = '-1';
   document.getElementById('vendorFormTitle').textContent = 'New Vendor';
-  _vmPendingDocs = []; renderVmDocList();
+  _vmPendingDocs = [];
+  renderVmDocList();
 }
-var _vmPendingDocs = [];
+
 function addVendorDocs(input) {
-  Array.from(input.files).forEach(function(f) {
-    if (f.size > 5*1024*1024) { toast('File ' + f.name + ' exceeds 5MB'); return; }
-    var r = new FileReader();
-    r.onload = function(e) { _vmPendingDocs.push({name:f.name,type:f.type,size:f.size,data:e.target.result,added:new Date().toISOString().split('T')[0]}); renderVmDocList(); };
-    r.readAsDataURL(f);
-  }); input.value = '';
+  var files = Array.from(input.files);
+  files.forEach(function(f) {
+    if (f.size > 5 * 1024 * 1024) { toast('File "' + f.name + '" exceeds 5MB limit'); return; }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      _vmPendingDocs.push({ name: f.name, type: f.type, size: f.size, data: e.target.result, added: new Date().toISOString().split('T')[0] });
+      renderVmDocList();
+    };
+    reader.readAsDataURL(f);
+  });
+  input.value = '';
 }
+
 function renderVmDocList() {
-  var el = document.getElementById('vm_doc_list'); if (!el) return;
+  var el = document.getElementById('vm_doc_list');
+  if (!el) return;
   if (!_vmPendingDocs.length) { el.innerHTML = ''; return; }
-  el.innerHTML = _vmPendingDocs.map(function(d,i){
-    var kb = Math.round(d.size/1024);
-    return '<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:4px;">'+
-      '<span style="flex:1;font-size:13px;">&#128196; '+d.name+'</span>'+
-      '<span style="font-size:11px;color:var(--muted);">'+kb+' KB</span>'+
-      '<a href="'+d.data+'" download="'+d.name+'" style="font-size:11px;color:var(--primary);">Download</a>'+
-      '<button class="btn btn-sm" onclick="removeVmDoc('+i+')" style="padding:2px 8px;font-size:11px;background:transparent;color:var(--danger);border:1px solid var(--danger);">Remove</button>'+
+  el.innerHTML = _vmPendingDocs.map(function(d, i) {
+    var icon = d.type.includes('pdf') ? '&#128196;' : d.type.includes('image') ? '&#128247;' : '&#128196;';
+    var kb = Math.round(d.size / 1024);
+    return '<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:6px;">' +
+      '<span>' + icon + '</span>' +
+      '<span style="flex:1;font-size:13px;">' + d.name + '</span>' +
+      '<span style="font-size:11px;color:var(--muted);">' + kb + ' KB</span>' +
+      '<a href="' + d.data + '" download="' + d.name + '" style="font-size:11px;color:var(--primary);">Download</a>' +
+      '<button class="btn btn-sm" onclick="removeVmDoc(' + i + ')" style="padding:2px 8px;font-size:11px;background:transparent;color:var(--danger);border:1px solid var(--danger);">Remove</button>' +
       '</div>';
   }).join('');
 }
-function removeVmDoc(i) { _vmPendingDocs.splice(i,1); renderVmDocList(); }
+
+function removeVmDoc(i) {
+  _vmPendingDocs.splice(i, 1);
+  renderVmDocList();
+}
+
 function saveVendor() {
   var name = document.getElementById('vm_name').value.trim();
   var contact = document.getElementById('vm_contact').value.trim();
   if (!name) { toast('Vendor Name is required'); return; }
   if (!contact) { toast('Contact Person is required'); return; }
-  var cats = [...document.querySelectorAll('#vm_categories input:checked')].map(function(x){return x.value;});
+  var cats = [...document.querySelectorAll('#vm_categories input:checked')].map(function(x){ return x.value; });
   var idx = parseInt(document.getElementById('vm_edit_idx').value);
-  var existingDocs = (idx>=0 && state.vendors[idx] && state.vendors[idx].documents) ? state.vendors[idx].documents : [];
+  var existingDocs = (idx >= 0 && state.vendors[idx].documents) ? state.vendors[idx].documents : [];
   var record = {
-    code: document.getElementById('vm_code').value.trim(), name: name, contact: contact,
-    phone: document.getElementById('vm_phone').value.trim(), email: document.getElementById('vm_email').value.trim(),
-    address: document.getElementById('vm_address').value.trim(),
-    gst: document.getElementById('vm_gst').value.trim(), pan: document.getElementById('vm_pan').value.trim(),
-    msme: document.getElementById('vm_msme').value.trim(),
+    code:      document.getElementById('vm_code').value.trim(),
+    name:      name,
+    contact:   contact,
+    phone:     document.getElementById('vm_phone').value.trim(),
+    email:     document.getElementById('vm_email').value.trim(),
+    address:   document.getElementById('vm_address').value.trim(),
+    gst:       document.getElementById('vm_gst').value.trim(),
+    pan:       document.getElementById('vm_pan').value.trim(),
+    msme:      document.getElementById('vm_msme').value.trim(),
     bank_name: document.getElementById('vm_bank_name').value.trim(),
-    acc_no: document.getElementById('vm_acc_no').value.trim(), ifsc: document.getElementById('vm_ifsc').value.trim(),
-    branch: document.getElementById('vm_branch').value.trim(), categories: cats,
+    acc_no:    document.getElementById('vm_acc_no').value.trim(),
+    ifsc:      document.getElementById('vm_ifsc').value.trim(),
+    branch:    document.getElementById('vm_branch').value.trim(),
+    categories: cats,
     documents: existingDocs.concat(_vmPendingDocs),
-    created: (idx>=0 && state.vendors[idx] && state.vendors[idx].created) ? state.vendors[idx].created : new Date().toISOString().split('T')[0]
+    created:   (idx >= 0 && state.vendors[idx].created) ? state.vendors[idx].created : new Date().toISOString().split('T')[0]
   };
   if (!state.vendors) state.vendors = [];
-  if (idx >= 0) { record.code = state.vendors[idx].code; state.vendors[idx] = record; toast('Vendor updated'); }
-  else { state.vendors.push(record); toast('Vendor added'); }
-  save(); document.getElementById('vendorFormCard').style.display = 'none'; clearVendorForm(); renderVendorMaster();
+  if (idx >= 0) {
+    record.code = state.vendors[idx].code;
+    state.vendors[idx] = record;
+    toast('Vendor updated');
+  } else {
+    state.vendors.push(record);
+    toast('Vendor added');
+  }
+  save();
+  document.getElementById('vendorFormCard').style.display = 'none';
+  clearVendorForm();
+  renderVendorMaster();
 }
+
 function openAddVendorForm() {
   clearVendorForm();
   document.getElementById('vm_code').value = autoVendorCode();
   var cats = getMaterialCategories();
-  document.getElementById('vm_categories').innerHTML = cats.map(function(x){
-    return '<label style="display:inline-flex;align-items:center;gap:5px;margin:3px 10px 3px 0;font-weight:400;cursor:pointer;"><input type="checkbox" value="'+x+'" style="width:auto;">'+x+'</label>';
+  document.getElementById('vm_categories').innerHTML = cats.map(function(c) {
+    return '<label style="display:inline-flex;align-items:center;gap:5px;margin:3px 10px 3px 0;font-weight:400;cursor:pointer;">' +
+      '<input type="checkbox" value="' + c + '" style="width:auto;">' + c + '</label>';
   }).join('');
   document.getElementById('vendorFormCard').style.display = 'block';
   document.getElementById('vendorFormCard').scrollIntoView({behavior:'smooth'});
 }
+
 function editVendor(idx) {
-  var v = state.vendors[idx]; _vmPendingDocs = [];
+  var v = state.vendors[idx];
+  _vmPendingDocs = [];
   document.getElementById('vm_edit_idx').value = idx;
-  document.getElementById('vendorFormTitle').textContent = 'Edit Vendor - ' + (v.name||'');
-  var flds = ['vm_code','vm_name','vm_contact','vm_phone','vm_email','vm_address','vm_gst','vm_pan','vm_msme','vm_bank_name','vm_acc_no','vm_ifsc','vm_branch'];
-  var keys = ['code','name','contact','phone','email','address','gst','pan','msme','bank_name','acc_no','ifsc','branch'];
-  flds.forEach(function(f,i){ document.getElementById(f).value = v[keys[i]]||''; });
+  document.getElementById('vendorFormTitle').textContent = 'Edit Vendor — ' + (v.name || '');
+  document.getElementById('vm_code').value = v.code || '';
+  document.getElementById('vm_name').value = v.name || '';
+  document.getElementById('vm_contact').value = v.contact || '';
+  document.getElementById('vm_phone').value = v.phone || '';
+  document.getElementById('vm_email').value = v.email || '';
+  document.getElementById('vm_address').value = v.address || '';
+  document.getElementById('vm_gst').value = v.gst || '';
+  document.getElementById('vm_pan').value = v.pan || '';
+  document.getElementById('vm_msme').value = v.msme || '';
+  document.getElementById('vm_bank_name').value = v.bank_name || '';
+  document.getElementById('vm_acc_no').value = v.acc_no || '';
+  document.getElementById('vm_ifsc').value = v.ifsc || '';
+  document.getElementById('vm_branch').value = v.branch || '';
   var allCats = getMaterialCategories();
-  document.getElementById('vm_categories').innerHTML = allCats.map(function(x){
-    return '<label style="display:inline-flex;align-items:center;gap:5px;margin:3px 10px 3px 0;font-weight:400;cursor:pointer;"><input type="checkbox" value="'+x+'" style="width:auto;" '+((v.categories||[]).includes(x)?'checked':'')+'>'+x+'</label>';
+  document.getElementById('vm_categories').innerHTML = allCats.map(function(c) {
+    return '<label style="display:inline-flex;align-items:center;gap:5px;margin:3px 10px 3px 0;font-weight:400;cursor:pointer;">' +
+      '<input type="checkbox" value="' + c + '" style="width:auto;" ' +
+      ((v.categories||[]).includes(c) ? 'checked' : '') + '>' + c + '</label>';
   }).join('');
-  var docEl = document.getElementById('vm_doc_list');
-  if (docEl && v.documents && v.documents.length) {
-    docEl.innerHTML = '<p style="font-size:12px;color:var(--muted);margin:0 0 6px;">Saved (' + v.documents.length + '):</p>' +
-      v.documents.map(function(d){ var kb=Math.round((d.size||0)/1024);
-        return '<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:4px;">'+
-          '<span style="flex:1;font-size:13px;">&#128196; '+d.name+'</span>'+
-          '<span style="font-size:11px;color:var(--muted);">'+kb+' KB</span>'+
-          (d.data?'<a href="'+d.data+'" download="'+d.name+'" style="font-size:11px;color:var(--primary);">Download</a>':'')+'</div>';
+  // Show existing docs
+  var docList = document.getElementById('vm_doc_list');
+  if (docList && v.documents && v.documents.length) {
+    docList.innerHTML = '<p style="font-size:12px;color:var(--muted);margin:0 0 6px;">Saved documents (' + v.documents.length + '):</p>' +
+      v.documents.map(function(d, i) {
+        var kb = Math.round((d.size||0) / 1024);
+        return '<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:4px;">' +
+          '<span style="flex:1;font-size:13px;">&#128196; ' + d.name + '</span>' +
+          '<span style="font-size:11px;color:var(--muted);">' + kb + ' KB</span>' +
+          (d.data ? '<a href="' + d.data + '" download="' + d.name + '" style="font-size:11px;color:var(--primary);">Download</a>' : '') +
+          '</div>';
       }).join('');
   }
   document.getElementById('vendorFormCard').style.display = 'block';
   document.getElementById('vendorFormCard').scrollIntoView({behavior:'smooth'});
 }
+
 function deleteVendor(idx) {
   if (!confirm('Delete this vendor?')) return;
-  state.vendors.splice(idx, 1); save(); renderVendorMaster(); toast('Vendor deleted');
+  state.vendors.splice(idx, 1);
+  save(); renderVendorMaster();
+  toast('Vendor deleted');
 }
+
 function renderVendorMaster() {
   if (!state.vendors) state.vendors = [];
-  var q = (document.getElementById('vmSearch') ? document.getElementById('vmSearch').value : '').toLowerCase();
-  var filtered = state.vendors.filter(function(v){
-    return !q || (v.name||'').toLowerCase().includes(q) || (v.code||'').toLowerCase().includes(q) ||
-      (v.contact||'').toLowerCase().includes(q) || (v.categories||[]).join(' ').toLowerCase().includes(q);
-  });
-  var tbody = document.getElementById('vendorMasterBody');
-  var empty = document.getElementById('vmEmpty');
-  if (!filtered.length) { if (tbody) tbody.innerHTML=''; if (empty) empty.style.display='block'; return; }
+  const q = (document.getElementById('vmSearch')?.value || '').toLowerCase();
+  const filtered = state.vendors.filter(v =>
+    !q || v.name?.toLowerCase().includes(q) || v.code?.toLowerCase().includes(q) ||
+    v.contact?.toLowerCase().includes(q) || (v.categories||[]).join(' ').toLowerCase().includes(q)
+  );
+  const tbody = document.getElementById('vendorMasterBody');
+  const empty = document.getElementById('vmEmpty');
+  if (!filtered.length) {
+    tbody.innerHTML = '';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
   if (empty) empty.style.display = 'none';
-  tbody.innerHTML = filtered.map(function(v){
-    var ri = state.vendors.indexOf(v);
-    var cats = (v.categories||[]).map(function(x){return '<span class="tag" style="font-size:10px;">'+x+'</span>';}).join(' ')||'-';
-    var bank = v.bank_name ? (v.bank_name+'<br><span style="font-size:11px;opacity:0.6">'+(v.acc_no||'')+'</span>') : '-';
-    var gstpan = (v.gst?'<span style="font-size:11px;display:block;">GST: '+v.gst+'</span>':'')+(v.pan?'<span style="font-size:11px;display:block;">PAN: '+v.pan+'</span>':'') || '-';
-    var dc = (v.documents||[]).length;
-    return '<tr><td><span class="tag">'+(v.code||'')+'</span></td>'+
-      '<td><strong>'+(v.name||'')+'</strong><br><span style="font-size:11px;color:var(--muted);">'+(v.email||'')+'</span></td>'+
-      '<td>'+(v.contact||'-')+'</td><td>'+(v.phone||'-')+'</td><td>'+gstpan+'</td>'+
-      '<td style="max-width:140px;">'+cats+'</td><td style="font-size:12px;">'+bank+'</td>'+
-      '<td style="text-align:center;">'+(dc?'<span class="tag" style="font-size:11px;">'+dc+' file'+(dc>1?'s':'')+'</span>':'-')+'</td>'+
-      '<td style="white-space:nowrap;"><button class="btn btn-sm btn-outline" onclick="editVendor('+ri+')">Edit</button> <button class="btn btn-sm btn-danger" onclick="deleteVendor('+ri+')" style="margin-left:4px;">Delete</button></td></tr>';
+  tbody.innerHTML = filtered.map(function(v) {
+    var realIdx = state.vendors.indexOf(v);
+    var cats = (v.categories||[]).map(function(x){ return '<span class="tag" style="font-size:10px;">' + x + '</span>'; }).join(' ') || '-';
+    var bank = v.bank_name ? (v.bank_name + '<br><span style="font-size:11px;opacity:0.6">' + (v.acc_no||'') + '</span>') : '-';
+    var gstpan = (v.gst ? '<span style="font-size:11px;display:block;">GST: ' + v.gst + '</span>' : '') +
+                 (v.pan ? '<span style="font-size:11px;display:block;">PAN: ' + v.pan + '</span>' : '') || '-';
+    var docCount = (v.documents||[]).length;
+    return '<tr>' +
+      '<td><span class="tag">' + (v.code||'') + '</span></td>' +
+      '<td><strong>' + (v.name||'') + '</strong><br><span style="font-size:11px;color:var(--muted);">' + (v.email||'') + '</span></td>' +
+      '<td>' + (v.contact||'-') + '</td>' +
+      '<td>' + (v.phone||'-') + '</td>' +
+      '<td>' + gstpan + '</td>' +
+      '<td style="max-width:140px;">' + cats + '</td>' +
+      '<td style="font-size:12px;">' + bank + '</td>' +
+      '<td style="text-align:center;">' + (docCount ? '<span class="tag" style="font-size:11px;">' + docCount + ' file' + (docCount>1?'s':'') + '</span>' : '-') + '</td>' +
+      '<td style="white-space:nowrap;">' +
+        '<button class="btn btn-sm btn-outline" onclick="editVendor(' + realIdx + ')">Edit</button> ' +
+        '<button class="btn btn-sm btn-danger" onclick="deleteVendor(' + realIdx + ')" style="margin-left:4px;">Delete</button>' +
+      '</td></tr>';
   }).join('');
 }
 
@@ -1908,6 +2076,7 @@ function submitIndent() {
   state.indents.push(indent);
   addActivity(`Indent ${no} submitted for ${project} (${lines.length} items)`);
   save(); updateBadges();
+  clearStageDocs('indent');
   initIndentForm();
   toast('Indent submitted ✓', '#16a34a');
   switchTab('indent', 'list');
@@ -1992,9 +2161,8 @@ function approveIndent(id) {
   const indent = state.indents.find(i => i.id === id);
   if (!indent) return;
   const stepMap = {
-    qs_engineer: { next: 'Pending Technical Director', role: 'QS Engineer' },
-    technical_director: { next: 'Pending Management', role: 'Technical Director' },
-    management: { next: 'Approved', role: 'Management' }
+    qs_engineer: { next: 'Pending Site Incharge', role: 'QS Engineer' },
+    site_incharge: { next: 'Approved', role: 'Site Incharge' }
   };
   const step = stepMap[state.role];
   if (!step) return;
@@ -2126,7 +2294,7 @@ function submitCS() {
   const cs = {
     id: ref, indentId, project: indent.project, date, preparedby,
     remarks: document.getElementById('cs_remarks').value,
-    lines, status: 'Pending Purchase Department',
+    lines, status: 'Pending Management',
     approvals: [], documents: (_stageDocs['cs'] || []).slice()
   };
   state.cs.push(cs);
@@ -2184,8 +2352,6 @@ function approveCS(id) {
   const cs = state.cs.find(c => c.id === id);
   if (!cs) return;
   const stepMap = {
-    purchase_manager: { next: 'Pending QS Department', role: 'Purchase Department' },
-    qs_manager: { next: 'Pending Management', role: 'QS Department' },
     management: { next: 'Approved', role: 'Management' }
   };
   const step = stepMap[state.role];
@@ -2305,7 +2471,7 @@ function submitPO() {
     instructions: document.getElementById('po_instructions').value,
     lines: poLines.map(l => ({...l})),
     total: grand, vendor: vendors,
-    status: 'Pending Purchase Department', approvals: [],
+    status: 'Pending QS Department', approvals: [],
     documents: (_stageDocs['po'] || []).slice()
   };
   state.pos.push(po);
@@ -2331,16 +2497,23 @@ function clearPOForm() {
 
 function renderPOList() {
   const body = document.getElementById('poListBody');
-  if (!state.pos.length) { body.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">📄</div><p>No POs yet</p></div></td></tr>'; return; }
-  body.innerHTML = state.pos.slice().reverse().map(p => `<tr>
+  const filter = document.getElementById('poFilterClosure')?.value || '';
+  let pos = state.pos.slice().reverse();
+  if (filter) pos = pos.filter(p => p.status === 'Approved' && poClosureStatus(p) === filter);
+  if (!pos.length) { body.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">📄</div><p>No POs yet</p></div></td></tr>'; return; }
+  body.innerHTML = pos.map(p => {
+    const closure = p.status === 'Approved' ? poClosureStatus(p) : '—';
+    return `<tr>
     <td><b>${p.id}</b></td><td>${p.date}</td><td>${p.vendor}</td>
     <td>${p.indentId}</td><td>₹${p.total.toLocaleString('en-IN', {maximumFractionDigits:2})}</td>
     <td><span class="status ${statusClass(p.status)}">${p.status}</span></td>
+    <td>${closure === '—' ? '—' : `<span class="status ${statusClass(closure)}">${closure}</span>`}</td>
     <td>
       <button class="btn btn-sm btn-outline" onclick="viewPO('${p.id}')">View</button>
       ${p.status === 'Approved' ? `<button class="btn btn-sm btn-accent" onclick="downloadPO('${p.id}')">⬇ Download</button>` : ''}
     </td>
-  </tr>`).join('');
+  </tr>`;
+  }).join('');
 }
 
 function renderPOApprove() {
@@ -2368,8 +2541,7 @@ function approvePO(id) {
   const po = state.pos.find(p => p.id === id);
   if (!po) return;
   const stepMap = {
-    purchase_manager: { next: 'Pending Management', role: 'Purchase Department' },
-    management: { next: 'Approved', role: 'Management' }
+    qs_manager: { next: 'Approved', role: 'QS Department' }
   };
   const step = stepMap[state.role];
   if (!step) return;
@@ -2487,8 +2659,7 @@ function loadGRNfromPO() {
   document.getElementById('grn_date').value = today();
   const tbody = document.getElementById('grnLineBody');
   tbody.innerHTML = po.lines.map((l, i) => {
-    const prevGRNs = state.grns.filter(g => g.poId === poId);
-    const alreadyReceived = prevGRNs.reduce((s, g) => s + (parseFloat(g.lines[i]?.receivedQty) || 0), 0);
+    const alreadyReceived = grnReceivedForLine(poId, i);
     const balance = l.qty - alreadyReceived;
     return `<tr>
       <td>${i+1}</td>
@@ -2594,49 +2765,107 @@ function populateInvoicePODropdown() {
   renderPaymentHistory();
 }
 
+let invLines = [];
+
 function loadInvoicePO() {
   const poId = document.getElementById('inv_po').value;
   const po = state.pos.find(p => p.id === poId);
-  if (!po) return;
+  if (!po) { invLines = []; renderInvoiceLines(); return; }
+  if (!document.getElementById('inv_no').value) document.getElementById('inv_no').value = genId('INV');
   document.getElementById('inv_vendor').value = po.vendor;
   const grns = state.grns.filter(g => g.poId === poId);
   const summary = document.getElementById('invGRNSummary');
   summary.innerHTML = grns.length
-    ? `<div class="alert alert-info">${grns.length} GRN(s) found for this PO. Total lines received: ${grns.reduce((s,g)=>s+g.lines.length,0)}</div>`
-    : '<div class="alert alert-warning">No GRNs found for this PO.</div>';
-  document.getElementById('inv_amount').oninput = function() {
-    const amt = parseFloat(this.value)||0;
-    const gst = parseFloat(document.getElementById('inv_gst').value)||0;
-    document.getElementById('inv_total').value = (amt+gst).toFixed(2);
+    ? `<div class="alert alert-info">${grns.length} GRN(s) found for this PO. Invoiced quantity defaults to what was received — edit if the vendor billed differently.</div>`
+    : `<div class="alert alert-warning">No GRNs found for this PO yet — every line will show as a discrepancy until a GRN is recorded.</div>`;
+  invLines = po.lines.map((l, idx) => {
+    const grnQty = grnReceivedForLine(poId, idx);
+    return {
+      desc: l.desc, uom: l.uom, poQty: l.qty, poRate: l.rate || 0, gst: l.gst || 0,
+      grnQty, invoicedQty: grnQty, invoicedRate: l.rate || 0
+    };
+  });
+  renderInvoiceLines();
+}
+
+function invoiceLineMatch(l) {
+  const lineAmount = (l.invoicedQty || 0) * (l.invoicedRate || 0);
+  const expectedAmount = l.grnQty * l.poRate;
+  return {
+    lineAmount,
+    qtyMismatch: l.invoicedQty !== l.grnQty,
+    amtMismatch: Math.abs(lineAmount - expectedAmount) > 0.01
   };
-  document.getElementById('inv_gst').oninput = function() {
-    const amt = parseFloat(document.getElementById('inv_amount').value)||0;
-    const gst = parseFloat(this.value)||0;
-    document.getElementById('inv_total').value = (amt+gst).toFixed(2);
-  };
+}
+
+function renderInvoiceLines() {
+  const body = document.getElementById('invLineBody');
+  if (!body) return;
+  if (!invLines.length) {
+    body.innerHTML = '<tr><td colspan="10"><div class="empty-state">Select a PO to load its line items</div></td></tr>';
+    recalcInvoiceTotals();
+    return;
+  }
+  body.innerHTML = invLines.map((l, i) => {
+    const { lineAmount, qtyMismatch, amtMismatch } = invoiceLineMatch(l);
+    const badge = (qtyMismatch || amtMismatch)
+      ? '<span class="status status-rejected">Discrepancy</span>'
+      : '<span class="status status-approved">Matched</span>';
+    return `<tr style="${(qtyMismatch||amtMismatch) ? 'background:#fff5f5;' : ''}">
+      <td>${i+1}</td><td>${l.desc}</td><td>${l.uom}</td><td>${l.poQty}</td><td>₹${l.poRate.toLocaleString('en-IN')}</td>
+      <td style="${qtyMismatch?'color:#dc2626;font-weight:700;':''}">${l.grnQty}</td>
+      <td><input type="number" id="invq_${i}" value="${l.invoicedQty}" min="0" style="width:80px;padding:4px;border:1px solid ${qtyMismatch?'#dc2626':'var(--border)'};border-radius:4px;" oninput="updateInvoiceLine(${i})"></td>
+      <td><input type="number" id="invr_${i}" value="${l.invoicedRate}" min="0" style="width:90px;padding:4px;border:1px solid var(--border);border-radius:4px;" oninput="updateInvoiceLine(${i})"></td>
+      <td style="${amtMismatch?'color:#dc2626;font-weight:700;':''}">₹${lineAmount.toFixed(2)}</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join('');
+  recalcInvoiceTotals();
+}
+
+function updateInvoiceLine(i) {
+  const l = invLines[i];
+  if (!l) return;
+  l.invoicedQty = parseFloat(document.getElementById(`invq_${i}`)?.value) || 0;
+  l.invoicedRate = parseFloat(document.getElementById(`invr_${i}`)?.value) || 0;
+  renderInvoiceLines();
+}
+
+function recalcInvoiceTotals() {
+  const amount = invLines.reduce((s, l) => s + (l.invoicedQty||0) * (l.invoicedRate||0), 0);
+  const gst = invLines.reduce((s, l) => s + ((l.invoicedQty||0) * (l.invoicedRate||0)) * ((l.gst||0)/100), 0);
+  document.getElementById('inv_amount').value = amount.toFixed(2);
+  document.getElementById('inv_gst').value = gst.toFixed(2);
+  document.getElementById('inv_total').value = (amount+gst).toFixed(2);
 }
 
 function submitInvoice() {
   const poId = document.getElementById('inv_po').value;
   const invNo = document.getElementById('inv_no').value.trim();
   const invDate = document.getElementById('inv_date').value;
+  const dueDate = document.getElementById('inv_duedate').value;
+  if (!poId || !invNo || !invDate || !invLines.length) { toast('Select a PO and fill all required fields', '#dc2626'); return; }
+  const po = state.pos.find(p => p.id === poId);
+  const lines = invLines.map(l => {
+    const { lineAmount, qtyMismatch, amtMismatch } = invoiceLineMatch(l);
+    return { desc: l.desc, uom: l.uom, poQty: l.poQty, poRate: l.poRate, grnQty: l.grnQty,
+              invoicedQty: l.invoicedQty, invoicedRate: l.invoicedRate, lineAmount, qtyMismatch, amtMismatch };
+  });
+  const hasDiscrepancy = lines.some(l => l.qtyMismatch || l.amtMismatch);
   const amount = parseFloat(document.getElementById('inv_amount').value)||0;
   const gst = parseFloat(document.getElementById('inv_gst').value)||0;
   const total = parseFloat(document.getElementById('inv_total').value)||0;
-  const dueDate = document.getElementById('inv_duedate').value;
-  if (!poId || !invNo || !invDate || !total) { toast('Fill all required fields', '#dc2626'); return; }
-  const po = state.pos.find(p => p.id === poId);
   const inv = {
     id: genId('INV'), invNo, poId, vendor: po?.vendor||'', project: po?.project||'',
-    date: invDate, amount, gst, total, dueDate,
+    date: invDate, amount, gst, total, dueDate, lines, hasDiscrepancy,
     remarks: document.getElementById('inv_remarks').value,
     paidAmount: 0, status: 'Pending', createdBy: state.userName,
     documents: (_stageDocs['invoice'] || []).slice()
   };
   state.invoices.push(inv);
-  addActivity(`Invoice ${invNo} submitted for PO ${poId}`);
+  addActivity(`Invoice ${invNo} submitted for PO ${poId}${hasDiscrepancy ? ' — discrepancy flagged' : ''}`);
   save(); updateBadges(); clearInvoiceForm(); renderInvoiceList();
-  toast('Invoice submitted ✓', '#16a34a');
+  toast(hasDiscrepancy ? 'Invoice submitted — discrepancy flagged ⚠' : 'Invoice submitted ✓', hasDiscrepancy ? '#d97706' : '#16a34a');
   switchTab('invoice','list');
 }
 
@@ -2647,6 +2876,8 @@ function clearInvoiceForm() {
   });
   const s = document.getElementById('invGRNSummary');
   if (s) s.innerHTML = '';
+  invLines = [];
+  renderInvoiceLines();
   clearStageDocs('invoice');
 }
 
@@ -2661,12 +2892,15 @@ function renderInvoiceList() {
     if (inv.status !== 'Paid' && inv.dueDate && inv.dueDate < today()) inv.status = 'Overdue';
   });
   if (!invs.length) {
-    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:20px;">No invoices yet</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:20px;">No invoices yet</td></tr>';
     return;
   }
   tbody.innerHTML = invs.map(inv => {
     const balance = inv.total - (inv.paidAmount||0);
-    const statusClass = inv.status === 'Paid' ? 'status-approved' : inv.status === 'Overdue' ? 'status-rejected' : 'status-pending';
+    const stCls = inv.status === 'Paid' ? 'status-approved' : inv.status === 'Overdue' ? 'status-rejected' : 'status-pending';
+    const matchBadge = inv.lines
+      ? (inv.hasDiscrepancy ? '<span class="status status-rejected">Discrepancy</span>' : '<span class="status status-approved">Matched</span>')
+      : '<span class="status status-draft">N/A</span>';
     return `<tr>
       <td><b>${inv.invNo}</b></td>
       <td>${inv.date}</td>
@@ -2676,7 +2910,8 @@ function renderInvoiceList() {
       <td>₹${(inv.paidAmount||0).toLocaleString('en-IN')}</td>
       <td>₹${balance.toLocaleString('en-IN')}</td>
       <td>${inv.dueDate||'—'}</td>
-      <td><span class="status ${statusClass}">${inv.status}</span></td>
+      <td><span class="status ${stCls}">${inv.status}</span></td>
+      <td>${matchBadge}</td>
       <td><button class="btn btn-sm btn-outline" onclick='viewInvoice("${inv.id}")'>View</button></td>
     </tr>`;
   }).join('');
@@ -2685,6 +2920,13 @@ function renderInvoiceList() {
 function viewInvoice(id) {
   const inv = state.invoices.find(x => x.id === id);
   if (!inv) return;
+  const lineRows = (inv.lines || []).map((l, i) => `
+    <tr style="${(l.qtyMismatch||l.amtMismatch) ? 'background:#fff5f5;' : ''}">
+      <td>${i+1}</td><td>${l.desc}</td>
+      <td style="${l.qtyMismatch?'color:#dc2626;font-weight:700;':''}">${l.grnQty} GRN / ${l.invoicedQty} Inv</td>
+      <td style="${l.amtMismatch?'color:#dc2626;font-weight:700;':''}">₹${(l.grnQty*l.poRate).toFixed(2)} expected / ₹${l.lineAmount.toFixed(2)} invoiced</td>
+      <td>${(l.qtyMismatch||l.amtMismatch) ? '<span class="status status-rejected">Discrepancy</span>' : '<span class="status status-approved">Matched</span>'}</td>
+    </tr>`).join('');
   showModal(`
     <h3 style="margin:0 0 12px;color:var(--primary);">Invoice: ${inv.invNo}</h3>
     <div class="info-grid">
@@ -2692,8 +2934,9 @@ function viewInvoice(id) {
       <div><b>Vendor:</b> ${inv.vendor}</div><div><b>Due Date:</b> ${inv.dueDate||'—'}</div>
       <div><b>Amount:</b> ₹${inv.amount.toLocaleString('en-IN')}</div><div><b>GST:</b> ₹${inv.gst.toLocaleString('en-IN')}</div>
       <div><b>Total:</b> ₹${inv.total.toLocaleString('en-IN')}</div><div><b>Paid:</b> ₹${(inv.paidAmount||0).toLocaleString('en-IN')}</div>
-      <div><b>Status:</b> ${inv.status}</div><div><b>File:</b> ${inv.file||'—'}</div>
+      <div><b>Status:</b> ${inv.status}</div><div><b>Overall match:</b> ${inv.lines ? (inv.hasDiscrepancy ? '⚠ Discrepancy' : '✓ Matched') : 'N/A'}</div>
     </div>
+    ${lineRows ? `<hr class="divider"><table><thead><tr><th>#</th><th>Description</th><th>Qty (GRN / Invoiced)</th><th>Amount (expected / invoiced)</th><th>Match</th></tr></thead><tbody>${lineRows}</tbody></table>` : ''}
     ${inv.remarks ? `<div class="alert alert-info" style="margin-top:12px;">${inv.remarks}</div>` : ''}
   `);
 }
@@ -3009,7 +3252,7 @@ function savePrefixSettings() {
 // ======================================================
 // USER MANAGEMENT
 // ======================================================
-const ROLE_LABELS = { site_engineer:'Site Engineer', qs_engineer:'QS Engineer', technical_director:'Technical Director', management:'Management', purchase_manager:'Purchase Department', qs_manager:'QS Department' };
+const ROLE_LABELS = { site_engineer:'Site Engineer', qs_engineer:'QS Engineer', site_incharge:'Site Incharge', management:'Management', purchase_manager:'Purchase Department', qs_manager:'QS Department' };
 
 function renderUserManagement() {
   const filter = document.getElementById('um_filter')?.value||'';
