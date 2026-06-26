@@ -584,25 +584,26 @@
               <option value="">-- Select Project --</option>
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group" id="opt-field-indent-reqdate">
             <label>Required By Date</label>
             <input id="i_reqdate" type="date">
           </div>
-          <div class="form-group">
+          <div class="form-group" id="opt-field-indent-location">
             <label>Site Location</label>
             <input id="i_location" placeholder="e.g. Floor 3, Block A">
           </div>
-          <div class="form-group">
+          <div class="form-group" id="opt-field-indent-priority">
             <label>Priority</label>
             <select id="i_priority">
               <option>Normal</option><option>Urgent</option><option>Critical</option>
             </select>
           </div>
-          <div class="form-group form-full">
+          <div class="form-group form-full" id="opt-field-indent-purpose">
             <label>Purpose / Justification</label>
             <textarea id="i_purpose" placeholder="Reason for this material request..."></textarea>
           </div>
         </div>
+        <div class="form-grid" id="cust-fields-indent" style="margin-top:0;padding-top:0;"></div>
         <hr class="divider">
         <div class="section-header">
           <h3>Line Items</h3>
@@ -694,15 +695,16 @@
             <label>Date</label>
             <input id="cs_date" type="date">
           </div>
-          <div class="form-group">
+          <div class="form-group" id="opt-field-cs-preparedby">
             <label>Prepared By</label>
             <input id="cs_preparedby" placeholder="Procurement Officer Name">
           </div>
-          <div class="form-group form-full">
+          <div class="form-group form-full" id="opt-field-cs-remarks">
             <label>Remarks</label>
             <textarea id="cs_remarks" placeholder="Notes on comparative statement..."></textarea>
           </div>
         </div>
+        <div class="form-grid" id="cust-fields-cs" style="margin-top:0;padding-top:0;"></div>
         <hr class="divider">
         <div class="section-header">
           <h3>Vendor Quotes per Line Item</h3>
@@ -884,23 +886,24 @@
             <label>Receipt Date</label>
             <input id="grn_date" type="date">
           </div>
-          <div class="form-group">
+          <div class="form-group" id="opt-field-grn-challan">
             <label>Vehicle / Challan No</label>
             <input id="grn_challan" placeholder="Challan / DC number">
           </div>
-          <div class="form-group">
+          <div class="form-group" id="opt-field-grn-receivedby">
             <label>Received By</label>
             <input id="grn_receivedby" placeholder="Store / Site In-charge name">
           </div>
-          <div class="form-group">
+          <div class="form-group" id="opt-field-grn-challandate">
             <label>Supplier Challan Date</label>
             <input id="grn_challandate" type="date">
           </div>
-          <div class="form-group form-full">
+          <div class="form-group form-full" id="opt-field-grn-remarks">
             <label>Remarks</label>
             <textarea id="grn_remarks" placeholder="Quality observations, shortages, damages..."></textarea>
           </div>
         </div>
+        <div class="form-grid" id="cust-fields-grn" style="margin-top:0;padding-top:0;"></div>
         <hr class="divider">
         <div class="section-header"><h3>PO Line Items — Enter Received Quantities</h3></div>
         <div class="tbl-wrap">
@@ -985,15 +988,16 @@
             <label>Total with GST (₹)</label>
             <input id="inv_total" type="number" placeholder="0" readonly style="background:#f1f5f9;">
           </div>
-          <div class="form-group">
+          <div class="form-group" id="opt-field-invoice-duedate">
             <label>Payment Due Date</label>
             <input id="inv_duedate" type="date">
           </div>
-          <div class="form-group form-full">
+          <div class="form-group form-full" id="opt-field-invoice-remarks">
             <label>Remarks</label>
             <textarea id="inv_remarks" placeholder="Any discrepancies or notes..."></textarea>
           </div>
         </div>
+        <div class="form-grid" id="cust-fields-invoice" style="margin-top:0;padding-top:0;"></div>
         <hr class="divider">
         <div class="section-header"><h3>PO–GRN–Invoice match (per line)</h3></div>
         <div id="invGRNSummary"></div>
@@ -1159,6 +1163,7 @@
     <div class="tab active" onclick="switchTab('templates','company')">Company Details</div>
     <div class="tab" onclick="switchTab('templates','workflow')">Approval Workflow</div>
     <div class="tab" onclick="switchTab('templates','prefixes')">Document Numbering</div>
+    <div class="tab" onclick="switchTab('templates','fields');renderFormConfigPanel()">Form Fields</div>
   </div>
 
   <div class="tab-content active" id="templates-company">
@@ -1205,6 +1210,13 @@
         <button class="btn btn-primary" onclick="savePrefixSettings()">Save Numbering</button>
       </div>
     </div>
+  </div>
+
+  <div class="tab-content" id="templates-fields">
+    <div class="alert alert-info" style="margin-bottom:12px;">
+      <b>Form Fields Configuration</b> — Toggle which built-in optional fields appear on each form, and add your own custom fields (text, number, date, dropdown). Custom field values are saved with every record and visible in the detail view.
+    </div>
+    <div id="formConfigEditor"></div>
   </div>
 </div>
 
@@ -1285,6 +1297,13 @@ const DEFAULT_SETTINGS = {
     indent: ['site_engineer','qs_engineer','site_incharge'],
     cs:     ['management'],
     po:     ['qs_manager']
+  },
+  formConfig: {
+    indent:  { optionalFields: { priority:true, reqdate:true, location:true, purpose:true }, customFields:[] },
+    cs:      { optionalFields: { preparedby:true, remarks:true }, customFields:[] },
+    po:      { optionalFields: {}, customFields:[] },
+    grn:     { optionalFields: { challan:true, receivedby:true, challandate:true, remarks:true }, customFields:[] },
+    invoice: { optionalFields: { duedate:true, remarks:true }, customFields:[] }
   }
 };
 function getSetting(path, fallback) {
@@ -1348,6 +1367,7 @@ function doLogin() {
     err.style.display = 'none';
     updateBadges();
     renderDashboard();
+    applyFormConfig();
   } else {
     err.style.display = 'block';
     document.getElementById('loginPasscode').value = '';
@@ -1509,11 +1529,11 @@ function nav(el) {
   if (page === 'dashboard') renderDashboard();
   if (page === 'master') { renderMaster(); populateProjectDropdowns(); }
   if (page === 'vendor_master') renderVendorMaster();
-  if (page === 'indent') { populateProjectDropdowns(); renderIndentList(); renderIndentApprove(); initIndentForm(); }
-  if (page === 'vendor') { populateCSIndentDropdown(); renderCSList(); renderCSApprove(); }
-  if (page === 'po') { populatePOCSDropdown(); renderPOList(); renderPOApprove(); }
-  if (page === 'grn') { populateGRNPODropdown(); renderGRNList(); }
-  if (page === 'invoice') { populateInvoicePODropdown(); renderInvoiceList(); renderPaymentHistory(); }
+  if (page === 'indent') { populateProjectDropdowns(); renderIndentList(); renderIndentApprove(); initIndentForm(); renderCustomFieldsInForm('indent'); }
+  if (page === 'vendor') { populateCSIndentDropdown(); renderCSList(); renderCSApprove(); renderCustomFieldsInForm('cs'); }
+  if (page === 'po') { populatePOCSDropdown(); renderPOList(); renderPOApprove(); renderCustomFieldsInForm('po'); }
+  if (page === 'grn') { populateGRNPODropdown(); renderGRNList(); renderCustomFieldsInForm('grn'); }
+  if (page === 'invoice') { populateInvoicePODropdown(); renderInvoiceList(); renderPaymentHistory(); renderCustomFieldsInForm('invoice'); }
   if (page === 'reports') { renderReports(); }
   if (page === 'usermgmt') { renderUserManagement(); }
   if (page === 'templates') { renderTemplateSettings(); }
@@ -2071,7 +2091,8 @@ function submitIndent() {
     status: 'Pending QS Engineer',
     raisedBy: ROLES[state.role],
     approvals: [{ role: 'Site Engineer', status: 'Approved', by: ROLES[state.role], time: new Date().toLocaleString('en-IN') }],
-    documents: (_stageDocs['indent'] || []).slice()
+    documents: (_stageDocs['indent'] || []).slice(),
+    customFields: collectCustomFieldValues('indent')
   };
   state.indents.push(indent);
   addActivity(`Indent ${no} submitted for ${project} (${lines.length} items)`);
@@ -2206,6 +2227,7 @@ function viewIndent(id) {
       <td>${idx+1}</td><td>${l.matCode}</td><td>${l.desc}</td><td>${l.scope}</td>
       <td>${l.uom}</td><td>${l.estQty}</td><td><b>${l.reqQty}</b></td><td>${l.remarks||'-'}</td>
     </tr>`).join('')}</tbody></table>
+    ${renderCustomFieldDisplay('indent', i.customFields)}
   `);
 }
 
@@ -2295,7 +2317,8 @@ function submitCS() {
     id: ref, indentId, project: indent.project, date, preparedby,
     remarks: document.getElementById('cs_remarks').value,
     lines, status: 'Pending Management',
-    approvals: [], documents: (_stageDocs['cs'] || []).slice()
+    approvals: [], documents: (_stageDocs['cs'] || []).slice(),
+    customFields: collectCustomFieldValues('cs')
   };
   state.cs.push(cs);
   addActivity(`CS ${ref} submitted for indent ${indentId}`);
@@ -2403,6 +2426,7 @@ function viewCS(id) {
         </table>
       </div>
     `).join('')}
+    ${renderCustomFieldDisplay('cs', c.customFields)}
   `);
 }
 
@@ -2695,7 +2719,8 @@ function submitGRN() {
     challanDate: document.getElementById('grn_challandate').value,
     remarks: document.getElementById('grn_remarks').value,
     lines, status: 'Completed', createdBy: state.userName,
-    documents: (_stageDocs['grn'] || []).slice()
+    documents: (_stageDocs['grn'] || []).slice(),
+    customFields: collectCustomFieldValues('grn')
   };
   state.grns.push(grn);
   addActivity(`GRN ${grno} created for PO ${poId}`);
@@ -2750,6 +2775,7 @@ function viewGRN(id) {
     <table><thead><tr><th>#</th><th>Description</th><th>UOM</th><th>PO Qty</th><th>Received</th><th>Condition</th></tr></thead>
     <tbody>${g.lines.map((l,i) => `<tr><td>${i+1}</td><td>${l.desc}</td><td>${l.uom}</td><td>${l.poQty}</td><td><b>${l.receivedQty}</b></td><td>${l.condition}</td></tr>`).join('')}</tbody>
     </table>
+    ${renderCustomFieldDisplay('grn', g.customFields)}
   `);
 }
 
@@ -2860,7 +2886,8 @@ function submitInvoice() {
     date: invDate, amount, gst, total, dueDate, lines, hasDiscrepancy,
     remarks: document.getElementById('inv_remarks').value,
     paidAmount: 0, status: 'Pending', createdBy: state.userName,
-    documents: (_stageDocs['invoice'] || []).slice()
+    documents: (_stageDocs['invoice'] || []).slice(),
+    customFields: collectCustomFieldValues('invoice')
   };
   state.invoices.push(inv);
   addActivity(`Invoice ${invNo} submitted for PO ${poId}${hasDiscrepancy ? ' — discrepancy flagged' : ''}`);
@@ -2938,6 +2965,7 @@ function viewInvoice(id) {
     </div>
     ${lineRows ? `<hr class="divider"><table><thead><tr><th>#</th><th>Description</th><th>Qty (GRN / Invoiced)</th><th>Amount (expected / invoiced)</th><th>Match</th></tr></thead><tbody>${lineRows}</tbody></table>` : ''}
     ${inv.remarks ? `<div class="alert alert-info" style="margin-top:12px;">${inv.remarks}</div>` : ''}
+    ${renderCustomFieldDisplay('invoice', inv.customFields)}
   `);
 }
 
@@ -3131,6 +3159,239 @@ function loadSampleData() {
   toast('Sample data loaded ✓', '#16a34a');
 }
 
+
+// ======================================================
+// FORM CONFIGURATION (Management)
+// ======================================================
+
+const OPTIONAL_FIELDS = {
+  indent: [
+    { key: 'priority',  label: 'Priority'              },
+    { key: 'reqdate',   label: 'Required By Date'       },
+    { key: 'location',  label: 'Site Location'          },
+    { key: 'purpose',   label: 'Purpose / Justification'}
+  ],
+  cs: [
+    { key: 'preparedby', label: 'Prepared By' },
+    { key: 'remarks',    label: 'Remarks'      }
+  ],
+  grn: [
+    { key: 'challan',     label: 'Vehicle / Challan No'  },
+    { key: 'receivedby',  label: 'Received By'           },
+    { key: 'challandate', label: 'Supplier Challan Date' },
+    { key: 'remarks',     label: 'Remarks'               }
+  ],
+  invoice: [
+    { key: 'duedate',  label: 'Payment Due Date' },
+    { key: 'remarks',  label: 'Remarks'           }
+  ]
+};
+
+function getFormConfig(module) {
+  const fc = (state.settings || DEFAULT_SETTINGS).formConfig;
+  const defaults = DEFAULT_SETTINGS.formConfig[module] || { optionalFields:{}, customFields:[] };
+  if (!fc || !fc[module]) return JSON.parse(JSON.stringify(defaults));
+  return fc[module];
+}
+
+function applyFormConfig() {
+  Object.keys(OPTIONAL_FIELDS).forEach(module => {
+    const cfg = getFormConfig(module);
+    OPTIONAL_FIELDS[module].forEach(f => {
+      const el = document.getElementById('opt-field-' + module + '-' + f.key);
+      if (el) el.style.display = cfg.optionalFields[f.key] !== false ? '' : 'none';
+    });
+    renderCustomFieldsInForm(module);
+  });
+}
+
+function renderCustomFieldsInForm(module) {
+  const container = document.getElementById('cust-fields-' + module);
+  if (!container) return;
+  const fields = (getFormConfig(module).customFields || []);
+  if (!fields.length) { container.innerHTML = ''; return; }
+  container.innerHTML = fields.map(f => {
+    let inputHtml;
+    if (f.type === 'select') {
+      inputHtml = `<select id="cf_${f.id}"><option value="">-- Select --</option>${(f.options||[]).map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`;
+    } else if (f.type === 'textarea') {
+      inputHtml = `<textarea id="cf_${f.id}" placeholder="${f.label}"></textarea>`;
+    } else {
+      inputHtml = `<input id="cf_${f.id}" type="${f.type}" placeholder="${f.label}">`;
+    }
+    return `<div class="form-group${f.type==='textarea'?' form-full':''}">
+      <label>${f.label}${f.required?' *':''} <span style="font-size:10px;color:var(--muted);font-weight:400;">(Custom)</span></label>
+      ${inputHtml}
+    </div>`;
+  }).join('');
+}
+
+function collectCustomFieldValues(module) {
+  const fields = (getFormConfig(module).customFields || []);
+  const result = {};
+  fields.forEach(f => {
+    const el = document.getElementById('cf_' + f.id);
+    if (el) result[f.id] = el.value;
+  });
+  return Object.keys(result).length ? result : null;
+}
+
+function renderCustomFieldDisplay(module, values) {
+  if (!values || !Object.keys(values).length) return '';
+  const fields = (getFormConfig(module).customFields || []);
+  const rows = Object.entries(values).map(([id, val]) => {
+    const field = fields.find(f => f.id === id);
+    if (!field || !val) return '';
+    return `<tr><td style="color:var(--muted);font-size:12px;padding:4px 8px 4px 0;white-space:nowrap;">${field.label}</td><td style="font-size:13px;padding:4px 0;">${val}</td></tr>`;
+  }).filter(Boolean).join('');
+  if (!rows) return '';
+  return `<hr class="divider"><p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:0 0 6px;">Custom Fields</p>
+    <table style="width:100%;border-collapse:collapse;"><tbody>${rows}</tbody></table>`;
+}
+
+function renderFormConfigPanel() {
+  const el = document.getElementById('formConfigEditor');
+  if (!el) return;
+  const s = state.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  if (!s.formConfig) s.formConfig = JSON.parse(JSON.stringify(DEFAULT_SETTINGS.formConfig));
+  const modules = [
+    { key:'indent',  label:'📝 Indent'   },
+    { key:'cs',      label:'📊 CS'       },
+    { key:'grn',     label:'📦 GRN'      },
+    { key:'invoice', label:'🧾 Invoice'  }
+  ];
+  el.innerHTML = `
+    <div class="tabs" style="margin-bottom:16px;">
+      ${modules.map((m,i)=>`<div class="tab${i===0?' active':''}" onclick="switchFCTab('${m.key}',this)">${m.label}</div>`).join('')}
+    </div>
+    ${modules.map((m,i)=>`
+      <div id="fc-tab-${m.key}" style="display:${i===0?'block':'none'};">
+        ${renderOptFieldsSection(m.key, s)}
+        ${renderCustFieldsSection(m.key, s)}
+        <div class="flex-row" style="margin-bottom:20px;">
+          <button class="btn btn-primary btn-sm" onclick="saveFormConfig()">Save Changes</button>
+        </div>
+      </div>`).join('')}`;
+}
+
+function switchFCTab(key, el) {
+  ['indent','cs','grn','invoice'].forEach(m => {
+    const t = document.getElementById('fc-tab-' + m);
+    if (t) t.style.display = m === key ? 'block' : 'none';
+  });
+  el.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function renderOptFieldsSection(module, s) {
+  const fields = OPTIONAL_FIELDS[module];
+  if (!fields || !fields.length) return '';
+  const cfg = s.formConfig[module] || { optionalFields:{}, customFields:[] };
+  return `<div class="card" style="margin-bottom:12px;">
+    <div class="card-title" style="margin-bottom:4px;">Built-in Optional Fields</div>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 10px;">Unchecked fields are hidden from the form.</p>
+    ${fields.map(f => `
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border);">
+        <input type="checkbox" id="fc_opt_${module}_${f.key}" ${cfg.optionalFields[f.key]!==false?'checked':''} style="width:auto;">
+        <label for="fc_opt_${module}_${f.key}" style="flex:1;font-size:13px;cursor:pointer;">${f.label}</label>
+      </div>`).join('')}
+  </div>`;
+}
+
+function renderCustFieldsSection(module, s) {
+  const cfg = s.formConfig[module] || { optionalFields:{}, customFields:[] };
+  const fields = cfg.customFields || [];
+  return `<div class="card" style="margin-bottom:12px;">
+    <div class="card-title" style="margin-bottom:4px;">Custom Fields</div>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 10px;">Add your own fields — they appear on the form and are saved with every record.</p>
+    <div id="cfl-${module}">
+      ${fields.length ? fields.map(f => `
+        <div style="display:flex;align-items:center;gap:8px;padding:8px;background:#f8fafc;border-radius:6px;margin-bottom:6px;">
+          <span style="flex:1;font-size:13px;"><b>${f.label}</b> <span style="color:var(--muted);font-size:12px;">(${f.type}${f.type==='select'?' — '+f.options.join(', '):''})</span>${f.required?'<span class="status status-pending" style="font-size:10px;margin-left:6px;">Required</span>':''}</span>
+          <button class="btn btn-sm btn-danger" onclick="removeCustomField('${module}','${f.id}')">✕</button>
+        </div>`).join('') : '<p style="font-size:13px;color:var(--muted);padding:6px 0 8px;">No custom fields yet.</p>'}
+    </div>
+    <hr class="divider">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:8px;">Add New Field</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Field Label</label>
+        <input id="nf_label_${module}" placeholder="e.g. Brand Preference">
+      </div>
+      <div class="form-group">
+        <label>Field Type</label>
+        <select id="nf_type_${module}" onchange="toggleSelectOpts('${module}')">
+          <option value="text">Text</option>
+          <option value="number">Number</option>
+          <option value="date">Date</option>
+          <option value="select">Dropdown</option>
+          <option value="textarea">Long Text</option>
+        </select>
+      </div>
+      <div class="form-group form-full" id="nf_opts_wrap_${module}" style="display:none;">
+        <label>Options <span style="font-weight:400;color:var(--muted)">(comma-separated)</span></label>
+        <input id="nf_opts_${module}" placeholder="Option A, Option B, Option C">
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;gap:8px;padding-top:20px;">
+        <input type="checkbox" id="nf_req_${module}" style="width:auto;">
+        <label for="nf_req_${module}" style="font-size:13px;text-transform:none;letter-spacing:0;">Required field</label>
+      </div>
+    </div>
+    <div class="flex-row mt-8">
+      <button class="btn btn-outline btn-sm" onclick="addCustomField('${module}')">+ Add Field</button>
+    </div>
+  </div>`;
+}
+
+function toggleSelectOpts(module) {
+  const type = document.getElementById('nf_type_' + module)?.value;
+  const wrap = document.getElementById('nf_opts_wrap_' + module);
+  if (wrap) wrap.style.display = (type === 'select') ? '' : 'none';
+}
+
+function addCustomField(module) {
+  const label = document.getElementById('nf_label_' + module)?.value.trim();
+  const type  = document.getElementById('nf_type_' + module)?.value || 'text';
+  const required = document.getElementById('nf_req_' + module)?.checked || false;
+  const optsRaw  = document.getElementById('nf_opts_' + module)?.value || '';
+  if (!label) { toast('Enter a field label', '#dc2626'); return; }
+  const options = (type === 'select') ? optsRaw.split(',').map(o=>o.trim()).filter(Boolean) : [];
+  if (type === 'select' && !options.length) { toast('Add at least one option for dropdown', '#dc2626'); return; }
+  const s = state.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  if (!s.formConfig) s.formConfig = JSON.parse(JSON.stringify(DEFAULT_SETTINGS.formConfig));
+  if (!s.formConfig[module]) s.formConfig[module] = { optionalFields:{}, customFields:[] };
+  s.formConfig[module].customFields.push({ id:'cf_'+module+'_'+Date.now(), label, type, required, options });
+  state.settings = s;
+  save(); renderFormConfigPanel(); applyFormConfig();
+  toast('Field "' + label + '" added ✓', '#16a34a');
+}
+
+function removeCustomField(module, fieldId) {
+  if (!confirm('Remove this custom field?\nExisting records keep their saved value but the field will no longer appear on new forms.')) return;
+  const s = state.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  if (!s.formConfig || !s.formConfig[module]) return;
+  s.formConfig[module].customFields = s.formConfig[module].customFields.filter(f => f.id !== fieldId);
+  state.settings = s;
+  save(); renderFormConfigPanel(); applyFormConfig();
+  toast('Custom field removed', '#d97706');
+}
+
+function saveFormConfig() {
+  const s = state.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  if (!s.formConfig) s.formConfig = JSON.parse(JSON.stringify(DEFAULT_SETTINGS.formConfig));
+  Object.keys(OPTIONAL_FIELDS).forEach(module => {
+    if (!s.formConfig[module]) s.formConfig[module] = { optionalFields:{}, customFields:[] };
+    const optState = {};
+    OPTIONAL_FIELDS[module].forEach(f => {
+      const el = document.getElementById('fc_opt_' + module + '_' + f.key);
+      optState[f.key] = el ? el.checked : true;
+    });
+    s.formConfig[module].optionalFields = optState;
+  });
+  state.settings = s;
+  save(); applyFormConfig();
+  toast('Form configuration saved ✓', '#16a34a');
+}
 
 // ======================================================
 // TEMPLATE SETTINGS
