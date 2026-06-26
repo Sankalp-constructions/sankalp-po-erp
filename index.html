@@ -3601,6 +3601,21 @@ window.onload = async function() {
   renderDashboard();
 };
 
+// Register Service Worker for network-first loading (always gets latest version)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sankalp-po-erp/sw.js')
+    .then(reg => {
+      reg.addEventListener('updatefound', () => {
+        const sw = reg.installing;
+        sw.addEventListener('statechange', () => {
+          if (sw.state === 'installed' && navigator.serviceWorker.controller) {
+            location.reload();
+          }
+        });
+      });
+    })
+    .catch(() => {});
+}
 
 </script>
 </body>
