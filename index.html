@@ -628,9 +628,10 @@
           <span style="font-size:11px;color:var(--muted);margin-left:10px;">PDF, Images, Word, Excel (max 5MB each)</span>
           <div id="doclist_indent" style="margin-top:10px;"></div>
         </div>
-        <div class="flex-row mt-16">
-          <button class="btn btn-primary" onclick="submitIndent()">Submit Indent</button>
-          <button class="btn btn-outline" onclick="clearIndentForm()">Clear</button>
+        <div class="flex-row mt-16" id="indent-form-buttons">
+          <button class="btn btn-primary" id="btn-indent-submit" onclick="submitIndent()">Submit Indent</button>
+          <button class="btn btn-outline" id="btn-indent-clear" onclick="clearIndentForm()">Clear</button>
+          <span id="cust-buttons-indent" style="display:contents;"></span>
         </div>
       </div>
     </div>
@@ -721,9 +722,10 @@
           <span style="font-size:11px;color:var(--muted);margin-left:10px;">PDF, Images, Word, Excel (max 5MB each)</span>
           <div id="doclist_cs" style="margin-top:10px;"></div>
         </div>
-        <div class="flex-row mt-16">
-          <button class="btn btn-primary" onclick="submitCS()">Submit for Approval</button>
-          <button class="btn btn-outline" onclick="clearCSForm()">Clear</button>
+        <div class="flex-row mt-16" id="cs-form-buttons">
+          <button class="btn btn-primary" id="btn-cs-submit" onclick="submitCS()">Submit for Approval</button>
+          <button class="btn btn-outline" id="btn-cs-clear" onclick="clearCSForm()">Clear</button>
+          <span id="cust-buttons-cs" style="display:contents;"></span>
         </div>
       </div>
     </div>
@@ -823,9 +825,11 @@
           <span style="font-size:11px;color:var(--muted);margin-left:10px;">PDF, Images, Word, Excel (max 5MB each)</span>
           <div id="doclist_po" style="margin-top:10px;"></div>
         </div>
-        <div class="flex-row mt-16">
-          <button class="btn btn-primary" onclick="submitPO()">Create & Submit PO</button>
-          <button class="btn btn-outline" onclick="clearPOForm()">Clear</button>
+        <div class="form-grid" id="cust-fields-po" style="margin-top:0;padding-top:0;"></div>
+        <div class="flex-row mt-16" id="po-form-buttons">
+          <button class="btn btn-primary" id="btn-po-submit" onclick="submitPO()">Create &amp; Submit PO</button>
+          <button class="btn btn-outline" id="btn-po-clear" onclick="clearPOForm()">Clear</button>
+          <span id="cust-buttons-po" style="display:contents;"></span>
         </div>
       </div>
     </div>
@@ -925,9 +929,10 @@
           <span style="font-size:11px;color:var(--muted);margin-left:10px;">PDF, Images, Word, Excel (max 5MB each)</span>
           <div id="doclist_grn" style="margin-top:10px;"></div>
         </div>
-        <div class="flex-row mt-16">
-          <button class="btn btn-primary" onclick="submitGRN()">Save GRN</button>
-          <button class="btn btn-outline" onclick="clearGRNForm()">Clear</button>
+        <div class="flex-row mt-16" id="grn-form-buttons">
+          <button class="btn btn-primary" id="btn-grn-submit" onclick="submitGRN()">Save GRN</button>
+          <button class="btn btn-outline" id="btn-grn-clear" onclick="clearGRNForm()">Clear</button>
+          <span id="cust-buttons-grn" style="display:contents;"></span>
         </div>
       </div>
     </div>
@@ -1020,9 +1025,10 @@
           <span style="font-size:11px;color:var(--muted);margin-left:10px;">PDF, Images, Word, Excel (max 5MB each)</span>
           <div id="doclist_invoice" style="margin-top:10px;"></div>
         </div>
-        <div class="flex-row mt-16">
-          <button class="btn btn-primary" onclick="submitInvoice()">Submit Invoice</button>
-          <button class="btn btn-outline" onclick="clearInvoiceForm()">Clear</button>
+        <div class="flex-row mt-16" id="invoice-form-buttons">
+          <button class="btn btn-primary" id="btn-invoice-submit" onclick="submitInvoice()">Submit Invoice</button>
+          <button class="btn btn-outline" id="btn-invoice-clear" onclick="clearInvoiceForm()">Clear</button>
+          <span id="cust-buttons-invoice" style="display:contents;"></span>
         </div>
       </div>
     </div>
@@ -1166,7 +1172,7 @@
     <div class="tab active" onclick="switchTab('templates','company')">Company Details</div>
     <div class="tab" onclick="switchTab('templates','workflow')">Approval Workflow</div>
     <div class="tab" onclick="switchTab('templates','prefixes')">Document Numbering</div>
-    <div class="tab" onclick="switchTab('templates','fields');renderFormConfigPanel()">Form Fields</div>
+    <div class="tab" onclick="switchTab('templates','fields');renderFormConfigPanel()">⚙️ Form Settings</div>
   </div>
 
   <div class="tab-content active" id="templates-company">
@@ -1217,7 +1223,7 @@
 
   <div class="tab-content" id="templates-fields">
     <div class="alert alert-info" style="margin-bottom:12px;">
-      <b>Form Fields Configuration</b> — Toggle which built-in optional fields appear on each form, and add your own custom fields (text, number, date, dropdown). Custom field values are saved with every record and visible in the detail view.
+      <b>Form Settings</b> — For each form: toggle built-in optional fields on/off, add/reorder/delete custom fields, and manage buttons (show/hide built-in buttons or add your own action buttons).
     </div>
     <div id="formConfigEditor"></div>
   </div>
@@ -1302,11 +1308,11 @@ const DEFAULT_SETTINGS = {
     po:     ['qs_manager']
   },
   formConfig: {
-    indent:  { optionalFields: { priority:true, reqdate:true, location:true, purpose:true }, customFields:[] },
-    cs:      { optionalFields: { preparedby:true, remarks:true }, customFields:[] },
-    po:      { optionalFields: {}, customFields:[] },
-    grn:     { optionalFields: { challan:true, receivedby:true, challandate:true, remarks:true }, customFields:[] },
-    invoice: { optionalFields: { duedate:true, remarks:true }, customFields:[] }
+    indent:  { optionalFields: { priority:true, reqdate:true, location:true, purpose:true }, customFields:[], hiddenButtons:{}, customButtons:[] },
+    cs:      { optionalFields: { preparedby:true, remarks:true }, customFields:[], hiddenButtons:{}, customButtons:[] },
+    po:      { optionalFields: {}, customFields:[], hiddenButtons:{}, customButtons:[] },
+    grn:     { optionalFields: { challan:true, receivedby:true, challandate:true, remarks:true }, customFields:[], hiddenButtons:{}, customButtons:[] },
+    invoice: { optionalFields: { duedate:true, remarks:true }, customFields:[], hiddenButtons:{}, customButtons:[] }
   }
 };
 function getSetting(path, fallback) {
@@ -3178,6 +3184,7 @@ const OPTIONAL_FIELDS = {
     { key: 'preparedby', label: 'Prepared By' },
     { key: 'remarks',    label: 'Remarks'      }
   ],
+  po: [],
   grn: [
     { key: 'challan',     label: 'Vehicle / Challan No'  },
     { key: 'receivedby',  label: 'Received By'           },
@@ -3190,6 +3197,29 @@ const OPTIONAL_FIELDS = {
   ]
 };
 
+const BUILTIN_BUTTONS = {
+  indent:  [
+    { key: 'submit', label: 'Submit Indent',       style: 'btn-primary', elId: 'btn-indent-submit' },
+    { key: 'clear',  label: 'Clear',               style: 'btn-outline', elId: 'btn-indent-clear'  }
+  ],
+  cs:      [
+    { key: 'submit', label: 'Submit for Approval', style: 'btn-primary', elId: 'btn-cs-submit'     },
+    { key: 'clear',  label: 'Clear',               style: 'btn-outline', elId: 'btn-cs-clear'      }
+  ],
+  po:      [
+    { key: 'submit', label: 'Create & Submit PO',  style: 'btn-primary', elId: 'btn-po-submit'     },
+    { key: 'clear',  label: 'Clear',               style: 'btn-outline', elId: 'btn-po-clear'      }
+  ],
+  grn:     [
+    { key: 'submit', label: 'Save GRN',            style: 'btn-primary', elId: 'btn-grn-submit'    },
+    { key: 'clear',  label: 'Clear',               style: 'btn-outline', elId: 'btn-grn-clear'     }
+  ],
+  invoice: [
+    { key: 'submit', label: 'Submit Invoice',      style: 'btn-primary', elId: 'btn-invoice-submit' },
+    { key: 'clear',  label: 'Clear',               style: 'btn-outline', elId: 'btn-invoice-clear'  }
+  ]
+};
+
 function getFormConfig(module) {
   const fc = (state.settings || DEFAULT_SETTINGS).formConfig;
   const defaults = DEFAULT_SETTINGS.formConfig[module] || { optionalFields:{}, customFields:[] };
@@ -3198,13 +3228,23 @@ function getFormConfig(module) {
 }
 
 function applyFormConfig() {
-  Object.keys(OPTIONAL_FIELDS).forEach(module => {
+  ['indent','cs','po','grn','invoice'].forEach(module => {
     const cfg = getFormConfig(module);
-    OPTIONAL_FIELDS[module].forEach(f => {
+    // optional fields
+    (OPTIONAL_FIELDS[module] || []).forEach(f => {
       const el = document.getElementById('opt-field-' + module + '-' + f.key);
       if (el) el.style.display = cfg.optionalFields[f.key] !== false ? '' : 'none';
     });
+    // custom fields
     renderCustomFieldsInForm(module);
+    // built-in button visibility
+    const hiddenBtns = cfg.hiddenButtons || {};
+    (BUILTIN_BUTTONS[module] || []).forEach(b => {
+      const el = document.getElementById(b.elId);
+      if (el) el.style.display = hiddenBtns[b.key] ? 'none' : '';
+    });
+    // custom buttons
+    renderCustButtonsInForm(module);
   });
 }
 
@@ -3219,6 +3259,8 @@ function renderCustomFieldsInForm(module) {
       inputHtml = `<select id="cf_${f.id}"><option value="">-- Select --</option>${(f.options||[]).map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`;
     } else if (f.type === 'textarea') {
       inputHtml = `<textarea id="cf_${f.id}" placeholder="${f.label}"></textarea>`;
+    } else if (f.type === 'checkbox') {
+      inputHtml = `<label style="display:flex;align-items:center;gap:8px;font-weight:400;cursor:pointer;"><input type="checkbox" id="cf_${f.id}" style="width:auto;"> Yes</label>`;
     } else {
       inputHtml = `<input id="cf_${f.id}" type="${f.type}" placeholder="${f.label}">`;
     }
@@ -3258,10 +3300,11 @@ function renderFormConfigPanel() {
   const s = state.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
   if (!s.formConfig) s.formConfig = JSON.parse(JSON.stringify(DEFAULT_SETTINGS.formConfig));
   const modules = [
-    { key:'indent',  label:'📝 Indent'   },
-    { key:'cs',      label:'📊 CS'       },
-    { key:'grn',     label:'📦 GRN'      },
-    { key:'invoice', label:'🧾 Invoice'  }
+    { key:'indent',  label:'📝 Indent'          },
+    { key:'cs',      label:'📊 Comp. Statement' },
+    { key:'po',      label:'📄 Purchase Order'  },
+    { key:'grn',     label:'📦 GRN'             },
+    { key:'invoice', label:'🧾 Invoice'          }
   ];
   el.innerHTML = `
     <div class="tabs" style="margin-bottom:16px;">
@@ -3271,14 +3314,15 @@ function renderFormConfigPanel() {
       <div id="fc-tab-${m.key}" style="display:${i===0?'block':'none'};">
         ${renderOptFieldsSection(m.key, s)}
         ${renderCustFieldsSection(m.key, s)}
+        ${renderButtonConfigSection(m.key, s)}
         <div class="flex-row" style="margin-bottom:20px;">
-          <button class="btn btn-primary btn-sm" onclick="saveFormConfig()">Save Changes</button>
+          <button class="btn btn-primary btn-sm" onclick="saveFormConfig()">💾 Save All Changes</button>
         </div>
       </div>`).join('')}`;
 }
 
 function switchFCTab(key, el) {
-  ['indent','cs','grn','invoice'].forEach(m => {
+  ['indent','cs','po','grn','invoice'].forEach(m => {
     const t = document.getElementById('fc-tab-' + m);
     if (t) t.style.display = m === key ? 'block' : 'none';
   });
@@ -3302,20 +3346,29 @@ function renderOptFieldsSection(module, s) {
 }
 
 function renderCustFieldsSection(module, s) {
-  const cfg = s.formConfig[module] || { optionalFields:{}, customFields:[] };
+  const cfg = s.formConfig[module] || { optionalFields:{}, customFields:[], hiddenButtons:{}, customButtons:[] };
   const fields = cfg.customFields || [];
+  const typeLabel = {text:'Text',number:'Number',date:'Date',select:'Dropdown',textarea:'Long Text',checkbox:'Checkbox'};
   return `<div class="card" style="margin-bottom:12px;">
-    <div class="card-title" style="margin-bottom:4px;">Custom Fields</div>
-    <p style="font-size:12px;color:var(--muted);margin:0 0 10px;">Add your own fields — they appear on the form and are saved with every record.</p>
+    <div class="card-title" style="margin-bottom:4px;">📋 Custom Fields</div>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 10px;">Add your own fields — they appear on the form and are saved with every record. Use ▲▼ to reorder.</p>
     <div id="cfl-${module}">
-      ${fields.length ? fields.map(f => `
-        <div style="display:flex;align-items:center;gap:8px;padding:8px;background:#f8fafc;border-radius:6px;margin-bottom:6px;">
-          <span style="flex:1;font-size:13px;"><b>${f.label}</b> <span style="color:var(--muted);font-size:12px;">(${f.type}${f.type==='select'?' — '+f.options.join(', '):''})</span>${f.required?'<span class="status status-pending" style="font-size:10px;margin-left:6px;">Required</span>':''}</span>
-          <button class="btn btn-sm btn-danger" onclick="removeCustomField('${module}','${f.id}')">✕</button>
+      ${fields.length ? fields.map((f,i) => `
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f8fafc;border:1px solid var(--border);border-radius:6px;margin-bottom:6px;">
+          <div style="display:flex;flex-direction:column;gap:2px;flex-shrink:0;">
+            <button class="btn btn-sm btn-outline" onclick="moveField('${module}',${i},-1)" ${i===0?'disabled':''} style="padding:1px 7px;font-size:11px;line-height:1.4;">▲</button>
+            <button class="btn btn-sm btn-outline" onclick="moveField('${module}',${i},1)" ${i===fields.length-1?'disabled':''} style="padding:1px 7px;font-size:11px;line-height:1.4;">▼</button>
+          </div>
+          <span style="flex:1;font-size:13px;min-width:0;">
+            <b>${f.label}</b>
+            <span style="color:var(--muted);font-size:11px;margin-left:6px;">${typeLabel[f.type]||f.type}${f.type==='select'?' ('+f.options.join(', ')+')':''}</span>
+            ${f.required?'<span class="status status-pending" style="font-size:10px;margin-left:6px;">Required</span>':''}
+          </span>
+          <button class="btn btn-sm btn-danger" onclick="removeCustomField('${module}','${f.id}')" style="flex-shrink:0;">✕ Delete</button>
         </div>`).join('') : '<p style="font-size:13px;color:var(--muted);padding:6px 0 8px;">No custom fields yet.</p>'}
     </div>
     <hr class="divider">
-    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:8px;">Add New Field</div>
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:8px;">➕ Add New Field</div>
     <div class="form-grid">
       <div class="form-group">
         <label>Field Label</label>
@@ -3329,6 +3382,7 @@ function renderCustFieldsSection(module, s) {
           <option value="date">Date</option>
           <option value="select">Dropdown</option>
           <option value="textarea">Long Text</option>
+          <option value="checkbox">Checkbox (Yes/No)</option>
         </select>
       </div>
       <div class="form-group form-full" id="nf_opts_wrap_${module}" style="display:none;">
@@ -3379,23 +3433,155 @@ function removeCustomField(module, fieldId) {
   toast('Custom field removed', '#d97706');
 }
 
+function moveField(module, idx, dir) {
+  const s = state.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  if (!s.formConfig || !s.formConfig[module]) return;
+  const fields = s.formConfig[module].customFields || [];
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= fields.length) return;
+  const tmp = fields[idx]; fields[idx] = fields[newIdx]; fields[newIdx] = tmp;
+  s.formConfig[module].customFields = fields;
+  state.settings = s;
+  save(); renderFormConfigPanel(); applyFormConfig();
+}
+
+// ---- Button Config ----
+function renderButtonConfigSection(module, s) {
+  const cfg = s.formConfig[module] || { optionalFields:{}, customFields:[], hiddenButtons:{}, customButtons:[] };
+  const builtins = BUILTIN_BUTTONS[module] || [];
+  const customBtns = cfg.customButtons || [];
+  const hiddenBtns = cfg.hiddenButtons || {};
+  const btnStyles = [
+    {value:'btn-primary', label:'Primary (Blue)'},
+    {value:'btn-success', label:'Success (Green)'},
+    {value:'btn-warning', label:'Warning (Amber)'},
+    {value:'btn-danger',  label:'Danger (Red)'},
+    {value:'btn-outline', label:'Outline (Default)'},
+    {value:'btn-accent',  label:'Accent (Yellow)'}
+  ];
+  return `<div class="card" style="margin-bottom:12px;">
+    <div class="card-title" style="margin-bottom:4px;">🔘 Form Buttons</div>
+
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--muted);margin-bottom:8px;">Built-in Buttons</div>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 10px;">Uncheck to hide a button from the form.</p>
+    ${builtins.map(b => `
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border);">
+        <input type="checkbox" id="fc_btn_${module}_${b.key}" ${hiddenBtns[b.key] ? '' : 'checked'} style="width:auto;">
+        <label for="fc_btn_${module}_${b.key}" style="flex:1;cursor:pointer;">
+          <span class="btn ${b.style} btn-sm" style="pointer-events:none;">${b.label}</span>
+        </label>
+      </div>`).join('')}
+
+    <hr class="divider">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--muted);margin-bottom:6px;">Custom Buttons</div>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 10px;">Custom buttons appear alongside the built-in buttons. When clicked they prompt the user for a note which is saved in the activity log.</p>
+    <div id="cbl-${module}">
+      ${customBtns.length ? customBtns.map(b => `
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:#f8fafc;border:1px solid var(--border);border-radius:6px;margin-bottom:6px;">
+          <span class="btn ${b.style} btn-sm" style="pointer-events:none;flex-shrink:0;">${b.icon ? b.icon+' ' : ''}${b.label}</span>
+          <span style="font-size:11px;color:var(--muted);flex:1;">Prompt: "${b.prompt||'Enter note'}"</span>
+          <button class="btn btn-sm btn-danger" onclick="removeCustomButton('${module}','${b.id}')">✕ Delete</button>
+        </div>`).join('') : '<p style="font-size:13px;color:var(--muted);padding:4px 0 8px;">No custom buttons yet.</p>'}
+    </div>
+    <hr class="divider">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--muted);margin-bottom:8px;">➕ Add Custom Button</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Button Label</label>
+        <input id="nb_label_${module}" placeholder="e.g. Request Revision">
+      </div>
+      <div class="form-group">
+        <label>Icon (emoji, optional)</label>
+        <input id="nb_icon_${module}" placeholder="e.g. 🔄" maxlength="4">
+      </div>
+      <div class="form-group">
+        <label>Button Style</label>
+        <select id="nb_style_${module}">
+          ${btnStyles.map(st=>`<option value="${st.value}">${st.label}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Note Prompt Text</label>
+        <input id="nb_prompt_${module}" placeholder="e.g. Enter reason for revision">
+      </div>
+    </div>
+    <div class="flex-row mt-8">
+      <button class="btn btn-outline btn-sm" onclick="addCustomButton('${module}')">+ Add Button</button>
+    </div>
+  </div>`;
+}
+
+function addCustomButton(module) {
+  const label  = document.getElementById('nb_label_'+module)?.value.trim();
+  const icon   = document.getElementById('nb_icon_'+module)?.value.trim();
+  const style  = document.getElementById('nb_style_'+module)?.value || 'btn-outline';
+  const prompt = document.getElementById('nb_prompt_'+module)?.value.trim() || ('Enter note for: ' + (label||'button'));
+  if (!label) { toast('Enter a button label', '#dc2626'); return; }
+  const s = state.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  if (!s.formConfig) s.formConfig = JSON.parse(JSON.stringify(DEFAULT_SETTINGS.formConfig));
+  if (!s.formConfig[module]) s.formConfig[module] = { optionalFields:{}, customFields:[], hiddenButtons:{}, customButtons:[] };
+  if (!s.formConfig[module].customButtons) s.formConfig[module].customButtons = [];
+  s.formConfig[module].customButtons.push({ id:'cb_'+module+'_'+Date.now(), label, icon, style, prompt });
+  state.settings = s;
+  save(); renderFormConfigPanel(); applyFormConfig();
+  toast('Button "'+label+'" added ✓', '#16a34a');
+}
+
+function removeCustomButton(module, btnId) {
+  if (!confirm('Remove this custom button?')) return;
+  const s = state.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  if (!s.formConfig || !s.formConfig[module]) return;
+  s.formConfig[module].customButtons = (s.formConfig[module].customButtons||[]).filter(b => b.id !== btnId);
+  state.settings = s;
+  save(); renderFormConfigPanel(); applyFormConfig();
+  toast('Button removed', '#d97706');
+}
+
+function renderCustButtonsInForm(module) {
+  const container = document.getElementById('cust-buttons-'+module);
+  if (!container) return;
+  const btns = getFormConfig(module).customButtons || [];
+  container.innerHTML = btns.map(b =>
+    `<button class="btn ${b.style}" onclick="handleCustomButton('${module}','${b.id}','${b.label.replace(/'/g,"\\'")}','${(b.prompt||'Enter note').replace(/'/g,"\\'")}')">
+      ${b.icon ? b.icon+' ' : ''}${b.label}
+    </button>`).join('');
+}
+
+function handleCustomButton(module, btnId, label, prompt) {
+  const note = window.prompt(prompt || ('Note for: ' + label));
+  if (note === null) return;
+  if (note.trim()) addActivity('[' + label + '] ' + note.trim());
+  toast(label + ' recorded ✓', '#16a34a');
+}
+
 function saveFormConfig() {
   const s = state.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
   if (!s.formConfig) s.formConfig = JSON.parse(JSON.stringify(DEFAULT_SETTINGS.formConfig));
-  Object.keys(OPTIONAL_FIELDS).forEach(module => {
-    if (!s.formConfig[module]) s.formConfig[module] = { optionalFields:{}, customFields:[] };
+  ['indent','cs','po','grn','invoice'].forEach(module => {
+    if (!s.formConfig[module]) s.formConfig[module] = { optionalFields:{}, customFields:[], hiddenButtons:{}, customButtons:[] };
+    // optional fields
     const optState = {};
-    OPTIONAL_FIELDS[module].forEach(f => {
+    (OPTIONAL_FIELDS[module] || []).forEach(f => {
       const el = document.getElementById('fc_opt_' + module + '_' + f.key);
       optState[f.key] = el ? el.checked : true;
     });
     s.formConfig[module].optionalFields = optState;
+    // hidden buttons
+    const hiddenState = {};
+    (BUILTIN_BUTTONS[module] || []).forEach(b => {
+      const el = document.getElementById('fc_btn_' + module + '_' + b.key);
+      if (el && !el.checked) hiddenState[b.key] = true;
+    });
+    s.formConfig[module].hiddenButtons = hiddenState;
   });
   state.settings = s;
   save(); applyFormConfig();
-  toast('Form configuration saved ✓', '#16a34a');
+  toast('Form settings saved ✓', '#16a34a');
 }
 
+// ======================================================
+// TEMPLATE SETTINGS
+// ======================================================
 // ======================================================
 // TEMPLATE SETTINGS
 // ======================================================
