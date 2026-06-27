@@ -3783,6 +3783,12 @@ function clearUserForm() {
 // STARTUP
 // ======================================================
 window.onload = async function() {
+  // Fix: ensure page-templates and page-usermgmt are inside #main (body is flex-row)
+  const _main = document.getElementById('main');
+  ['page-templates','page-usermgmt'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.parentElement !== _main) _main.appendChild(el);
+  });
   await load();
   renderDashboard();
 };
