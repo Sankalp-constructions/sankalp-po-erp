@@ -1,5 +1,5 @@
 // PO ERP Service Worker — network-first for HTML, cache-first for assets
-const CACHE = 'po-erp-v2';
+const CACHE = 'po-erp-v3';
 
 self.addEventListener('install', () => self.skipWaiting());
 
